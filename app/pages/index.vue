@@ -1,0 +1,15 @@
+<template>
+    <HeaderTop/>
+    <HeaderOne/>
+    <HeroOne/>
+    <AboutOne/>
+    <ServicesOne/>
+    <FeatureOne/>
+    <CounterOne/>
+    <ProjectOne/>
+    <TestimonialOne/>
+    <ChooseOne/>
+    <BlogOne/>
+    <CTAOne/>
+    <FooterArea/>
+</template>
