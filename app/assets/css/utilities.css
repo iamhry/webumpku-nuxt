@@ -1,0 +1,68 @@
+
+/* Overflow */
+.overflow-hidden { overflow: hidden !important; }
+.overflow-auto { overflow: auto !important; }
+.overflow-visible { overflow: visible !important; }
+
+/* Hidden */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Text Align */
+.text-left { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+.text-justify { text-align: justify !important; }
+
+/* Flex utilities */
+.flex-row { flex-direction: row !important; }
+.flex-column { flex-direction: column !important; }
+.justify-start { justify-content: flex-start !important; }
+.justify-center { justify-content: center !important; }
+.justify-end { justify-content: flex-end !important; }
+.justify-between { justify-content: space-between !important; }
+.align-start { align-items: flex-start !important; }
+.align-center { align-items: center !important; }
+.align-end { align-items: flex-end !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-grow-1 { flex-grow: 1 !important; }
+.flex-shrink-0 { flex-shrink: 0 !important; }
+
+/* Grid utilities */
+.grid-cols-1 { grid-template-columns: repeat(1, 1fr) !important; }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr) !important; }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr) !important; }
+
+/* Border */
+.border-0 { border: none !important; }
+.border-1 { border: 1px solid var(--border) !important; }
+
+/* Radius */
+.rounded-sm { border-radius: var(--radius-small) !important; }
+.rounded-md { border-radius: var(--radius-medium) !important; }
+.rounded-lg { border-radius: var(--radius-large) !important; }
+.rounded-full { border-radius: var(--radius-full) !important; }
+
+/* Shadow */
+.shadow-sm { box-shadow: var(--shadow-small) !important; }
+.shadow-md { box-shadow: var(--shadow-medium) !important; }
+.shadow-lg { box-shadow: var(--shadow-large) !important; }
+.shadow-none { box-shadow: none !important; }
+
+/* Cursor */
+.cursor-pointer { cursor: pointer !important; }
+.cursor-default { cursor: default !important; }
+
+/* Opacity */
+.opacity-0 { opacity: 0 !important; }
+.opacity-50 { opacity: 0.5 !important; }
+.opacity-100 { opacity: 1 !important; }

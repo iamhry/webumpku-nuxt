@@ -1,0 +1,337 @@
+/* Custom CSS for Homepage Agenda & Event section - UNSW Key Dates Style */
+
+:root {
+  --umpku-navy: #0b2e59;
+  --umpku-teal: #0b7a75;
+  --umpku-orange: #F35C27; /* Vibrant UMPKU Orange */
+  --neutral-dark: #000000; /* Solid Black text */
+  --neutral-gray: #4a5568;
+  --neutral-light: #718096;
+}
+
+/* Header section styling */
+.home-event-header {
+  margin-bottom: 2.5rem;
+}
+
+.home-event-subtitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--umpku-teal);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.home-event-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--neutral-dark);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.home-event-description {
+  color: var(--neutral-gray);
+  font-size: 1rem;
+  max-width: 600px;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+/* Category Filter Bar */
+.home-event-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.75rem;
+}
+
+.home-event-filter-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--neutral-gray);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.home-event-filter-btn:hover {
+  color: var(--neutral-dark);
+}
+
+.home-event-filter-btn.active {
+  color: var(--neutral-dark);
+  border-bottom: 3px solid var(--umpku-orange);
+  font-weight: 700;
+}
+
+/* Cards Grid Layout */
+.home-event-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 991px) {
+  .home-event-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .home-event-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* UNSW Style Event Card */
+.home-event-unsw-card {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  background: transparent;
+  padding: 0;
+  text-decoration: none !important;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.home-event-unsw-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Left: Solid Orange Date Block */
+.home-event-unsw-date-box {
+  width: 80px;
+  height: 105px;
+  background-color: var(--umpku-orange);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.home-event-unsw-card:hover .home-event-unsw-date-box {
+  transform: scale(1.04);
+}
+
+.home-event-unsw-date-day {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #ffffff;
+  opacity: 0.9;
+  text-transform: capitalize;
+  margin-bottom: 0.1rem;
+}
+
+.home-event-unsw-date-num {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.home-event-unsw-date-month {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.1rem;
+}
+
+/* Right: Content Block */
+.home-event-unsw-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Category Label */
+.home-event-unsw-category {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--neutral-light);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+/* Title Headline */
+.home-event-unsw-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--neutral-dark);
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.home-event-unsw-card:hover .home-event-unsw-title {
+  color: var(--umpku-navy);
+}
+
+/* CTA text link */
+.home-event-unsw-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--neutral-dark);
+  margin-top: auto;
+  transition: color 0.2s ease;
+}
+
+.home-event-unsw-cta i {
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.home-event-unsw-card:hover .home-event-unsw-cta {
+  color: var(--umpku-teal);
+}
+
+.home-event-unsw-card:hover .home-event-unsw-cta i {
+  transform: translateX(4px);
+}
+
+/* Event time above CTA */
+.home-event-unsw-time {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--neutral-gray);
+  margin-bottom: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  line-height: 1;
+}
+
+.home-event-unsw-time i {
+  font-size: 0.95rem;
+  color: var(--umpku-teal);
+}
+
+/* --- Skeleton Loading States --- */
+.home-event-skeleton-unsw-card {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.home-event-skeleton-unsw-date {
+  width: 80px;
+  height: 105px;
+  background-color: #f1f5f9;
+  animation: pulse-placeholder 1.5s infinite ease-in-out;
+}
+
+.home-event-skeleton-unsw-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.home-event-skeleton-line {
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  animation: pulse-placeholder 1.5s infinite ease-in-out;
+}
+
+.home-event-skeleton-line.tag { height: 12px; width: 30%; }
+.home-event-skeleton-line.title-l1 { height: 18px; width: 85%; }
+.home-event-skeleton-line.title-l2 { height: 18px; width: 60%; }
+.home-event-skeleton-line.cta { height: 14px; width: 40%; margin-top: 8px; }
+
+@keyframes pulse-placeholder {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Bottom Action Button: Outlined Show More */
+.home-event-footer-action {
+  margin-top: 2rem;
+}
+
+.home-event-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 2px solid var(--neutral-dark);
+  background-color: transparent;
+  color: var(--neutral-dark);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.75rem 2.25rem;
+  transition: all 0.25s ease;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.home-event-more-btn:hover {
+  background-color: var(--neutral-dark);
+  color: #ffffff;
+}
+
+.home-event-more-btn i {
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
+}
+
+.home-event-more-btn:hover i {
+  transform: translateX(4px);
+}
+
+/* Empty State */
+.home-event-empty-state {
+  text-align: center;
+  padding: 3.5rem 2rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  grid-column: span 3;
+}
+
+@media (max-width: 991px) {
+  .home-event-empty-state {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 767px) {
+  .home-event-empty-state {
+    grid-column: span 1;
+  }
+}
+
+.home-event-empty-icon {
+  font-size: 2.5rem;
+  color: var(--neutral-light);
+  margin-bottom: 0.75rem;
+}
+
+.home-event-empty-text {
+  font-size: 1rem;
+  color: var(--neutral-gray);
+  font-weight: 500;
+}

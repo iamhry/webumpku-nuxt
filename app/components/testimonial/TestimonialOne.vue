@@ -54,7 +54,7 @@ onUpdated(() => {
 <template>
     <div class="testimonial-area gray-bg section-padding">
  		<div class="capricorn-testimonial">
- 			<div class="container">
+ 			<div class="container content-wide">
  				<div class="row">
  					<div class="col-lg-12 text-center ">
  						<div class="section-title">

@@ -1,0 +1,218 @@
+/* Reputation Section Styles - Premium Redesign */
+.reputation-section {
+  background-color: #ffffff; /* Clean white background */
+  padding: 80px 0;
+  position: relative;
+}
+
+.reputation-container-narrow {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Header */
+.reputation-header {
+  text-align: center;
+  margin-bottom: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reputation-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.reputation-main-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.reputation-description {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Grid Layout */
+.reputation-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* Card */
+.provern-card {
+  display: block;
+  background: #ffffff;
+  border-radius: 16px; /* rounded-2xl */
+  padding: 24px 24px 32px;
+  box-shadow: 0px 10px 30px 0px rgba(15,15,14,0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  width: calc((100% - 60px) / 3);
+}
+
+.provern-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 15px 40px 0px rgba(15,15,14,0.08);
+  text-decoration: none;
+}
+
+.reputation-card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Image / Icon */
+.ico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 12px auto;
+}
+
+.reputation-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.reputation-icon {
+  font-size: 48px;
+  color: var(--primary, #005BAC);
+}
+
+/* Content */
+.reputation-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.reputation-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2b6cb0; /* Specific blue color resembling the example */
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.reputation-title span {
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.reputation-desc {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* Animation */
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-fade-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Skeleton Loading */
+.skeleton-card {
+  border-top: none;
+  cursor: default;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.skeleton-card:hover {
+  transform: none;
+  box-shadow: 0px 10px 30px 0px rgba(15,15,14,0.05);
+}
+
+.skeleton-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  margin: 0 auto 12px auto;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-title {
+  height: 18px;
+  width: 80%;
+  background: #f0f0f0;
+  margin: 0 auto 12px auto;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-desc {
+  height: 14px;
+  width: 90%;
+  background: #f8f8f8;
+  margin: 0 auto 6px auto;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-desc.short {
+  width: 70%;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+  .provern-card {
+    width: calc((100% - 30px) / 2);
+  }
+}
+
+@media (max-width: 767px) {
+  .provern-card {
+    width: 100%;
+  }
+  .reputation-main-title {
+    font-size: 28px;
+  }
+  .ico {
+    width: 72px;
+    height: 72px;
+  }
+}

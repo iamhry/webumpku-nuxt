@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Global Layout Styles
+   ========================================================================== */
+
+:root {
+    --container-width: 1450px;
+    --reading-width: 980px;
+}
+
+.layout-container {
+    width: 100%;
+    max-width: var(--container-width);
+    margin-inline: auto;
+    padding-inline: 24px;
+}
+
+.layout-reading {
+    width: 100%;
+    max-width: var(--reading-width);
+    margin-inline: auto;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1400px) {
+    .layout-container {
+        max-width: 1320px;
+    }
+}
+
+@media (max-width: 991px) {
+    .layout-container {
+        padding-inline: 20px;
+    }
+}

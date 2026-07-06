@@ -1,6 +1,8 @@
 <script setup>
 
 import { onMounted } from 'vue'
+import MainMenu from '~/components/navigation/MainMenu.vue'
+import MobileMenu from '~/components/navigation/MobileMenu.vue'
 
 onMounted(() => {     
     
@@ -59,70 +61,14 @@ onMounted(() => {
  									</button>
 
  									<div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
- 										<ul class="navbar-nav m-auto">
- 											<li class="nav-item">
- 												<a class="nav-link active" href="#">Home
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/">Home-Main</NuxtLink></li>
- 													<li><NuxtLink to="/">Home-Industry</NuxtLink></li>
- 													<li><NuxtLink to="/">Home-Construction</NuxtLink></li>
- 												</ul>
- 											</li>
-
- 											<li class="nav-item">
- 												<a class="nav-link" href="#">Pages
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/about">About us</NuxtLink></li>
- 													<li><NuxtLink to="/choose-us">Why Choose Us</NuxtLink></li>
- 													<li><NuxtLink to="/team">Our Team</NuxtLink></li>
- 													<li><NuxtLink to="/price">Pricing</NuxtLink></li>
- 													<li><NuxtLink to="/faq">FAQ</NuxtLink></li>
- 												</ul>
- 											</li>
- 											<li class="nav-item">
- 												<a class="nav-link" href="#">Services
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/service-1">Services-01</NuxtLink></li>
- 													<li><NuxtLink to="/service-2">Services-02</NuxtLink></li>
- 													<li><NuxtLink to="/service-details">Service Details</NuxtLink></li>
- 												</ul>
-
- 											</li>
-
- 											<li class="nav-item">
- 												<a class="nav-link" href="#">Projects
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/project">Projects</NuxtLink></li>
- 													<li><NuxtLink to="/project-details">Project Details</NuxtLink></li>
- 												</ul>
- 											</li>
-
- 											<li class="nav-item">
- 												<a class="nav-link" href="#">Blog
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/blog">Blog</NuxtLink></li>
- 													<li><NuxtLink to="/blog-details">Blog Details</NuxtLink></li>
- 												</ul>
- 											</li>
- 											<li class="nav-item">
- 												<NuxtLink class="nav-link" to="/contact">Contact</NuxtLink>
- 											</li>
- 										</ul>
+ 										<!-- Desktop Menu -->
+ 										<div class="d-none d-lg-block w-100">
+ 											<MainMenu />
+ 										</div>
+ 										<!-- Mobile Accordion Menu -->
+ 										<div class="d-block d-lg-none w-100 mt-3">
+ 											<MobileMenu />
+ 										</div>
 
  									</div>
  								</nav>

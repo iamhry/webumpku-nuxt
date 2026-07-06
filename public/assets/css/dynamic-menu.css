@@ -1,0 +1,83 @@
+/* Dynamic Menu Fixes */
+.sub-menu {
+  min-width: 220px;
+}
+
+.sub-menu li a.active {
+  color: var(--primary-color, #0b2e59);
+}
+
+.mobile-menu-accordion .mobile-nav-link.active,
+.mobile-menu-accordion .mobile-sub-menu a.active {
+  color: var(--primary-color, #0b2e59);
+  font-weight: 600;
+}
+
+/* Ensure mega menu links wrap correctly if long */
+.mega-link {
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Professional Footer Styling */
+.footer-area {
+  background-color: #0a182c !important; /* Changed to #0a182c per request */
+  color: #8a9bb2;
+}
+
+.footer-area h5, .footer-widget h5 {
+  color: #ffffff !important;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  text-transform: capitalize;
+}
+
+.footer-widget ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-widget ul li {
+  margin-bottom: 0;
+}
+
+.footer-widget ul li a, .footer-area ul li a, .footer-link {
+  color: #8a9bb2 !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 15px;
+  padding: 0 !important;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.footer-widget ul li a:hover, .footer-area ul li a:hover, .footer-link:hover {
+  color: #ffffff !important;
+}
+
+.footer-area p {
+  color: #8a9bb2 !important;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.footer-area p i {
+  color: #8a9bb2;
+  margin-right: 12px;
+  font-size: 20px;
+  margin-top: 2px;
+}
+
+.footer-bottom {
+  background-color: #01060e !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-bottom p {
+  color: #8a9bb2 !important;
+}

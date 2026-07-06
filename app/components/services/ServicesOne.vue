@@ -56,7 +56,7 @@ onUpdated(() => {
 
 <template>
     <div class="services-area gray-bg section-padding pad-bot-90">
- 		<div class="container">
+ 		<div class="container content-wide">
  			<div class="row">
  				<div class="offset-lg-2 col-lg-8 text-center">
  					<div class="section-title">

@@ -1,6 +1,11 @@
 <script setup>
 
 import { onMounted } from 'vue'
+import { useSettings } from '~/composables/useSettings'
+import MainMenu from '~/components/navigation/MainMenu.vue'
+import MobileMenu from '~/components/navigation/MobileMenu.vue'
+
+const { settings } = useSettings()
 
 onMounted(() => {     
     
@@ -8,27 +13,7 @@ onMounted(() => {
 		$(this).toggleClass("active");
 	});
 
-	$(".navbar-nav li a").on("click", function () {
-		$(".sub-nav-toggler").removeClass("active");
-	});
-
-	var subMenu = $(".navbar-nav .sub-menu");
-
-	if (subMenu.length) {
-		subMenu
-			.parent("li")
-			.children("a")
-			.append(function () {
-				return '<button class="sub-nav-toggler"> <i class="fa fa-angle-down"></i> </button>';
-			});
-
-		var subMenuToggler = $(".navbar-nav .sub-nav-toggler");
-
-		subMenuToggler.on("click", function () {
-			$(this).parent().parent().children(".sub-menu").slideToggle();
-			return false;
-		});
-	}
+	// Menu sub-nav toggler logic has been moved to Vue components (MenuItem.vue)
 
 	$('.sticky-area').sticky({
 		topSpacing: 0,
@@ -44,7 +29,7 @@ onMounted(() => {
  			<div class="row align-items-center">
  				<div class="col-lg-3">
  					<div class="logo"> 						
-						 <NuxtLink class="navbar-brand" to="/"><img src="/assets/img/logo.png" alt=""></NuxtLink>
+						 <NuxtLink class="navbar-brand" to="/"><img :src="settings.logo || '/assets/img/logo.png'" :alt="settings.site_name || 'Universitas'"></NuxtLink>
  					</div>
  				</div>
  				<div class="col-lg-9 text-end">
@@ -66,7 +51,7 @@ onMounted(() => {
  								<div class="info-three">
  									<div class="info-wrap">
  										<div class="info-i"><span><i class="las la-mobile"></i></span></div>
- 										<div class="info-c">(+1)212-946-2064<br><span>info@dustrian.com</span></div>
+ 										<div class="info-c">{{ settings.phone || '(+1)212-946-2064' }}<br><span>{{ settings.email || 'info@dustrian.com' }}</span></div>
  									</div>
  								</div>
  							</div>
@@ -89,71 +74,14 @@ onMounted(() => {
  									</button>
 
  									<div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
- 										<ul class="navbar-nav m-auto">
- 											<li class="nav-item">
- 												<a class="nav-link active" href="#">Home
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/">Home-Main</NuxtLink></li>
- 													<li><NuxtLink to="/">Home-Industry</NuxtLink></li>
- 													<li><NuxtLink to="/">Home-Construction</NuxtLink></li>
- 												</ul>
- 											</li>
-
- 											<li class="nav-item">
- 												<a class="nav-link" href="#">Pages
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/about">About us</NuxtLink></li>
- 													<li><NuxtLink to="/choose-us">Why Choose Us</NuxtLink></li>
- 													<li><NuxtLink to="/team">Our Team</NuxtLink></li>
- 													<li><NuxtLink to="/price">Pricing</NuxtLink></li>
- 													<li><NuxtLink to="/faq">FAQ</NuxtLink></li>
- 												</ul>
- 											</li>
- 											<li class="nav-item">
- 												<a class="nav-link" href="#">Services
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/service-1">Services-01</NuxtLink></li>
- 													<li><NuxtLink to="/service-2">Services-02</NuxtLink></li>
- 													<li><NuxtLink to="/service-details">Service Details</NuxtLink></li>
- 												</ul>
-
- 											</li>
-
- 											<li class="nav-item">
- 												<a class="nav-link" href="#">Projects
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/project">Projects</NuxtLink></li>
- 													<li><NuxtLink to="/project-details">Project Details</NuxtLink></li>
- 												</ul>
- 											</li>
-
- 											<li class="nav-item">
- 												<a class="nav-link" href="#">Blog
- 													<span class="sub-nav-toggler">
- 													</span>
- 												</a>
- 												<ul class="sub-menu">
- 													<li><NuxtLink to="/blog">Blog</NuxtLink></li>
- 													<li><NuxtLink to="/blog-details">Blog Details</NuxtLink></li>
- 												</ul>
- 											</li>
- 											<li class="nav-item">
- 												<NuxtLink class="nav-link" to="/contact">Contact</NuxtLink>
- 											</li>
- 										</ul>
-
+ 										<!-- Render Dynamic Menu from API -->
+ 										<div class="d-none d-lg-block w-100">
+ 											<MainMenu />
+ 										</div>
+ 										<!-- Mobile Accordion Menu -->
+ 										<div class="d-block d-lg-none w-100 mt-3">
+ 											<MobileMenu />
+ 										</div>
  									</div>
  								</nav>
  							</div>
@@ -166,7 +94,7 @@ onMounted(() => {
  						<!-- Responsive Logo-->
  						<div class="col-md-4 col-sm-4">
  							<div class="responsive-logo">
- 								<img src="/assets/img/logo.png" alt="dustrian-logo">
+ 								<img :src="settings.logo || '/assets/img/logo.png'" :alt="settings.site_name || 'Universitas'">
  							</div>
  						</div>
  					</div>

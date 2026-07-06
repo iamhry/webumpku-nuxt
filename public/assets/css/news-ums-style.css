@@ -1,0 +1,443 @@
+/* ==========================================================================
+   News Detail UMS-Style Layout Stylesheet
+   Author: Senior Nuxt 4 Architect / UX Designer
+   ========================================================================== */
+
+/* 1. Container Width Adjustments (Matching UMS portal width at 1450px) */
+@media (min-width: 1200px) {
+    .layout-content .news-details-page .container,
+    .layout-content .news-detail-page .container,
+    .layout-content .header-top .container,
+    .layout-content .navigation .container,
+    .layout-content .header-area .container,
+    .layout-content .footer-area .container,
+    .layout-content .footer-bottom .container {
+        max-width: 1450px !important;
+        width: 100% !important;
+    }
+}
+
+/* 2. Grid & Width Customizations (Desktop & Tablet) */
+@media (min-width: 992px) {
+    .news-details-page .row {
+        display: flex !important;
+        justify-content: space-between !important;
+        flex-wrap: wrap !important;
+        max-width: 1330px !important; /* Cap row width for a proportional gap */
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* Content Area: Max 850px for reading comfort */
+    .news-details-page .col-lg-8 {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        max-width: 850px !important;
+    }
+
+    /* Sidebar: Widened to 380px */
+    .news-details-page .col-lg-4 {
+        flex: 0 0 380px !important;
+        width: 380px !important;
+        max-width: 380px !important;
+    }
+}
+
+/* 3. Breadcrumb Spacing */
+.news-details-page .breadcrumb-area {
+    padding: 35px 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* 4. UMS Hero Section Order Styling */
+.ums-hero-section {
+    margin-bottom: 30px;
+}
+
+/* Featured Image (UMS Style - Large Top Image) */
+.ums-hero-section .featured-image-wrapper {
+    width: 100%;
+    margin-bottom: 25px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(11, 46, 89, 0.08);
+}
+
+.ums-hero-section .featured-image {
+    width: 100%;
+    height: auto;
+    max-height: 520px;
+    object-fit: cover;
+    display: block;
+}
+
+/* SDGs Labels directly below image */
+.ums-hero-section .sdgs-labels-wrapper {
+    margin-bottom: 15px;
+}
+
+/* Judul Berita (Title below SDGs) */
+.ums-hero-section .news-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #0b2e59;
+    margin-top: 0;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
+}
+
+@media (max-width: 768px) {
+    .ums-hero-section .news-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* Meta Information (Horizontal below Title) */
+.ums-hero-section .news-meta-section {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+.ums-hero-section .meta-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ums-hero-section .meta-item-horiz {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.ums-hero-section .meta-item-horiz i {
+    font-size: 1.1rem;
+    color: #ffc107;
+}
+
+.ums-hero-section .meta-item-horiz strong {
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.ums-hero-section .meta-item-divider {
+    color: #d1d5db;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .ums-hero-section .meta-horizontal {
+        gap: 10px;
+    }
+    .ums-hero-section .meta-item-divider {
+        display: none;
+    }
+    .ums-hero-section .meta-item-horiz {
+        width: 100%;
+        border-bottom: 1px dashed #f3f4f6;
+        padding-bottom: 6px;
+    }
+    .ums-hero-section .meta-item-horiz:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+}
+
+/* 5. Typography & Readability (Comfortable Reading Area) */
+.news-details-page .news-content {
+    font-size: 1.125rem;
+    line-height: 1.85;
+    color: #2c3e50;
+    text-align: justify;
+}
+
+.news-details-page .news-content p {
+    margin-bottom: 24px;
+}
+
+.news-details-page .news-content blockquote {
+    margin: 30px 0;
+    padding: 24px;
+    background-color: #f8fafc;
+    border-left: 5px solid #0b2e59;
+    border-radius: 6px;
+    font-style: italic;
+}
+
+/* 6. Sidebar Right Widget Styling */
+.news-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.sidebar-widget {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef2f6;
+}
+
+.widget-header {
+    background: linear-gradient(135deg, #0b2e59 0%, #1a4a7e 100%);
+    padding: 14px 18px;
+    border-bottom: 3px solid #ffc107;
+}
+
+.widget-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.widget-title i {
+    font-size: 1.2rem;
+    color: #ffc107;
+}
+
+.widget-content {
+    padding: 18px;
+}
+
+/* Latest News Widget Items (Row flex layout with small thumbnail) */
+.latest-news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.latest-news-item {
+    display: flex;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.latest-news-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.latest-news-item .thumbnail {
+    flex-shrink: 0;
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #f1f5f9;
+}
+
+.latest-news-item .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.latest-news-item:hover .thumbnail img {
+    transform: scale(1.08);
+}
+
+.latest-news-item .info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.latest-news-item .title {
+    margin: 0 0 4px 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0b2e59;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.latest-news-item .title a {
+    color: #0b2e59;
+    text-decoration: none;
+}
+
+.latest-news-item .title a:hover {
+    color: #ffc107;
+}
+
+.latest-news-item .date {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* Category List */
+.categories-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-item {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.category-item:last-child {
+    border-bottom: none;
+}
+
+.category-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    color: #334155;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.category-link:hover {
+    color: #0b2e59;
+    padding-left: 4px;
+}
+
+.category-count {
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* SDGs Sidebar list */
+.sdgs-sidebar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sdg-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #334155;
+    transition: transform 0.2s ease;
+}
+
+.sdg-sidebar-item:hover {
+    transform: translateX(4px);
+    background: white;
+}
+
+.sdg-sidebar-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.sdg-sidebar-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.sdg-sidebar-label {
+    display: block;
+    font-size: 0.65rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.sdg-sidebar-title {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0b2e59;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Tags cloud */
+.tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-cloud-item {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #475569;
+    background: #f1f5f9;
+    padding: 5px 12px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.tag-cloud-item:hover {
+    background: #0b2e59;
+    color: white;
+    border-color: #0b2e59;
+}
+
+/* 7. Related News Section (UMS Style - Spans full 1450px) */
+.news-details-page .related-news-section {
+    width: 100% !important;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    padding-top: 40px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.news-details-page .related-news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+@media (max-width: 991px) {
+    .news-details-page .related-news-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .news-details-page .related-news-grid {
+        grid-template-columns: 1fr;
+    }
+}

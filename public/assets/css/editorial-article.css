@@ -1,0 +1,391 @@
+/* ==========================================================================
+   Editorial Article Experience (Webarq Inspired)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Container & Grid Strategy
+   -------------------------------------------------------------------------- */
+.editorial-container-wide {
+    max-width: 1450px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* --------------------------------------------------------------------------
+   SECTION 1: Full Width Article Hero
+   -------------------------------------------------------------------------- */
+.editorial-hero-section {
+    position: relative;
+    width: 100vw;
+    height: 75vh;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+.editorial-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
+    z-index: 2;
+}
+
+.editorial-hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: #ffffff;
+    max-width: 900px;
+    padding: 0 20px;
+}
+
+.editorial-hero-badges {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.badge-editorial {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.badge-category {
+    background-color: #0b2e59;
+    color: #fff;
+}
+
+.badge-sdg {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.editorial-hero-title {
+    font-size: 60px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 991px) {
+    .editorial-hero-title {
+        font-size: 42px;
+    }
+}
+@media (max-width: 767px) {
+    .editorial-hero-title {
+        font-size: 32px;
+    }
+}
+
+.editorial-hero-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.9;
+    flex-wrap: wrap;
+}
+
+.editorial-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.editorial-meta-item i {
+    font-size: 20px;
+}
+
+.editorial-meta-divider {
+    opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   SECTION 2: Article Introduction
+   -------------------------------------------------------------------------- */
+.editorial-intro-section {
+    max-width: 900px;
+    margin: 64px auto;
+    text-align: center;
+}
+
+.editorial-excerpt {
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: #555;
+}
+
+@media (max-width: 767px) {
+    .editorial-excerpt {
+        font-size: 20px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   SECTION 3: Editorial Layout (Content area max 850px)
+   -------------------------------------------------------------------------- */
+.editorial-reading-wrapper {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+/* Typography Overrides */
+.editorial-reading-wrapper p {
+    font-size: 19px;
+    line-height: 1.9;
+    margin-bottom: 32px;
+    color: #333;
+}
+
+.editorial-reading-wrapper h2, 
+.editorial-reading-wrapper h3 {
+    margin-top: 64px;
+    margin-bottom: 24px;
+    font-weight: 700;
+    color: #111;
+}
+
+.editorial-reading-wrapper h2 {
+    font-size: 32px;
+}
+
+.editorial-reading-wrapper h3 {
+    font-size: 26px;
+}
+
+/* Image inside Article */
+.editorial-reading-wrapper img {
+    border-radius: 20px;
+    margin-top: 48px;
+    margin-bottom: 48px;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* Blockquote - Modern Card Style */
+.editorial-reading-wrapper blockquote {
+    background: #f8f9fa;
+    border-left: 5px solid #0b2e59;
+    padding: 32px 40px;
+    margin: 48px 0;
+    border-radius: 0 12px 12px 0;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.6;
+    color: #444;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+}
+
+/* --------------------------------------------------------------------------
+   SECTION 4: Sticky Sidebar
+   -------------------------------------------------------------------------- */
+.editorial-sidebar-sticky {
+    position: sticky;
+    top: 120px;
+}
+
+/* --------------------------------------------------------------------------
+   SECTION 5: Author Section
+   -------------------------------------------------------------------------- */
+.editorial-author-card {
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    padding: 40px;
+    margin: 64px 0;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+}
+
+.author-avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #f1f1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    color: #ccc;
+    flex-shrink: 0;
+}
+
+.author-info h4 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.author-department {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #0b2e59;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.author-bio {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    margin: 0;
+}
+
+@media (max-width: 767px) {
+    .editorial-author-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   SECTION 6: Share Section (Floating Style)
+   -------------------------------------------------------------------------- */
+.editorial-share-section {
+    margin: 48px 0;
+    padding: 32px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.share-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.share-buttons-float {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-share-float {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    color: #444;
+    font-size: 22px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-share-float:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.btn-share-float.wa:hover { background: #25D366; color: #fff; }
+.btn-share-float.li:hover { background: #0077b5; color: #fff; }
+.btn-share-float.fb:hover { background: #1877F2; color: #fff; }
+.btn-share-float.cp:hover { background: #333; color: #fff; }
+
+@media (max-width: 767px) {
+    .editorial-share-section {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   SECTION 8: Next/Prev Article Navigation
+   -------------------------------------------------------------------------- */
+.editorial-magazine-nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 64px 0;
+    gap: 30px;
+}
+
+.magazine-nav-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    background: #f9f9f9;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.magazine-nav-card:hover {
+    background: #f0f0f0;
+    transform: translateY(-5px);
+}
+
+.nav-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.nav-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.nav-card-prev {
+    text-align: left;
+}
+
+.nav-card-next {
+    text-align: right;
+}
+
+@media (max-width: 767px) {
+    .editorial-magazine-nav {
+        flex-direction: column;
+    }
+    .magazine-nav-card {
+        text-align: left;
+    }
+}
+
+/* SDGs Impact Specific Adjustments */
+.sdgs-impact-section {
+    margin-top: 64px;
+}

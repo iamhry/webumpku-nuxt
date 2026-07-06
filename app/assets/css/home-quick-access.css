@@ -1,0 +1,281 @@
+/* Styling for Homepage Portal & Layanan Digital section - UMPKU */
+
+:root {
+  --umpku-navy: #0b2e59;
+  --umpku-teal: #0b7a75;
+  --umpku-teal-light: #e6f2f2;
+  --neutral-dark: #1a202c;
+  --neutral-gray: #4a5568;
+  --neutral-light: #cbd5e1;
+  --neutral-bg: #f8fafc;
+  --card-bg: #ffffff;
+  
+  --shadow-premium-sm: 0 4px 20px -2px rgba(11, 46, 89, 0.02), 0 2px 8px -1px rgba(11, 46, 89, 0.01);
+  --shadow-premium-md: 0 20px 25px -5px rgba(11, 46, 89, 0.06), 0 8px 10px -6px rgba(11, 46, 89, 0.02);
+}
+
+.home-quick-access-area {
+  padding: 6rem 0;
+  background-color: var(--neutral-bg);
+}
+
+.quick-access-header {
+  margin-bottom: 3.5rem;
+}
+
+.quick-access-subtitle-tag {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--umpku-teal);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.quick-access-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--umpku-navy);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.quick-access-desc {
+  font-size: 1rem;
+  color: var(--neutral-gray);
+  max-width: 700px;
+  line-height: 1.6;
+  margin-top: 0.75rem;
+}
+
+.quick-access-header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: var(--umpku-navy);
+  transition: all 0.25s ease;
+  text-decoration: none !important;
+}
+
+.quick-access-header-btn:hover {
+  color: var(--umpku-teal);
+  transform: translateX(4px);
+}
+
+/* Grid Layout */
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1199px) {
+  .quick-access-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .quick-access-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .quick-access-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card Design */
+.quick-access-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+  border: 1px solid rgba(11, 46, 89, 0.06);
+  border-radius: 24px;
+  padding: 2.25rem 2rem;
+  text-decoration: none !important;
+  color: inherit !important;
+  box-shadow: var(--shadow-premium-sm);
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.quick-access-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-premium-md);
+  border-color: rgba(11, 122, 117, 0.2);
+  background-color: #fafbfc;
+}
+
+/* Icon box */
+.quick-access-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background-color: var(--neutral-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), 
+              background-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quick-access-icon-box i {
+  font-size: 2rem;
+  color: var(--umpku-teal);
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quick-access-card:hover .quick-access-icon-box {
+  background-color: var(--umpku-teal-light);
+}
+
+.quick-access-card:hover .quick-access-icon-box i {
+  transform: scale(1.1);
+}
+
+/* Card details */
+.quick-access-card-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.quick-access-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--umpku-navy);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.quick-access-card-desc {
+  font-size: 0.95rem;
+  color: var(--neutral-gray);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+/* Card Arrow */
+.quick-access-card-arrow {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--umpku-teal);
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quick-access-card-arrow i {
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quick-access-card:hover .quick-access-card-arrow i {
+  transform: translateX(6px);
+}
+
+/* Skeleton Loading state */
+.quick-access-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+  border: 1px solid rgba(11, 46, 89, 0.05);
+  border-radius: 24px;
+  padding: 2.25rem 2rem;
+  height: 250px;
+}
+
+.quick-access-skeleton-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background-color: #f1f5f9;
+  margin-bottom: 1.75rem;
+  animation: pulse-placeholder 1.5s infinite ease-in-out;
+}
+
+.quick-access-skeleton-line {
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  animation: pulse-placeholder 1.5s infinite ease-in-out;
+}
+
+.quick-access-skeleton-title {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 0.75rem;
+}
+
+.quick-access-skeleton-desc1 {
+  height: 16px;
+  width: 90%;
+  margin-bottom: 0.5rem;
+}
+
+.quick-access-skeleton-desc2 {
+  height: 16px;
+  width: 70%;
+  margin-bottom: 1.5rem;
+}
+
+.quick-access-skeleton-arrow {
+  height: 16px;
+  width: 25%;
+  margin-top: auto;
+}
+
+@keyframes pulse-placeholder {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Empty State */
+.quick-access-empty-state {
+  grid-column: span 4;
+  text-align: center;
+  padding: 4rem 2rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 24px;
+  background-color: #f8fafc;
+}
+
+@media (max-width: 1199px) {
+  .quick-access-empty-state {
+    grid-column: span 3;
+  }
+}
+@media (max-width: 991px) {
+  .quick-access-empty-state {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 575px) {
+  .quick-access-empty-state {
+    grid-column: span 1;
+  }
+}
+
+.quick-access-empty-icon {
+  font-size: 3rem;
+  color: var(--neutral-light);
+  margin-bottom: 1rem;
+}
+
+.quick-access-empty-text {
+  font-size: 1.1rem;
+  color: var(--neutral-gray);
+  font-weight: 500;
+}

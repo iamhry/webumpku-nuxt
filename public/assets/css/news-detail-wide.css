@@ -1,0 +1,268 @@
+/* ==========================================================================
+   News Detail Wide Layout Stylesheet (RSTheme Industrie Laboratory Inspired)
+   Author: Senior Nuxt 4 Architect / UX Designer
+   ========================================================================== */
+
+/* 1. Container Width Adjustments (Matching Homepage exactly at 1500px) */
+@media (min-width: 1200px) {
+    .layout-content .news-details-page .container,
+    .layout-content .news-detail-page .container {
+        max-width: 1500px !important;
+        width: 100% !important;
+    }
+}
+
+/* 2. Grid & Width Customizations (Desktop Only) */
+@media (min-width: 992px) {
+    .news-details-page .row {
+        display: flex !important;
+        justify-content: space-between !important;
+        flex-wrap: wrap !important;
+        max-width: 1360px !important; /* Cap row width for a proportional gap */
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* Content Area: Max 900px for Readability */
+    .news-details-page .col-lg-8 {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        max-width: 900px !important;
+    }
+
+    /* Sidebar: Widened to 380px */
+    .news-details-page .col-lg-4 {
+        flex: 0 0 380px !important;
+        width: 380px !important;
+        max-width: 380px !important;
+    }
+}
+
+/* 3. Breadcrumb Spacing Enhancement */
+.news-details-page .breadcrumb-area {
+    padding: 40px 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* 4. Article Header & Inline Title styling */
+.news-detail-header {
+    margin-bottom: 25px;
+}
+
+.news-details-page .news-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #0b2e59;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .news-details-page .news-title {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+}
+
+/* 5. Featured Image Layout & Border Radius */
+.featured-image-wrapper {
+    width: 100%;
+    margin-bottom: 40px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(11, 46, 89, 0.08);
+}
+
+.featured-image {
+    width: 100%;
+    height: auto;
+    max-height: 550px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.featured-image-wrapper:hover .featured-image {
+    transform: scale(1.02);
+}
+
+/* 6. Meta Horizontal Information Area */
+.news-details-page .news-meta-section {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.news-details-page .meta-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.news-details-page .meta-item-horiz {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.news-details-page .meta-item-horiz i {
+    font-size: 1.15rem;
+    color: #ffc107;
+}
+
+.news-details-page .meta-item-horiz strong {
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.news-details-page .meta-item-divider {
+    color: #d1d5db;
+    user-select: none;
+}
+
+/* 7. Inline SDGs badges in meta-info */
+.meta-sdgs-badges {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.meta-sdg-badge-inline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meta-sdg-badge-inline:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .news-details-page .meta-horizontal {
+        gap: 12px;
+    }
+    
+    .news-details-page .meta-item-divider {
+        display: none;
+    }
+    
+    .news-details-page .meta-item-horiz {
+        width: 100%;
+        border-bottom: 1px dashed #f3f4f6;
+        padding-bottom: 8px;
+    }
+    
+    .news-details-page .meta-item-horiz:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+}
+
+/* 8. SDGs Sidebar widget styles */
+.sdgs-sidebar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sdg-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #1f2937;
+    transition: all 0.3s ease;
+}
+
+.sdg-sidebar-item:hover {
+    transform: translateX(4px);
+    background: white;
+    box-shadow: 0 4px 12px rgba(11, 46, 89, 0.06);
+    color: #0b2e59;
+}
+
+.sdg-sidebar-number {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.sdg-sidebar-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.sdg-sidebar-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.sdg-sidebar-title {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #374151;
+}
+
+.sdg-sidebar-item:hover .sdg-sidebar-title {
+    color: #0b2e59;
+}
+
+/* 9. Related News (Full Width below content) */
+.news-details-page .related-news-section {
+    width: 100% !important;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    padding-top: 40px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* 10. Align Header Top, Navigation Header, and Footer with Homepage Container (1500px) */
+@media (min-width: 1200px) {
+    .layout-content .header-top .container,
+    .layout-content .navigation .container,
+    .layout-content .header-area .container,
+    .layout-content .footer-area .container,
+    .layout-content .footer-bottom .container {
+        max-width: 1500px !important;
+        width: 100% !important;
+    }
+}

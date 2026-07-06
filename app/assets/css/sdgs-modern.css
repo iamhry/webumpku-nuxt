@@ -1,0 +1,132 @@
+:root {
+  /* Official UN SDG Colors */
+  --sdg-1: #e5243b;
+  --sdg-2: #dda63a;
+  --sdg-3: #4c9f38;
+  --sdg-4: #c5192d;
+  --sdg-5: #ff3a21;
+  --sdg-6: #26bde2;
+  --sdg-7: #fcc30b;
+  --sdg-8: #a21942;
+  --sdg-9: #fd6925;
+  --sdg-10: #dd1367;
+  --sdg-11: #fd9d24;
+  --sdg-12: #bf8b2e;
+  --sdg-13: #3f7e44;
+  --sdg-14: #0a97d9;
+  --sdg-15: #56c02b;
+  --sdg-16: #00689d;
+  --sdg-17: #19486a;
+
+  /* Modern Palette */
+  --sdg-bg-light: #ffffff;
+  --sdg-bg-dark: #0f172a;
+  --sdg-text-dark: #1e293b;
+  --sdg-text-light: #f8fafc;
+  --sdg-glass-bg: rgba(255, 255, 255, 0.85);
+  --sdg-glass-dark: rgba(15, 23, 42, 0.7);
+  --sdg-glass-border: rgba(255, 255, 255, 0.2);
+}
+
+/* Base resets specifically for sdgs wrapper to not break existing styles */
+.sdgs-modern-wrapper {
+  font-family: 'Inter', 'Outfit', sans-serif;
+  color: var(--sdg-text-dark);
+  background-color: var(--sdg-bg-light);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Dark Mode Variations */
+.sdgs-modern-wrapper.sdgs-dark {
+  background-color: var(--sdg-bg-dark);
+  color: var(--sdg-text-light);
+}
+
+/* Glassmorphism utility */
+.sdgs-glass {
+  background: var(--sdg-glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--sdg-glass-border);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+.sdgs-dark .sdgs-glass {
+  background: var(--sdg-glass-dark);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Typography */
+.sdgs-title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.sdgs-gradient-text {
+  background: linear-gradient(135deg, var(--sdg-1), var(--sdg-14));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animations */
+@keyframes floatUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.sdgs-animate-float {
+  animation: floatUp 0.8s ease-out forwards;
+}
+
+/* Hover effects */
+.sdgs-hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sdgs-hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.sdgs-dark .sdgs-hover-lift:hover {
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* Layout Utilities */
+.sdgs-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.sdgs-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+/* Button */
+.sdgs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.sdgs-btn-primary {
+  background-color: var(--sdg-14);
+  color: white;
+  border: none;
+}
+
+.sdgs-btn-primary:hover {
+  background-color: #0875a8;
+  color: white;
+  transform: scale(1.05);
+}

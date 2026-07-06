@@ -1,0 +1,246 @@
+
+> build
+> nuxt build
+
+┌  Building Nuxt for production...
+│
+●  Nuxt 4.4.8 (with Nitro 2.13.4, Vite 7.3.5 and Vue 3.5.38)
+│
+●  Nitro preset: node-server
+
+[nuxt]  WARN  Two component files resolving to the same name StatisticsSection:
+
+ - /home/hry/PhpstormProjects/webumpku/app/components/sections/StatisticsSection.vue
+ - /home/hry/PhpstormProjects/webumpku/app/components/home/StatisticsSection.vue
+
+ℹ Building client...
+ℹ vite v7.3.5 building client environment for production...
+
+ WARN  [plugin nuxt:module-preload-polyfill] Sourcemap is likely to be incorrect: a plugin (nuxt:module-preload-polyfill) was used to transform files, but didn't generate a sourcemap for the transformation. Consult the plugin documentation for help
+
+ℹ transforming...
+
+ WARN  [vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+62 |  
+63 |  /* 6. Dyslexia Friendly Font */
+64 |  @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap');
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+65 |  body.dyslexia-font, 
+66 |  body.dyslexia-font * {
+
+
+ WARN  [vite:css][postcss] Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: inherit * var(--a11y-font-multiplier)
+^..^
+18 |  body.large-text h5, 
+19 |  body.large-text h6 {
+20 |    font-size: calc(inherit * var(--a11y-font-multiplier)) !important;
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+21 |    line-height: calc(1.5 * var(--a11y-font-multiplier)) !important;
+22 |  }
+
+ℹ ✓ 412 modules transformed.
+ℹ rendering chunks...
+ℹ computing gzip size...
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/manifest.json                   6.19 kB │ gzip:  0.98 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/NewsCard.B0aRCQr3.css     0.65 kB │ gzip:  0.33 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/index.1AZrPYNA.css        1.82 kB │ gzip:  0.64 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/error-500.BW0Y54Of.css    1.91 kB │ gzip:  0.73 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/error-404.C3kT2QX-.css    2.43 kB │ gzip:  0.86 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/_slug_.U8GpcDVn.css       4.12 kB │ gzip:  1.04 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/index.sq5NPaiu.css        6.78 kB │ gzip:  1.81 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/default.DnXZzo-C.css      9.79 kB │ gzip:  2.49 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/DlAUqK2U.js               0.09 kB │ gzip:  0.10 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/DapPFd0s.js               0.42 kB │ gzip:  0.30 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/DrADJeCK.js               0.53 kB │ gzip:  0.26 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/DcHYjms5.js               0.93 kB │ gzip:  0.57 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/CxwRcGYq.js               1.11 kB │ gzip:  0.48 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/Bg3FGURL.js               1.20 kB │ gzip:  0.66 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/CkaJ1XlQ.js               1.25 kB │ gzip:  0.46 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/D_GYGjOL.js               1.30 kB │ gzip:  0.49 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/Bc3XGxJ2.js               1.75 kB │ gzip:  0.92 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/CEjhk2g2.js               2.06 kB │ gzip:  0.90 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/DlygG6vk.js               2.08 kB │ gzip:  1.03 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/B75t3DNy.js               2.26 kB │ gzip:  1.16 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/geVLfArw.js               2.38 kB │ gzip:  1.21 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/BtbuJlVz.js               2.45 kB │ gzip:  0.94 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/CKaGPlzL.js               3.48 kB │ gzip:  1.56 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/CIr48xQW.js               3.79 kB │ gzip:  1.71 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/CaTYubl-.js               5.65 kB │ gzip:  2.26 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/D0-XKgX7.js              15.02 kB │ gzip:  5.41 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/DxcuIpQx.js              24.32 kB │ gzip:  7.59 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/COm8QSDh.js              44.22 kB │ gzip: 16.02 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/OI3yD9sz.js              65.34 kB │ gzip: 24.50 kB
+ℹ ../node_modules/.cache/nuxt/.nuxt/dist/client/_nuxt/d2tK7gTf.js             270.71 kB │ gzip: 99.86 kB
+ℹ ✓ built in 5.28s
+✔ Client built in 5292ms
+ℹ Building server...
+ℹ vite v7.3.5 building ssr environment for production...
+ℹ transforming...
+
+ WARN  [vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+62 |  
+63 |  /* 6. Dyslexia Friendly Font */
+64 |  @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap');
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+65 |  body.dyslexia-font, 
+66 |  body.dyslexia-font * {
+
+
+ WARN  [vite:css][postcss] Lexical error on line 1: Unrecognized text.
+
+  Erroneous area:
+1: inherit * var(--a11y-font-multiplier)
+^..^
+18 |  body.large-text h5, 
+19 |  body.large-text h6 {
+20 |    font-size: calc(inherit * var(--a11y-font-multiplier)) !important;
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+21 |    line-height: calc(1.5 * var(--a11y-font-multiplier)) !important;
+22 |  }
+
+ℹ ✓ 281 modules transformed.
+ℹ rendering chunks...
+ℹ ✓ built in 2.84s
+✔ Server built in 2855ms
+[nitro] ✔ Generated public .output/public
+[nitro] ℹ Building Nuxt Nitro server (preset: node-server, compatibility date: 2025-07-15)
+[nitro] ✔ Nuxt Nitro server built
+  ├─ .output/server/chunks/_/error-500.mjs (5.09 kB) (2.06 kB gzip)
+  ├─ .output/server/chunks/_/error-500.mjs.map (182 B) (154 B gzip)
+  ├─ .output/server/chunks/build/_plugin-vue_export-helper-1tPrXgE0.mjs (254 B) (201 B gzip)
+  ├─ .output/server/chunks/build/_plugin-vue_export-helper-1tPrXgE0.mjs.map (225 B) (169 B gzip)
+  ├─ .output/server/chunks/build/_slug_-CaFiF8-d.mjs (3.88 kB) (1.4 kB gzip)
+  ├─ .output/server/chunks/build/_slug_-CaFiF8-d.mjs.map (187 B) (157 B gzip)
+  ├─ .output/server/chunks/build/_slug_-CGBJAr6r.mjs (5.05 kB) (1.75 kB gzip)
+  ├─ .output/server/chunks/build/_slug_-CGBJAr6r.mjs.map (187 B) (159 B gzip)
+  ├─ .output/server/chunks/build/_slug_-D7uHjtjJ.mjs (4.87 kB) (1.82 kB gzip)
+  ├─ .output/server/chunks/build/_slug_-D7uHjtjJ.mjs.map (187 B) (157 B gzip)
+  ├─ .output/server/chunks/build/_slug_-DoDz7Gz-.mjs (33.6 kB) (6.66 kB gzip)
+  ├─ .output/server/chunks/build/_slug_-DoDz7Gz-.mjs.map (187 B) (158 B gzip)
+  ├─ .output/server/chunks/build/_slug_-styles-1.mjs-554CsdfN.mjs (3.71 kB) (947 B gzip)
+  ├─ .output/server/chunks/build/_slug_-styles-1.mjs-554CsdfN.mjs.map (213 B) (166 B gzip)
+  ├─ .output/server/chunks/build/_slug_-styles-2.mjs-CKVXgnX4.mjs (283 B) (210 B gzip)
+  ├─ .output/server/chunks/build/_slug_-styles-2.mjs-CKVXgnX4.mjs.map (213 B) (166 B gzip)
+  ├─ .output/server/chunks/build/_slug_-styles-3.mjs-Dz2c-MuR.mjs (532 B) (322 B gzip)
+  ├─ .output/server/chunks/build/_slug_-styles-3.mjs-Dz2c-MuR.mjs.map (213 B) (165 B gzip)
+  ├─ .output/server/chunks/build/_slug_-styles.Bkqu_3Kx.mjs (1.02 kB) (417 B gzip)
+  ├─ .output/server/chunks/build/_slug_-styles.Bkqu_3Kx.mjs.map (338 B) (196 B gzip)
+  ├─ .output/server/chunks/build/AppTopbar-styles.VMS1jNz6.mjs (321 B) (206 B gzip)
+  ├─ .output/server/chunks/build/AppTopbar-styles.VMS1jNz6.mjs.map (217 B) (170 B gzip)
+  ├─ .output/server/chunks/build/client.precomputed.mjs (12.7 kB) (1.6 kB gzip)
+  ├─ .output/server/chunks/build/client.precomputed.mjs.map (188 B) (150 B gzip)
+  ├─ .output/server/chunks/build/default-dEmwrFRi.mjs (27.7 kB) (5.07 kB gzip)
+  ├─ .output/server/chunks/build/default-dEmwrFRi.mjs.map (189 B) (157 B gzip)
+  ├─ .output/server/chunks/build/default-styles-1.mjs-DQb-TR9O.mjs (753 B) (386 B gzip)
+  ├─ .output/server/chunks/build/default-styles-1.mjs-DQb-TR9O.mjs.map (215 B) (169 B gzip)
+  ├─ .output/server/chunks/build/default-styles-2.mjs-BisjHd3H.mjs (644 B) (387 B gzip)
+  ├─ .output/server/chunks/build/default-styles-2.mjs-BisjHd3H.mjs.map (215 B) (167 B gzip)
+  ├─ .output/server/chunks/build/default-styles-3.mjs-yTm4a73V.mjs (3.06 kB) (1.02 kB gzip)
+  ├─ .output/server/chunks/build/default-styles-3.mjs-yTm4a73V.mjs.map (215 B) (167 B gzip)
+  ├─ .output/server/chunks/build/default-styles-4.mjs-uU8sqtKx.mjs (661 B) (343 B gzip)
+  ├─ .output/server/chunks/build/default-styles-4.mjs-uU8sqtKx.mjs.map (215 B) (167 B gzip)
+  ├─ .output/server/chunks/build/default-styles.B1ZOjb2a.mjs (7.02 kB) (1.98 kB gzip)
+  ├─ .output/server/chunks/build/default-styles.B1ZOjb2a.mjs.map (675 B) (253 B gzip)
+  ├─ .output/server/chunks/build/en-BrKt9TeY.mjs (2.04 kB) (527 B gzip)
+  ├─ .output/server/chunks/build/en-BrKt9TeY.mjs.map (179 B) (154 B gzip)
+  ├─ .output/server/chunks/build/error-404-DwtaIAwF.mjs (5.75 kB) (2.3 kB gzip)
+  ├─ .output/server/chunks/build/error-404-DwtaIAwF.mjs.map (193 B) (163 B gzip)
+  ├─ .output/server/chunks/build/error-404-styles.C8lgdT6t.mjs (2.72 kB) (985 B gzip)
+  ├─ .output/server/chunks/build/error-404-styles.C8lgdT6t.mjs.map (317 B) (191 B gzip)
+  ├─ .output/server/chunks/build/error-500-C9Bx883z.mjs (4.93 kB) (2.02 kB gzip)
+  ├─ .output/server/chunks/build/error-500-C9Bx883z.mjs.map (193 B) (161 B gzip)
+  ├─ .output/server/chunks/build/error-500-styles.Ccrcwcfa.mjs (2.19 kB) (857 B gzip)
+  ├─ .output/server/chunks/build/error-500-styles.Ccrcwcfa.mjs.map (317 B) (189 B gzip)
+  ├─ .output/server/chunks/build/id-Cq4nYvgK.mjs (2.09 kB) (566 B gzip)
+  ├─ .output/server/chunks/build/id-Cq4nYvgK.mjs.map (179 B) (154 B gzip)
+  ├─ .output/server/chunks/build/index-B_HIXHNF.mjs (36.2 kB) (7.73 kB gzip)
+  ├─ .output/server/chunks/build/index-B_HIXHNF.mjs.map (185 B) (158 B gzip)
+  ├─ .output/server/chunks/build/index-dd9tKvm4.mjs (2.83 kB) (1.15 kB gzip)
+  ├─ .output/server/chunks/build/index-dd9tKvm4.mjs.map (185 B) (155 B gzip)
+  ├─ .output/server/chunks/build/index-DKlesvMJ.mjs (28 kB) (6.73 kB gzip)
+  ├─ .output/server/chunks/build/index-DKlesvMJ.mjs.map (185 B) (156 B gzip)
+  ├─ .output/server/chunks/build/index-styles-1.mjs-DJTBTxlr.mjs (677 B) (396 B gzip)
+  ├─ .output/server/chunks/build/index-styles-1.mjs-DJTBTxlr.mjs.map (211 B) (166 B gzip)
+  ├─ .output/server/chunks/build/index-styles-2.mjs-DxSv2fXA.mjs (708 B) (401 B gzip)
+  ├─ .output/server/chunks/build/index-styles-2.mjs-DxSv2fXA.mjs.map (211 B) (166 B gzip)
+  ├─ .output/server/chunks/build/index-styles-3.mjs-Dr4TBT5A.mjs (1.34 kB) (614 B gzip)
+  ├─ .output/server/chunks/build/index-styles-3.mjs-Dr4TBT5A.mjs.map (211 B) (167 B gzip)
+  ├─ .output/server/chunks/build/index-styles-4.mjs-B8CgncsR.mjs (926 B) (462 B gzip)
+  ├─ .output/server/chunks/build/index-styles-4.mjs-B8CgncsR.mjs.map (211 B) (165 B gzip)
+  ├─ .output/server/chunks/build/index-styles-5.mjs-Zg_3UeAf.mjs (874 B) (465 B gzip)
+  ├─ .output/server/chunks/build/index-styles-5.mjs-Zg_3UeAf.mjs.map (211 B) (165 B gzip)
+  ├─ .output/server/chunks/build/index-styles-6.mjs-DgfCN1A9.mjs (587 B) (321 B gzip)
+  ├─ .output/server/chunks/build/index-styles-6.mjs-DgfCN1A9.mjs.map (211 B) (167 B gzip)
+  ├─ .output/server/chunks/build/index-styles-7.mjs-l0mHaQr7.mjs (1.66 kB) (686 B gzip)
+  ├─ .output/server/chunks/build/index-styles-7.mjs-l0mHaQr7.mjs.map (211 B) (164 B gzip)
+  ├─ .output/server/chunks/build/index-styles-8.mjs-CsnfK7PP.mjs (1.68 kB) (670 B gzip)
+  ├─ .output/server/chunks/build/index-styles-8.mjs-CsnfK7PP.mjs.map (211 B) (166 B gzip)
+  ├─ .output/server/chunks/build/index-styles.BhT0aErN.mjs (1.81 kB) (498 B gzip)
+  ├─ .output/server/chunks/build/index-styles.BhT0aErN.mjs.map (385 B) (213 B gzip)
+  ├─ .output/server/chunks/build/index-styles.Ct7oG-Z1.mjs (2.09 kB) (782 B gzip)
+  ├─ .output/server/chunks/build/index-styles.Ct7oG-Z1.mjs.map (305 B) (188 B gzip)
+  ├─ .output/server/chunks/build/NewsCard-BUgAc32I.mjs (4.36 kB) (1.58 kB gzip)
+  ├─ .output/server/chunks/build/NewsCard-BUgAc32I.mjs.map (191 B) (161 B gzip)
+  ├─ .output/server/chunks/build/NewsCard-styles.CSVe8zRP.mjs (917 B) (459 B gzip)
+  ├─ .output/server/chunks/build/NewsCard-styles.CSVe8zRP.mjs.map (314 B) (192 B gzip)
+  ├─ .output/server/chunks/build/NewsContent-styles.CX6ce7_H.mjs (330 B) (209 B gzip)
+  ├─ .output/server/chunks/build/NewsContent-styles.CX6ce7_H.mjs.map (221 B) (169 B gzip)
+  ├─ .output/server/chunks/build/NewsGrid-Drhju3Dn.mjs (1.28 kB) (601 B gzip)
+  ├─ .output/server/chunks/build/NewsGrid-Drhju3Dn.mjs.map (191 B) (159 B gzip)
+  ├─ .output/server/chunks/build/NewsSidebar-styles.DssbbgiX.mjs (330 B) (213 B gzip)
+  ├─ .output/server/chunks/build/NewsSidebar-styles.DssbbgiX.mjs.map (221 B) (168 B gzip)
+  ├─ .output/server/chunks/build/nuxt-link-ozKK7XcK.mjs (10.4 kB) (2.77 kB gzip)
+  ├─ .output/server/chunks/build/nuxt-link-ozKK7XcK.mjs.map (193 B) (160 B gzip)
+  ├─ .output/server/chunks/build/QuickAccessOverlay-styles.Dis_b5Mq.mjs (366 B) (212 B gzip)
+  ├─ .output/server/chunks/build/QuickAccessOverlay-styles.Dis_b5Mq.mjs.map (235 B) (174 B gzip)
+  ├─ .output/server/chunks/build/QuickAccessSidebar-styles.CSUnCHRN.mjs (366 B) (218 B gzip)
+  ├─ .output/server/chunks/build/QuickAccessSidebar-styles.CSUnCHRN.mjs.map (235 B) (177 B gzip)
+  ├─ .output/server/chunks/build/QuickAccessToggle-styles.g8XV0ruD.mjs (361 B) (210 B gzip)
+  ├─ .output/server/chunks/build/QuickAccessToggle-styles.g8XV0ruD.mjs.map (233 B) (174 B gzip)
+  ├─ .output/server/chunks/build/RelatedNews-styles.bgOF4L0D.mjs (330 B) (208 B gzip)
+  ├─ .output/server/chunks/build/RelatedNews-styles.bgOF4L0D.mjs.map (221 B) (169 B gzip)
+  ├─ .output/server/chunks/build/SdgsDashboard-styles.C2nX86pr.mjs (339 B) (208 B gzip)
+  ├─ .output/server/chunks/build/SdgsDashboard-styles.C2nX86pr.mjs.map (225 B) (171 B gzip)
+  ├─ .output/server/chunks/build/SdgsGoalsGrid-styles.P8mbWd2t.mjs (339 B) (211 B gzip)
+  ├─ .output/server/chunks/build/SdgsGoalsGrid-styles.P8mbWd2t.mjs.map (225 B) (172 B gzip)
+  ├─ .output/server/chunks/build/SdgsHeroSection-styles.BrMD9X3Z.mjs (349 B) (212 B gzip)
+  ├─ .output/server/chunks/build/SdgsHeroSection-styles.BrMD9X3Z.mjs.map (229 B) (174 B gzip)
+  ├─ .output/server/chunks/build/SdgsImpactBlock-styles.9KXYDBT9.mjs (349 B) (212 B gzip)
+  ├─ .output/server/chunks/build/SdgsImpactBlock-styles.9KXYDBT9.mjs.map (229 B) (175 B gzip)
+  ├─ .output/server/chunks/build/SdgsNewsSection-styles.CnxMzrIR.mjs (349 B) (210 B gzip)
+  ├─ .output/server/chunks/build/SdgsNewsSection-styles.CnxMzrIR.mjs.map (229 B) (172 B gzip)
+  ├─ .output/server/chunks/build/SdgsPartnerships-styles.kRqTk9Hv.mjs (354 B) (213 B gzip)
+  ├─ .output/server/chunks/build/SdgsPartnerships-styles.kRqTk9Hv.mjs.map (231 B) (173 B gzip)
+  ├─ .output/server/chunks/build/SdgsPriorityGoals-styles.QX5lK5I1.mjs (359 B) (213 B gzip)
+  ├─ .output/server/chunks/build/SdgsPriorityGoals-styles.QX5lK5I1.mjs.map (233 B) (176 B gzip)
+  ├─ .output/server/chunks/build/SdgsStatistics-styles.DC_wT8Gf.mjs (344 B) (208 B gzip)
+  ├─ .output/server/chunks/build/SdgsStatistics-styles.DC_wT8Gf.mjs.map (227 B) (172 B gzip)
+  ├─ .output/server/chunks/build/server.mjs (232 kB) (51.9 kB gzip)
+  ├─ .output/server/chunks/build/server.mjs.map (331 B) (207 B gzip)
+  ├─ .output/server/chunks/build/styles.mjs (2.71 kB) (698 B gzip)
+  ├─ .output/server/chunks/build/styles.mjs.map (164 B) (142 B gzip)
+  ├─ .output/server/chunks/build/test-icons-CgnoWC36.mjs (2.68 kB) (975 B gzip)
+  ├─ .output/server/chunks/build/test-icons-CgnoWC36.mjs.map (195 B) (160 B gzip)
+  ├─ .output/server/chunks/build/useMedia-D3csoL1O.mjs (1.1 kB) (391 B gzip)
+  ├─ .output/server/chunks/build/useMedia-D3csoL1O.mjs.map (191 B) (158 B gzip)
+  ├─ .output/server/chunks/build/useNews-CFbKdwKS.mjs (4.24 kB) (1.21 kB gzip)
+  ├─ .output/server/chunks/build/useNews-CFbKdwKS.mjs.map (189 B) (159 B gzip)
+  ├─ .output/server/chunks/build/useSdgs-CENtUClY.mjs (3.58 kB) (1.19 kB gzip)
+  ├─ .output/server/chunks/build/useSdgs-CENtUClY.mjs.map (189 B) (159 B gzip)
+  ├─ .output/server/chunks/build/useSettings-CluruK-I.mjs (1.75 kB) (767 B gzip)
+  ├─ .output/server/chunks/build/useSettings-CluruK-I.mjs.map (197 B) (160 B gzip)
+  ├─ .output/server/chunks/nitro/nitro.mjs (251 kB) (58.7 kB gzip)
+  ├─ .output/server/chunks/nitro/nitro.mjs.map (4.68 kB) (1.03 kB gzip)
+  ├─ .output/server/chunks/routes/renderer.mjs (13.5 kB) (4.26 kB gzip)
+  ├─ .output/server/chunks/routes/renderer.mjs.map (768 B) (267 B gzip)
+  ├─ .output/server/chunks/virtual/_virtual_spa-template.mjs (94 B) (100 B gzip)
+  ├─ .output/server/chunks/virtual/_virtual_spa-template.mjs.map (90 B) (98 B gzip)
+  ├─ .output/server/index.mjs (374 B) (215 B gzip)
+  └─ .output/server/package.json (2.51 kB) (911 B gzip)
+Σ Total size: 15.5 MB (2.99 MB gzip)
+[nitro] ✔ You can preview this build using node .output/server/index.mjs
+│
+└  ✨ Build complete!

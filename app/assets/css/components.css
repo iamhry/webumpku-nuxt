@@ -1,0 +1,244 @@
+/* Buttons */
+.main-btn,
+.btn-premium {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: var(--primary) !important;
+  color: var(--text-light) !important;
+  font-family: var(--font-body) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  padding: var(--space-3) var(--space-5) !important;
+  border-radius: var(--radius-full) !important;
+  transition: all var(--transition-normal) !important;
+  box-shadow: var(--shadow-small) !important;
+  border: 1.5px solid transparent !important;
+  cursor: pointer;
+}
+
+.main-btn:hover,
+.btn-premium:hover {
+  background-color: var(--primary-hover) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-medium) !important;
+  color: var(--text-light) !important;
+}
+
+.main-btn.btn-white {
+  background-color: var(--text-light) !important;
+  color: var(--primary) !important;
+}
+
+.main-btn.btn-white:hover {
+  background-color: var(--surface) !important;
+  color: var(--primary-hover) !important;
+}
+
+/* Cards */
+.card-premium,
+.single-blog-item,
+.faculty-card,
+.reputation-card,
+.quick-access-card {
+  background-color: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-large) !important;
+  padding: var(--space-5) !important;
+  transition: all var(--transition-normal) !important;
+  box-shadow: var(--shadow-small) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.card-premium:hover,
+.single-blog-item:hover,
+.faculty-card:hover,
+.reputation-card:hover,
+.quick-access-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-medium) !important;
+  border-color: var(--border-hover) !important;
+}
+
+/* Badge & Chip */
+.badge,
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background-color: var(--surface);
+  color: var(--text-body);
+  border: 1px solid var(--border);
+}
+
+.badge-primary,
+.chip-primary {
+  background-color: var(--primary);
+  color: var(--text-light);
+  border-color: var(--primary-hover);
+}
+
+/* Form Controls */
+input,
+textarea,
+select {
+  width: 100%;
+  background-color: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  padding: var(--space-3) var(--space-4) !important;
+  font-family: var(--font-body) !important;
+  font-size: 14px !important;
+  color: var(--text-heading) !important;
+  border-radius: var(--radius-medium) !important;
+  transition: all var(--transition-fast) !important;
+  box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary) !important;
+  outline: none;
+}
+
+/* Navbar */
+.navigation {
+  background-color: var(--bg) !important;
+  border-bottom: 1px solid var(--border);
+  transition: all var(--transition-normal) !important;
+}
+
+/* Footer */
+.footer-area,
+.site-footer {
+  background-color: #0a182c !important;
+  color: var(--text-light) !important;
+}
+
+.footer-area h3,
+.site-footer h3 {
+  color: var(--text-light) !important;
+}
+
+/* Section Title */
+.section-title h2 {
+  font-family: var(--font-heading) !important;
+  font-size: clamp(32px, 4vw, 48px) !important;
+  font-weight: 700;
+  color: var(--text-heading) !important;
+}
+
+.section-title h6 {
+  font-family: var(--font-body) !important;
+  font-size: 13px;
+  color: var(--primary) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.section-title p {
+  color: var(--text-body) !important;
+}
+
+/* Breadcrumb */
+.breadcrumb-area,
+.breadcrumb {
+  background-color: var(--surface) !important;
+  color: var(--text-body) !important;
+}
+
+/* Page Header */
+.page-header {
+  background-color: var(--accent) !important;
+  color: var(--text-light) !important;
+}
+
+/* CTA */
+.cta-area,
+.cta-section {
+  background-color: var(--primary) !important;
+  color: var(--text-light) !important;
+}
+
+/* Modal */
+.modal-content {
+  background-color: var(--bg) !important;
+  border-radius: var(--radius-large) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-large) !important;
+}
+
+/* Accordion */
+.accordion-item {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-medium) !important;
+  background-color: var(--bg) !important;
+  margin-bottom: var(--space-3) !important;
+}
+
+/* Tabs */
+.tabs-nav {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.tabs-nav-btn {
+  background: transparent;
+  border: none;
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-body);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.tabs-nav-btn.is-active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+}
+
+/* Webarq Promote Gradient Main Title Style */
+.banner-title .main-title,
+.main-title {
+  background: var(--Gradient-purple-blu, linear-gradient(90deg, #4645a8 0, #09b2cf 100%)) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  display: block !important;
+  -webkit-text-fill-color: transparent !important;
+  padding-bottom: 10px !important;
+  position: relative !important;
+}
+
+/* Header Top Overrides */
+.header-top {
+  background-color: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--text-header-top) !important;
+  font-size: 13px !important;
+  padding: 10px 0 !important;
+}
+
+.header-top a,
+.header-top i,
+.header-top .contact-info a,
+.header-top .contact-info i,
+.header-top .site-info .social-area a i,
+.language-switcher a {
+  color: var(--text-header-top) !important;
+}
+
+.header-top a:hover,
+.header-top .site-info .social-area a:hover i,
+.language-switcher a:hover,
+.language-switcher a.active {
+  color: var(--primary) !important;
+}

@@ -15,7 +15,7 @@ onMounted(async () => {
 
 <template>
     <div id="service-3" class="services-area section-padding">
- 		<div class="container">
+ 		<div class="container content-wide">
  			<div class="row">
  				<div class="offset-lg-2 col-lg-8 text-center">
  					<div class="section-title">

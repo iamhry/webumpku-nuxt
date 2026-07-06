@@ -26,36 +26,12 @@
   11. Preloader 
 
 */
-(function ($) {
+window.initDustrian = function ($) {
 	"use strict";
 
-	// Mobile Menu
-
-	$(".navbar-toggler").on("click", function () {
-		$(this).toggleClass("active");
-	});
-
-	$(".navbar-nav li a").on("click", function () {
-		$(".sub-nav-toggler").removeClass("active");
-	});
-
-	var subMenu = $(".navbar-nav .sub-menu");
-
-	if (subMenu.length) {
-		subMenu
-			.parent("li")
-			.children("a")
-			.append(function () {
-				return '<button class="sub-nav-toggler"> <i class="fa fa-angle-down"></i> </button>';
-			});
-
-		var subMenuToggler = $(".navbar-nav .sub-nav-toggler");
-
-		subMenuToggler.on("click", function () {
-			$(this).parent().parent().children(".sub-menu").slideToggle();
-			return false;
-		});
-	}
+	// Mobile Menu and Sticky Area initialization have been removed 
+	// because they are natively handled inside HeaderOne.vue's onMounted hook.
+	// This prevents duplicate event listeners and hydration node mismatches.
 
 	//Home Page Slide
 
@@ -251,10 +227,7 @@
 		}
 	})
 
-	//jQuery Sticky Area 
-	$('.sticky-area').sticky({
-		topSpacing: 0,
-	});
+	//jQuery Sticky Area initialization removed (handled by HeaderOne.vue)
 
 	//Progress Bar JS
 
@@ -363,4 +336,4 @@
 	});
 
 
-}(jQuery));
+};

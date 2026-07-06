@@ -1,6 +1,6 @@
 <template>
     <div id="about-2" class="about-area gray-bg section-padding">
- 		<div class="container">
+ 		<div class="container content-wide">
  			<div class="row">
  				<div class="col-lg-6 col-md-12 col-sm-12">
  					<div class="info-content-area">

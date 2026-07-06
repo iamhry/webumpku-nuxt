@@ -1,6 +1,6 @@
 <template>
     <div class="about-area section-padding">
- 		<div class="container">
+ 		<div class="container content-wide">
  			<div class="row align-items-center">
  				<div class="col-lg-6 col-md-12 col-sm-12">
 					<div class="about-img-wrap">

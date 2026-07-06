@@ -14,7 +14,7 @@ onMounted(async () => {
 
 <template>
     <div class="project-area section-padding">
- 		<div class="container">
+ 		<div class="container content-wide">
  			<div class="offset-lg-2 col-lg-8 text-center">
  				<div class="section-title">
  					<h6>Recent Project</h6>

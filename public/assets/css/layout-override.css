@@ -1,0 +1,208 @@
+/* ==========================================================================
+   RSTheme Industrie Laboratory Style Overrides for Dustrian Template
+   Focus: Layout Width Modernization, Spacing, and Scaling (No Colors/Typography)
+   ========================================================================== */
+
+/* 1. Container Width Modernization (Ala RSTheme Industrie Laboratory)
+   ========================================================= */
+/* Utility class for content-wide */
+.content-wide {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+@media (min-width: 1200px) {
+    .content-wide {
+        max-width: 1240px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .content-wide {
+        max-width: 1380px !important;
+    }
+}
+
+/* 2. Header Area Enlargement
+   ========================= */
+@media (min-width: 992px) {
+    /* Header Top */
+    .header-top {
+        padding: 15px 0 !important;
+    }
+    .header-top .contact-info,
+    .header-top .site-info {
+        font-size: 14px !important;
+    }
+
+    /* Main Header Navigation */
+    .logo {
+        height: 80px !important;
+        display: flex;
+        align-items: center;
+    }
+    .header-area .logo img {
+        width: 180px !important;
+        margin-top: 0 !important;
+    }
+    .main-menu .navbar-nav .nav-link {
+        padding: 35px 0 !important;
+    }
+    .main-menu li.nav-item {
+        margin-right: 25px !important; /* Reduced for 992px+ */
+    }
+    .header-area .header-btn.main-btn {
+        padding: 12px 24px !important;
+        margin-top: 0 !important;
+    }
+
+    /* Sticky Navigation Header Scale */
+    .header-area .is-sticky .sticky-area {
+        height: auto !important;
+    }
+    .header-area .is-sticky .main-menu .navbar-nav .nav-link {
+        padding: 25px 0 !important;
+    }
+    .header-area .is-sticky .logo {
+        height: 70px !important;
+    }
+    .header-area .is-sticky .logo img {
+        width: 150px !important;
+        margin-top: 0 !important;
+    }
+    .header-area .is-sticky .header-btn.main-btn {
+        margin-top: 0 !important;
+        padding: 12px 24px !important;
+    }
+}
+
+/* Proportional scaling for larger containers */
+@media (min-width: 1200px) {
+    .header-area .logo img {
+        width: 200px !important;
+    }
+    .main-menu li.nav-item {
+        margin-right: 35px !important;
+    }
+    .header-area .header-btn.main-btn {
+        padding: 14px 28px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .header-area .logo img {
+        width: 230px !important;
+    }
+    .main-menu .navbar-nav .nav-link {
+        padding: 40px 0 !important;
+    }
+    .main-menu li.nav-item {
+        margin-right: 45px !important; /* Original wide spacing only on xl screens */
+    }
+    .header-area .header-btn.main-btn {
+        padding: 16px 32px !important;
+    }
+}
+
+/* 3. Hero Area Enlargement
+   ======================= */
+@media (min-width: 992px) {
+    .single-slide-item {
+        height: 950px !important;
+    }
+
+    #home2 .single-slide-item,
+    #home3 .single-slide-item {
+        height: 1000px !important;
+    }
+
+    .hero-area-content {
+        padding: 160px 0 !important;
+    }
+
+    .single-slide-item .section-title h1 {
+        margin: 50px 0 !important;
+    }
+
+    .single-slide-item .section-title p {
+        margin-bottom: 35px !important;
+    }
+}
+
+/* 4. Faculty Section (Services Area) Enlargement
+   ============================================ */
+@media (min-width: 992px) {
+    .services-area.section-padding {
+        padding: 160px 0 !important;
+    }
+
+    .single-service-area {
+        padding: 65px 50px !important;
+        /* More breathing room */
+        min-height: 380px !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .service-icon i {
+        width: 110px !important;
+        height: 110px !important;
+    }
+
+    .service-icon i:before {
+        font-size: 60px !important;
+        line-height: 55px !important;
+    }
+
+    .single-service-area h5 {
+        margin: 30px 0 20px !important;
+    }
+}
+
+/* 5. News Section (Blog Area) Enlargement
+   ====================================== */
+@media (min-width: 992px) {
+    .blog-area.section-padding,
+    .project-area.section-padding,
+    .about-area.section-padding,
+    .about-us-area.section-padding,
+    .testimonial-area.section-padding {
+        padding: 160px 0 !important;
+    }
+
+    .blog-content {
+        padding: 50px 50px 60px !important;
+    }
+
+    .single-blog-item {
+        margin-bottom: 50px !important;
+    }
+}
+
+/* 6. Footer Area Enlargement
+   ========================= */
+@media (min-width: 992px) {
+    .footer-up {
+        padding: 120px 0 !important;
+        /* Extended upper padding */
+    }
+
+    .footer-bottom {
+        padding: 30px 0 !important;
+        /* More breathing room for copyright */
+    }
+
+    .footer-area ul li a {
+        padding: 15px 0 !important;
+    }
+
+    .footer-up .logo {
+        width: 250px !important;
+    }
+
+    .footer-up .social-area {
+        margin-top: 45px !important;
+    }
+}

@@ -63,7 +63,7 @@ onMounted(() => {
  		<div class="single-slide-item">
  			<div class="overlay-2"></div>
  			<div class="hero-area-content">
- 				<div class="container">
+ 				<div class="container content-wide">
  					<div class="row justify-content-center">
  						<div class="col-lg-10 col-md-10 col-11 text-center wow fadeInUp animated" data-wow-delay=".2s">
  							<div class="section-title">
@@ -80,7 +80,7 @@ onMounted(() => {
  		<div class="single-slide-item hero-area-bg-2">
  			<div class="overlay-2"></div>
  			<div class="hero-area-content">
- 				<div class="container">
+ 				<div class="container content-wide">
  					<div class="row justify-content-center">
  						<div class="col-lg-10 col-md-10 col-11 text-center wow fadeInUp animated" data-wow-delay=".2s">
  							<div class="section-title">

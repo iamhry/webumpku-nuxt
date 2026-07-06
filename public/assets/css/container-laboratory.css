@@ -1,0 +1,67 @@
+/* ==========================================================================
+   RSTheme Industrie Laboratory Proportional Containers
+   Focus: Layout container widths according to requirements (no styling/colors/typography)
+   ========================================================================== */
+
+/* Centering and auto margin for all layout containers */
+.layout-homepage .container,
+.layout-homepage .container-fluid,
+.layout-homepage .content-wide,
+.layout-content .container,
+.layout-content .container-fluid,
+.layout-content .content-wide,
+.layout-form .container,
+.layout-form .container-fluid,
+.layout-form .content-wide {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 1. Global Header and Footer Container (max-width: 1500px across ALL layouts) */
+@media (min-width: 1200px) {
+  .layout-homepage .header-top .container,
+  .layout-homepage .navigation .container,
+  .layout-homepage .footer-area .container,
+  .layout-homepage .footer-bottom .container,
+  .layout-content .header-top .container,
+  .layout-content .navigation .container,
+  .layout-content .footer-area .container,
+  .layout-content .footer-bottom .container,
+  .layout-form .header-top .container,
+  .layout-form .navigation .container,
+  .layout-form .footer-area .container,
+  .layout-form .footer-bottom .container {
+    max-width: 1500px !important;
+    width: 100% !important;
+  }
+}
+
+/* 2. Homepage Wide Container (max-width: 1500px) */
+@media (min-width: 1200px) {
+  .layout-homepage .container,
+  .layout-homepage .container-fluid,
+  .layout-homepage .content-wide {
+    max-width: 1500px !important;
+    width: 100% !important;
+  }
+}
+
+/* 3. Content Container (max-width: 1100px) */
+@media (min-width: 1200px) {
+  .layout-content .container,
+  .layout-content .container-fluid,
+  .layout-content .content-wide {
+    max-width: 1100px !important;
+    width: 100% !important;
+  }
+}
+
+/* 4. Form Container (max-width: 900px) */
+@media (min-width: 1200px) {
+  .layout-form .container,
+  .layout-form .container-fluid,
+  .layout-form .content-wide {
+    max-width: 900px !important;
+    width: 100% !important;
+  }
+}

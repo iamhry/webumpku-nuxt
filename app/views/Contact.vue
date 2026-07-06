@@ -1,11 +1,9 @@
 <script setup>
 
-import {BreadCrumb, HeaderThree, 
+import { BreadCrumb, HeaderThree } from "../components";
+import { useSettings } from '~/composables/useSettings'
 
-
-} from "../components";
-
-
+const { settings } = useSettings()
 </script>
 <template>
     <HeaderThree/>
@@ -26,7 +24,7 @@ import {BreadCrumb, HeaderThree,
  						<div class="contact-us-inner">
  							<div class="info-i"><span><i class="las la-map-marker"></i></span></div>
  							<h5>Office Location</h5>
- 							<p>66 Broklyn Streat <br>New York, USA</p>
+ 							<p>{{ settings.address || '66 Broklyn Streat \nNew York, USA' }}</p>
  							<a href="">Find us on map</a>
  						</div>
  					</div>
@@ -42,7 +40,7 @@ import {BreadCrumb, HeaderThree,
  						<div class="contact-us-inner">
  							<div class="info-i"><span><i class="las la-mobile"></i></span></div>
  							<h5>Phone Number</h5>
- 							<p>(+1)212-946-2064 <br>(+3)112-976-2067</p>
+ 							<p>{{ settings.phone || '(+1)212-946-2064' }}</p>
  							<a href="">Call Now</a>
  						</div>
  					</div>
@@ -50,8 +48,8 @@ import {BreadCrumb, HeaderThree,
  						<div class="contact-us-inner">
  							<div class="info-i"><span><i class="las la-envelope"></i></span></div>
  							<h5>E-mail Address</h5>
- 							<p>info@dustrian.com<br>info@webmail.com</p>
- 							<a href="">Mail Us</a>
+ 							<p>{{ settings.email || 'info@dustrian.com' }}</p>
+ 							<a :href="`mailto:${settings.email}`">Mail Us</a>
  						</div>
  					</div>
  				</div>

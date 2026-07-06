@@ -53,7 +53,7 @@ onUpdated(() => {
 
 <template>
     <div id="project-3" class="project-area section-padding">
- 		<div class="container">
+ 		<div class="container content-wide">
  			<div class="row">
  				<div class="col-lg-7">
  					<div class="section-title">
