@@ -78,22 +78,64 @@ const isActiveMenu = (menu: HeaderMenu): boolean => {
 }
 
 // ─── Reactive state ──────────────────────────────────────────────────────────
-const isSticky        = ref(false)
-const spacerHeight    = ref(0)
-const isSearchOpen    = ref(false)
-const isMobileOpen    = ref(false)
-const searchKeyword   = ref('')
+const scrolled          = ref(false)       // shrink main-nav (scrollY > 8)
+const hideUtilityBar    = ref(false)       // collapse topbar (direction + threshold)
+const lastScrollY       = ref(0)
+const isSearchOpen      = ref(false)
+const isMobileOpen      = ref(false)
+const searchKeyword     = ref('')
 const openedMobileMenus = ref<Record<string | number, boolean>>({})
 
-// ─── Sticky header ───────────────────────────────────────────────────────────
-const headerRef  = ref<HTMLElement | null>(null)
-const spacerRef  = ref<HTMLElement | null>(null)
+// ─── Shrink-on-scroll (rAF-throttled, direction-aware) ───────────────────────
+const SCROLL_SHRINK_THRESHOLD = 8
+const UTILITY_HIDE_THRESHOLD  = 80
+const DIRECTION_DELTA         = 6 // ignore tiny scroll noise / jitter
+
+const headerRef = ref<HTMLElement | null>(null)
+
+let scrollTicking = false
+
+const updateScrollState = () => {
+  const y = Math.max(0, window.scrollY)
+  const delta = y - lastScrollY.value
+
+  // Mobile drawer open → keep full-size header
+  if (isMobileOpen.value) {
+    scrolled.value = false
+    hideUtilityBar.value = false
+    lastScrollY.value = y
+    scrollTicking = false
+    return
+  }
+
+  scrolled.value = y > SCROLL_SHRINK_THRESHOLD
+
+  if (Math.abs(delta) >= DIRECTION_DELTA) {
+    if (delta > 0 && y > UTILITY_HIDE_THRESHOLD) {
+      hideUtilityBar.value = true
+    } else if (delta < 0) {
+      hideUtilityBar.value = false
+    }
+  }
+
+  // Near top: always restore utility bar
+  if (y <= SCROLL_SHRINK_THRESHOLD) {
+    hideUtilityBar.value = false
+  }
+
+  lastScrollY.value = y
+  scrollTicking = false
+}
 
 const onScroll = () => {
-  isSticky.value = window.scrollY > 80
+  if (scrollTicking) return
+  scrollTicking = true
+  requestAnimationFrame(updateScrollState)
 }
 
 onMounted(() => {
+  lastScrollY.value = window.scrollY
+  updateScrollState()
   window.addEventListener('scroll', onScroll, { passive: true })
 })
 
@@ -101,12 +143,10 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
 })
 
-// Keep spacer height synced
-watch(isSticky, (sticky) => {
-  if (sticky && headerRef.value) {
-    spacerHeight.value = headerRef.value.offsetHeight
-  } else {
-    spacerHeight.value = 0
+// Re-evaluate when mobile drawer closes
+watch(isMobileOpen, (open) => {
+  if (!open && import.meta.client) {
+    requestAnimationFrame(updateScrollState)
   }
 })
 
@@ -159,15 +199,11 @@ const closeMobileDrawer = () => {
 
 <template>
   <div class="rs-header-root">
-    <!-- ── Spacer (prevents layout jump on sticky) ── -->
+    <!-- ── TOPBAR (utility-bar) ────────────────────── -->
     <div
-      ref="spacerRef"
-      class="rs-header-spacer"
-      :style="{ height: spacerHeight + 'px', display: isSticky ? 'block' : 'none' }"
-    />
-
-    <!-- ── TOPBAR ─────────────────────────────────── -->
-    <div class="rs-header-top">
+      class="rs-header-top"
+      :class="{ 'rs-header-top--hidden': hideUtilityBar && !isMobileOpen }"
+    >
       <div class="rs-header-top-inner">
         <!-- Left: Email + Phone -->
         <div class="rs-header-info-wrapper">
@@ -210,8 +246,12 @@ const closeMobileDrawer = () => {
       </div>
     </div>
 
-    <!-- ── MAIN HEADER ────────────────────────────── -->
-    <div ref="headerRef" class="rs-header-area" :class="{ 'is-sticky': isSticky }">
+    <!-- ── MAIN HEADER (main-nav) ──────────────────── -->
+    <div
+      ref="headerRef"
+      class="rs-header-area"
+      :class="{ 'rs-header-area--scrolled': scrolled && !isMobileOpen }"
+    >
       <div class="rs-header-inner">
 
         <!-- LEFT: Logo in yellow block -->

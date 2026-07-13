@@ -8,10 +8,6 @@
     </div>
     
     <div v-else-if="orderedSections.length > 0">
-      <div class="welcome-banner text-center" style="background-color: #fff; padding: 25px 0 15px 0;">
-        <h5 class="text-uppercase" style="color: #6b7280; font-size: 15px; letter-spacing: 1px; font-weight: 400; margin-bottom: 5px;">Welcome To</h5>
-        <h2 style="color: #374151; font-weight: 700; font-size: 28px; margin-bottom: 0;">UMPKU Surakarta</h2>
-      </div>
       <template v-for="section in orderedSections" :key="section.id">
         <HeroOne v-if="section.type === 'hero'" />
         <HomeJourneySection v-else-if="section.type === 'journey'" />
@@ -38,10 +34,6 @@
     </div>
     
     <div v-else>
-      <div class="welcome-banner text-center" style="background-color: #fff; padding: 25px 0 15px 0;">
-        <h5 class="text-uppercase" style="color: #6b7280; font-size: 15px; letter-spacing: 1px; font-weight: 400; margin-bottom: 5px;">Welcome To</h5>
-        <h2 style="color: #374151; font-weight: 700; font-size: 28px; margin-bottom: 0;">UMPKU Surakarta</h2>
-      </div>
       <HeroOne/>
       <HomeJourneySection/>
       <AboutSection/>

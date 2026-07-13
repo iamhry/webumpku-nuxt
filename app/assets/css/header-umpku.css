@@ -15,28 +15,36 @@
 }
 
 /* ============================================================
-   ROOT WRAPPER
+   ROOT WRAPPER — sticky so topbar + main-nav stay as one unit
    ============================================================ */
 .rs-header-root {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1000;
 }
 
-/* Spacer to prevent layout jump when sticky kicks in */
-.rs-header-spacer {
-  display: none;
-}
-.rs-header-spacer.active {
-  display: block;
-}
-
 /* ============================================================
-   TOPBAR
+   TOPBAR (utility-bar)
    ============================================================ */
 .rs-header-top {
   background-color: #F7F7F7;
   border-bottom: none;
   padding: 10px 0;
+  max-height: 72px;
+  opacity: 1;
+  overflow: hidden;
+  transition:
+    max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rs-header-top--hidden {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  pointer-events: none;
 }
 
 .rs-header-top-inner {
@@ -170,23 +178,30 @@
   display: flex;
   align-items: center;
   min-height: 86px;
-  padding: 0 32px;
+  padding: 0.9rem 32px;
   position: relative;
+  transition:
+    min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Sticky state */
-.rs-header-area.is-sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+/* Scrolled / shrink state — shadow + tighter vertical padding */
+.rs-header-area--scrolled {
   box-shadow: var(--rs-shadow);
-  animation: rs-slideDown 0.3s ease forwards;
 }
 
-@keyframes rs-slideDown {
-  from { transform: translateY(-100%); opacity: 0; }
-  to   { transform: translateY(0);     opacity: 1; }
+.rs-header-area--scrolled .rs-header-inner {
+  min-height: 64px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.rs-header-area--scrolled .rs-header-logo-wrapper {
+  height: 64px;
+}
+
+.rs-header-area--scrolled .rs-header-logo img {
+  max-height: 48px;
 }
 
 /* ============================================================
@@ -204,6 +219,7 @@
   justify-content: flex-start;
   height: 86px;
   position: relative;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rs-header-logo {
@@ -222,7 +238,9 @@
   max-width: 100%;
   width: auto;
   object-fit: contain;
-  transition: transform var(--rs-transition);
+  transition:
+    transform var(--rs-transition),
+    max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rs-header-logo img:hover {
@@ -809,7 +827,8 @@
 
 @media (max-width: 1199px) {
   .rs-header-inner {
-    padding: 0 20px 0 0;
+    padding-left: 0;
+    padding-right: 20px;
   }
 
   .rs-header-left,
@@ -860,6 +879,18 @@
     max-height: 44px;
   }
 
+  .rs-header-area--scrolled .rs-header-inner {
+    min-height: 60px;
+  }
+
+  .rs-header-area--scrolled .rs-header-logo-wrapper {
+    height: 60px;
+  }
+
+  .rs-header-area--scrolled .rs-header-logo img {
+    max-height: 38px;
+  }
+
   .rs-header-btn {
     display: none;
   }
@@ -876,5 +907,19 @@
 
   .rs-header-logo img {
     max-height: 44px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION — skip transitions, apply end state instantly
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .rs-header-top,
+  .rs-header-inner,
+  .rs-header-logo-wrapper,
+  .rs-header-logo img,
+  .rs-header-area {
+    transition: none !important;
+    animation: none !important;
   }
 }
