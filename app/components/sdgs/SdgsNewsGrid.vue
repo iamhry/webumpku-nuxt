@@ -11,28 +11,46 @@ defineProps<{
 </script>
 
 <template>
-  <div class="sdgs-news-modern">
+  <section class="sdgs-news-highlight">
     <div class="container">
-      <div class="row">
-        <div class="col-12 text-center mb-5">
-          <h2 class="section-title">{{ t('sdg_related_news') }}</h2>
-        </div>
+      <div class="sdgs-news-highlight-header text-center">
+        <h2 class="sdgs-news-highlight-title">News</h2>
       </div>
-      <div class="row" v-if="news && news.length">
-        <!-- 3 columns on desktop, 2 on tablet, 1 on mobile -->
-        <div 
-          class="col-lg-4 col-md-6 col-sm-12 mb-4" 
-          v-for="article in news" 
+
+      <div v-if="news && news.length" class="row g-4">
+        <div
+          v-for="article in news"
           :key="article.id"
+          class="col-lg-4 col-md-6 col-12"
         >
           <SdgsNewsCard :article="article" />
         </div>
       </div>
-      <div v-else class="row">
-        <div class="col-12 text-center">
-          <p class="text-muted">{{ t('sdg_no_news') }}</p>
-        </div>
+
+      <div v-else class="text-center">
+        <p class="text-muted mb-0">{{ t('sdg_no_news') }}</p>
       </div>
     </div>
-  </div>
+  </section>
 </template>
+
+<style scoped>
+.sdgs-news-highlight {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.sdgs-news-highlight-header {
+  margin-bottom: 48px;
+}
+
+.sdgs-news-highlight-title {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+</style>

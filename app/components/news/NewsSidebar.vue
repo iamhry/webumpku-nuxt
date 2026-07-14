@@ -108,7 +108,7 @@ const populartags = [
           <NuxtLink
             v-for="goal in relatedSdgs"
             :key="goal.id"
-            :to="`/sdgs/${goal.slug}`"
+            :to="`/tujuan-pembangunan-berkelanjutan/${goal.slug}`"
             class="sdg-sidebar-item"
             :style="{ borderColor: getSdgColor(goal.id) }"
           >

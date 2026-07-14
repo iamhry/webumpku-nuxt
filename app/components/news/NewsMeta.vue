@@ -1,7 +1,15 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { NewsArticle } from '~/types/news'
 
-defineProps<{ article: NewsArticle }>()
+const props = defineProps<{ article: NewsArticle }>()
+
+const authorLabel = computed(() => {
+  const author = props.article.author
+  if (!author) return 'Universitas UMPKU'
+  if (typeof author === 'string') return author
+  return author.name || 'Universitas UMPKU'
+})
 
 // Format date with time
 const formatDate = (dateString: string) => {
@@ -63,7 +71,7 @@ const getSdgColor = (id: number) => sdgColors[id] || '#0b2e59'
       <!-- Author -->
       <li class="meta-item-horiz">
         <i class="las la-user-circle"></i>
-        <span><strong>Oleh:</strong> {{ article.author || 'Universitas UMPKU' }}</span>
+        <span><strong>Oleh:</strong> {{ authorLabel }}</span>
       </li>
 
       <!-- Divider (only if SDGs exist) -->

@@ -39,10 +39,10 @@ const getSdgColor = (id: number) => sdgColors[id] || '#0b2e59'
     <div class="sdgs-badges">
       <div v-for="goal in sdgs" :key="goal.id" class="sdg-badge-wrapper">
         <NuxtLink
-          :to="`/sdgs/${goal.slug}`"
+          :to="`/tujuan-pembangunan-berkelanjutan/${goal.slug}`"
           class="sdg-badge"
           :style="{ borderColor: getSdgColor(goal.id) }"
-          :title="`${goal.id}. ${goal.title}`"
+          :title="`${goal.id}. ${goal.title || goal.name}`"
         >
           <div class="sdg-number" :style="{ backgroundColor: getSdgColor(goal.id) }">
             {{ goal.id }}

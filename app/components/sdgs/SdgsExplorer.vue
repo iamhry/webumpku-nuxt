@@ -19,7 +19,7 @@
         </div>
 
         <div v-for="goal in sortedSdgs" :key="goal.id" class="col-6 col-md-4 col-lg-3 col-xl-2">
-          <NuxtLink :to="`/sdgs/${goal.slug}`" class="text-decoration-none">
+          <NuxtLink :to="`/tujuan-pembangunan-berkelanjutan/${goal.slug}`" class="text-decoration-none">
             <div 
               class="sdgs-goal-card position-relative overflow-hidden rounded-3 sdgs-hover-lift h-100"
               :style="{ backgroundColor: goal.color || getFallbackColor(goal.number || goal.id) }"

@@ -32,7 +32,7 @@
             <div class="card-body p-4 d-flex flex-column">
               <h4 class="fw-bold mb-3" :style="{ color: priority.color }">{{ priority.title }}</h4>
               <p class="text-muted mb-4 flex-grow-1">{{ priority.description }}</p>
-              <NuxtLink :to="`/sdgs/${priority.slug}`" class="text-decoration-none fw-bold" :style="{ color: priority.color }">
+              <NuxtLink :to="`/tujuan-pembangunan-berkelanjutan/${priority.slug}`" class="text-decoration-none fw-bold" :style="{ color: priority.color }">
                 Pelajari Lebih Lanjut <i class="fa fa-arrow-right ms-2"></i>
               </NuxtLink>
             </div>

@@ -13,7 +13,7 @@
       <div class="row g-3">
         <!-- 17 Goals Grid -->
         <div class="col-lg-2 col-md-4 col-sm-6 col-12" v-for="goal in goals" :key="goal.number">
-          <NuxtLink :to="`/sdgs/${goal.slug}`" class="sdg-card" :style="{ backgroundColor: goal.color }">
+          <NuxtLink :to="`/tujuan-pembangunan-berkelanjutan/${goal.slug}`" class="sdg-card" :style="{ backgroundColor: goal.color }">
             <div class="sdg-number">{{ goal.number }}</div>
             <div class="sdg-content">
               <h4>{{ goal.shortName }}</h4>

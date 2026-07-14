@@ -1,76 +1,91 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAsyncData, useHead, useSeoMeta } from '#imports'
+import { useAsyncData, useSeoMeta, useRuntimeConfig, createError } from '#imports'
 import { useI18n } from 'vue-i18n'
 
-import SdgsBreadcrumb from '~/components/sdgs/SdgsBreadcrumb.vue'
 import SdgsHero from '~/components/sdgs/SdgsHero.vue'
+import SdgsAbout from '~/components/sdgs/SdgsAbout.vue'
 import SdgsStatistics from '~/components/sdgs/SdgsStatistics.vue'
 import SdgsNewsGrid from '~/components/sdgs/SdgsNewsGrid.vue'
 import SdgsRelatedGoals from '~/components/sdgs/SdgsRelatedGoals.vue'
-import '~/assets/css/sdgs-detail-modern.css' // Import custom CSS for this page
+import SdgsGoalNav from '~/components/sdgs/SdgsGoalNav.vue'
+import { mergeSdgDetail, getAdjacentGoals } from '~/utils/mergeSdgDetail'
+import type { SdgGoal } from '~/types/sdgs'
+import '~/assets/css/sdgs-detail-modern.css'
 
 const route = useRoute()
 const slug = route.params.slug as string
 const config = useRuntimeConfig()
-const apiUrl = config.public.apiBase || 'http://localhost:8000/api/v1'
 const { t, locale } = useI18n()
 
-// Fetch SDG Detail
-const { data: sdgData, error: sdgError } = await useAsyncData(`sdg-detail-${slug}`, () => 
-  $fetch(`${apiUrl}/sdgs/${slug}`)
+const apiRoot = String(config.public.apiBase || 'https://cms.umpku.ac.id').replace(/\/$/, '')
+const apiBase = apiRoot.includes('/api/v1') ? apiRoot : `${apiRoot}/api/v1`
+
+const { data: sdgPayload, error: detailError } = await useAsyncData(
+  `sdg-detail-page-${slug}`,
+  () => $fetch(`${apiBase}/sdgs/${slug}`)
 )
 
-// If SDG not found, throw 404
-if (sdgError.value || !sdgData.value) {
-  throw createError({ statusCode: 404, statusMessage: t('page_not_found') || 'SDG Not Found', fatal: true })
+if (detailError.value || !sdgPayload.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: t('page_not_found') || 'SDG Not Found',
+    fatal: true
+  })
 }
 
-// The backend returns the SDG object directly (or inside data if wrapped, but curl shows direct object)
-const sdg = (sdgData.value as any).data || sdgData.value
+const apiSdg = ((sdgPayload.value as any).data || sdgPayload.value) as SdgGoal
+const sdg = computed(() => mergeSdgDetail(apiSdg, locale.value))
 
-// Fetch News for this SDG
-const { data: newsData } = await useAsyncData(`sdg-news-${slug}`, () => 
-  $fetch(`${apiUrl}/sdgs/${slug}/news?per_page=6`) // fetch some news
+const { data: newsData } = await useAsyncData(`sdg-news-${slug}`, () =>
+  $fetch(`${apiBase}/sdgs/${slug}/news?per_page=6`)
 )
 const newsArticles = newsData.value ? ((newsData.value as any).news?.data || []) : []
 
-// Fetch All SDGs for Related Goals section
-const { data: allSdgsData } = await useAsyncData('all-sdgs', () => 
-  $fetch(`${apiUrl}/sdgs`)
+const { data: allSdgsData } = await useAsyncData('all-sdgs-detail', () =>
+  $fetch(`${apiBase}/sdgs`)
 )
-const allSdgs = allSdgsData.value ? ((allSdgsData.value as any).data || []) : []
+const allSdgs = (allSdgsData.value ? ((allSdgsData.value as any).data || []) : []) as SdgGoal[]
 
-// Set SEO Meta
-useSeoMeta({
-  title: `${sdg.short_name || sdg.name} - ${sdg.name}`,
-  description: sdg.description,
-  ogTitle: `${sdg.short_name || sdg.name} - ${sdg.name}`,
-  ogDescription: sdg.description,
-  ogImage: sdg.image || '/assets/img/logo.png',
-  twitterCard: 'summary_large_image',
-})
+const adjacent = computed(() => getAdjacentGoals(allSdgs, sdg.value.goal_number))
 
-// Statistics object
 const stats = (newsData.value as any)?.statistics || {
-  news_count: sdg.news_count || newsArticles.length,
-  article_count: sdg.article_count,
-  activity_count: sdg.activity_count
+  news_count: apiSdg.news_count || newsArticles.length,
+  article_count: apiSdg.article_count,
+  activity_count: apiSdg.activity_count
 }
+
+useSeoMeta({
+  title: `${sdg.value.name} — ${sdg.value.short_name}`,
+  description: sdg.value.description,
+  ogTitle: `${sdg.value.name} — ${sdg.value.short_name}`,
+  ogDescription: sdg.value.description,
+  ogImage: sdg.value.image || '/assets/img/logo.png',
+  twitterCard: 'summary_large_image'
+})
 </script>
 
 <template>
   <div class="sdgs-detail-page">
-    <SdgsBreadcrumb :sdgName="sdg.short_name || sdg.name" />
-    
     <SdgsHero :sdg="sdg" />
-    
-    <SdgsStatistics :stats="stats" />
-    
-    <SdgsNewsGrid :news="newsArticles" />
-    
-    <SdgsRelatedGoals :currentSdgId="sdg.id" :allSdgs="allSdgs" />
-    
+
+    <div id="sdgs-content">
+      <SdgsAbout
+        :title="sdg.name"
+        :description="sdg.description"
+        :color="sdg.color"
+      />
+
+      <SdgsStatistics :stats="stats" />
+
+      <SdgsNewsGrid :news="newsArticles" />
+
+      <SdgsGoalNav :prev="adjacent.prev" :next="adjacent.next" />
+
+      <SdgsRelatedGoals :currentSdgId="sdg.id" :allSdgs="allSdgs" />
+    </div>
+
     <div class="sdgs-cta-modern">
       <div class="container">
         <h2>{{ t('umpku_contribution_sdgs') }}</h2>

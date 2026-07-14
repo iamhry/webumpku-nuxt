@@ -40,14 +40,14 @@ const relatedSdgs = computed(() => {
       <div class="row" v-if="relatedSdgs.length">
         <div class="col-lg-3 col-md-6 col-sm-6 col-12 mb-4" v-for="sdg in relatedSdgs" :key="sdg.id">
           <NuxtLink :to="`/tujuan-pembangunan-berkelanjutan/${sdg.slug || sdg.id}`" class="sdgs-related-card">
-            <div class="img-wrapper" :style="{ backgroundColor: getSdgColor(sdg.id) }">
-              <img v-if="sdg.icon_image" :src="sdg.icon_image" :alt="sdg.name" loading="lazy" />
+            <div class="img-wrapper" :style="{ backgroundColor: getSdgColor(sdg.goal_number || sdg.number || sdg.id) }">
+              <img v-if="sdg.icon || sdg.icon_image" :src="sdg.icon || sdg.icon_image" :alt="sdg.name || sdg.title" loading="lazy" />
               <div v-else class="w-100 h-100 d-flex align-items-center justify-content-center text-white" style="font-size: 4rem; font-weight: bold;">
-                {{ sdg.id }}
+                {{ sdg.goal_number || sdg.number || sdg.id }}
               </div>
             </div>
             <div class="card-body">
-              <h5 class="text-center">{{ sdg.short_name || sdg.name }}</h5>
+              <h5 class="text-center">{{ sdg.short_name || sdg.name || sdg.title }}</h5>
             </div>
           </NuxtLink>
         </div>

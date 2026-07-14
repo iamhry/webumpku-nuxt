@@ -8,9 +8,9 @@ defineProps<{ goal: SdgGoal }>()
       <img :src="goal.icon_image" :alt="goal.title" style="width: 80px;" />
     </div>
     <div class="service-content text-center">
-      <h5><NuxtLink :to="`/sdgs/${goal.slug}`">{{ goal.title }}</NuxtLink></h5>
+      <h5><NuxtLink :to="`/tujuan-pembangunan-berkelanjutan/${goal.slug}`">{{ goal.title || goal.name }}</NuxtLink></h5>
       <p>{{ goal.description }}</p>
-      <NuxtLink :to="`/sdgs/${goal.slug}`" class="read-more">View Details</NuxtLink>
+      <NuxtLink :to="`/tujuan-pembangunan-berkelanjutan/${goal.slug}`" class="read-more">View Details</NuxtLink>
     </div>
   </div>
 </template>

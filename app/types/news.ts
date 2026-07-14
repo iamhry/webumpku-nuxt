@@ -1,5 +1,11 @@
 import type { SdgGoal } from './sdgs'
 
+export interface NewsAuthor {
+    name: string;
+    photo?: string;
+    bio?: string;
+}
+
 export interface NewsArticle {
     id: number;
     title: string;
@@ -14,7 +20,7 @@ export interface NewsArticle {
     og_image?: string;
     sdgs?: SdgGoal[];
     related_news?: NewsArticle[];
-    author?: string;
+    author?: string | NewsAuthor;
     category?: string;
     tags?: string[];
     views?: number;

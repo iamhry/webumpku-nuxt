@@ -31,6 +31,23 @@ if (!article) {
   })
 }
 
+// Author helpers (API may return string or { name, photo, bio })
+const authorName = computed(() => {
+  if (!article?.author) return 'UMPKU'
+  if (typeof article.author === 'string') return article.author
+  return article.author.name || 'UMPKU'
+})
+
+const authorPhoto = computed(() => {
+  if (!article?.author || typeof article.author === 'string') return ''
+  return article.author.photo?.trim() || ''
+})
+
+const authorBio = computed(() => {
+  if (!article?.author || typeof article.author === 'string') return ''
+  return article.author.bio?.trim() || ''
+})
+
 // SEO & Meta Tags
 const protocol = useRequestURL().protocol
 const host = useRequestURL().host
@@ -46,7 +63,7 @@ const newsSchema = computed(() => ({
   datePublished: article.published_at,
   author: {
     '@type': 'Organization',
-    name: (article.author as any)?.name || article.author || 'Universitas Muhammadiyah Pekajangan Pekalongan',
+    name: authorName.value,
   },
   publisher: {
     '@type': 'Organization',
@@ -208,11 +225,17 @@ const formatHeroDate = (dateString: string) => {
             <!-- SECTION 5: AUTHOR SECTION -->
             <div class="editorial-author-card">
               <div class="author-avatar-large">
-                <i class="las la-user-alt"></i>
+                <img
+                  v-if="authorPhoto"
+                  :src="authorPhoto"
+                  :alt="authorName"
+                  class="author-avatar-img"
+                >
+                <i v-else class="las la-user-alt"></i>
               </div>
               <div class="author-info">
-                <h4>{{ article.author }}</h4>
-            
+                <h4>{{ authorName }}</h4>
+                <p v-if="authorBio" class="author-bio">{{ authorBio }}</p>
               </div>
             </div>
 
@@ -306,6 +329,14 @@ const formatHeroDate = (dateString: string) => {
 .editorial-page {
   background-color: #ffffff;
   min-height: 100vh;
+}
+
+.author-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }
 
 .toc-item-link {
