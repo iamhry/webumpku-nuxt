@@ -25,19 +25,24 @@ try {
   sdgsBulletUrl = '/assets/img/sdgs.png'
 }
 </script>
+
 <template>
   <div class="single-blog-item">
     <div class="blog-bg">
       <img :src="props.article.featured_image" :alt="props.article.title" class="featured-img" />
     </div>
+    
     <div class="blog-content">
       <p class="blog-meta">{{ props.article.published_at }}</p>
 
-      <!-- SDG badges previously here were moved to replace the Read More link -->
-
-      <h5><NuxtLink :to="`/berita/${props.article.slug}`">{{ props.article.title }}</NuxtLink></h5>
-      <p>{{ props.article.excerpt }}</p>
-      <!-- SDG label + badges (UMS-like layout) - placed instead of Read More -->
+      <!-- EDIT DI SINI: Tag judul <h5> diberikan class "news-title" -->
+      <h5 class="news-title">
+        <NuxtLink :to="`/berita/${props.article.slug}`">{{ props.article.title }}</NuxtLink>
+      </h5>
+      
+      <!-- EDIT DI SINI: Tag <p> diberikan class "news-excerpt" untuk memotong teks -->
+      <p class="news-excerpt">{{ props.article.excerpt }}</p>
+      
       <div v-if="props.article.sdgs && props.article.sdgs.length" class="sdg-container">
         <a class="mr-1" href="/tujuan-pembangunan-berkelanjutan" data-toggle="tooltip" data-placement="bottom" title="Tujuan Pembangunan Berkelanjutan" aria-label="sdg content link">
           <img :src="sdgsBulletUrl" alt="sdgs-label" loading="lazy" class="sdgLabelImg" style="width:110px; height:40px;" />
@@ -60,12 +65,64 @@ try {
 </template>
 
 <style scoped>
-.featured-img{ width:100%; height:250px; object-fit:cover; }
-.sdg-more{ display:inline-block; background:#f1f1f1; color:#333; font-size:12px; padding:2px 6px; border-radius:12px; vertical-align:middle }
-.sdg-container{ display:flex; flex-wrap:wrap; justify-content:flex-start; align-items:center }
-.sdgLabelImg{ display:block }
-.sdgs-banner{ display:inline-block }
-.mr-1{ margin-right:8px }
-.sdg-number-badge{ width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:#f5f5f5; border-radius:6px; font-weight:700 }
-</style>
+.single-blog-item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff; /* sesuaikan jika ada background color */
+  border-radius: 8px; /* sesuaikan style website */
+  overflow: hidden;
+}
 
+.featured-img { 
+  width: 100%; 
+  height: 220px; /* Diubah sedikit agar proporsional */
+  object-fit: cover; 
+}
+
+.blog-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px; /* sesuaikan padding dalam card */
+}
+
+.blog-meta {
+  margin-bottom: 10px;
+}
+
+.news-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.8em; /* Mengunci ruang agar judul 1 baris & 2 baris tingginya sama */
+  margin-bottom: 10px;
+}
+
+.news-excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 4.5em; /* Mengunci ruang agar tinggi tulisan seragam */
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.sdg-container { 
+  margin-top: auto; 
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: flex-start; 
+  align-items: center; 
+}
+
+.sdg-more { display: inline-block; background: #f1f1f1; color: #333; font-size: 12px; padding: 2px 6px; border-radius: 12px; vertical-align: middle }
+.sdgLabelImg { display: block }
+.sdgs-banner { display: inline-block }
+.mr-1 { margin-right: 8px }
+.sdg-number-badge { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 6px; font-weight: 700 }
+</style>
