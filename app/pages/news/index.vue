@@ -69,7 +69,6 @@ useHead({
   flex-direction: column;
 }
 
-/* Ganti '.card' dengan nama class komponen card kamu jika berbeda */
 :deep(.card) { 
   display: flex;
   flex-direction: column;
@@ -77,21 +76,18 @@ useHead({
   justify-content: space-between;
 }
 
-/* Memastikan area konten card mengambil sisa ruang yang ada */
 :deep(.card-body) {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* 2. Menyingkat Judul Artikel jika terlalu panjang (Maksimal 2 baris) */
-/* Ganti '.card-title' atau 'h5' sesuai dengan tag judul di dalam NewsGrid */
 :deep(.card-title), :deep(.card-body h5), :deep(.card-body a) {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Membatasi teks hanya sampai 2 baris saja */
+  -webkit-line-clamp: 2; 
   -webkit-box-orient: vertical;  
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 3em; /* Menjaga space judul tetap sama meski cuma 1 baris */
+  min-height: 3em; 
 }
 </style>
