@@ -1,45 +1,71 @@
 <template>
-  <div v-if="isValid" class="about-area section-padding">
-    <div class="container content-wide">
-      <div class="row align-items-center">
-        <div class="col-lg-6 col-md-12 col-sm-12">
-          <div class="about-img-wrap image-zoom" v-reveal data-reveal="fade-left">
-            <div class="image-one">
-              <img :src="primaryImage" :alt="title">
-            </div>                                                                      
-          </div> 					
-        </div>
-        <div class="col-lg-6 col-md-12 col-sm-12">
-          <div class="info-content-area" v-reveal data-reveal="fade-right" data-reveal-delay="150">
-            <div class="section-title">
-              <h6>{{ subtitle }}</h6>
-              <h2 v-html="title"></h2>
-            </div>
-            
-            <div v-html="content" class="about-content-wrapper"></div>
+  <section
+    v-if="isValid"
+    ref="sectionRef"
+    class="about-spotlight"
+  >
+    <div
+      ref="bgRef"
+      class="about-spotlight-bg"
+      aria-hidden="true"
+    />
+    <div class="about-spotlight-grid" aria-hidden="true" />
 
-            <div v-if="hasSettings" class="row founded mt-4">
-              <div v-if="experienceYear" class="col-lg-4 col-md-6 col-12">
-                <div class="years"><span>{{ experienceYear }}</span>Year of Success</div>
+    <div class="container content-wide about-spotlight-inner">
+      <div class="about-spotlight-panel" v-reveal data-reveal="fade-up">
+        <div class="row align-items-center g-4 g-xl-5">
+          <!-- Text -->
+          <div class="col-lg-6 col-md-12">
+            <div class="about-spotlight-copy" v-reveal data-reveal="fade-right" data-reveal-delay="120">
+              <p v-if="subtitle" class="about-spotlight-kicker">{{ subtitle }}</p>
+              <h2 class="about-spotlight-title" v-html="formattedTitle"></h2>
+
+              <div class="about-spotlight-body about-content-wrapper" v-html="content" />
+
+              <div v-if="hasSettings" class="about-spotlight-stats">
+                <div v-if="experienceYear" class="about-spotlight-stat">
+                  <span class="stat-num">{{ experienceYear }}</span>
+                  <span class="stat-label">{{ locale === 'en' ? 'Year of Success' : 'Tahun Prestasi' }}</span>
+                </div>
+                <p v-if="highlightText" class="about-spotlight-highlight">{{ highlightText }}</p>
               </div>
-              <div v-if="highlightText" class="col-lg-8 col-md-6 col-12">
-                <div class="text">{{ highlightText }}</div>
+
+              <div
+                v-if="ctaUrl && ctaText"
+                class="about-spotlight-actions"
+                v-reveal
+                data-reveal="fade-up"
+                data-reveal-delay="220"
+              >
+                <NuxtLink :to="ctaUrl" class="about-spotlight-btn">
+                  <span>{{ ctaText }}</span>
+                  <i class="las la-arrow-right" aria-hidden="true" />
+                </NuxtLink>
               </div>
             </div>
-            
-            <div v-if="buttonUrl && buttonText" class="mt-4" v-reveal data-reveal="fade-up" data-reveal-delay="250">
-              <NuxtLink :to="buttonUrl" class="main-btn">{{ buttonText }}</NuxtLink>
+          </div>
+
+          <!-- Image -->
+          <div class="col-lg-6 col-md-12">
+            <div
+              class="about-spotlight-media"
+              v-reveal
+              data-reveal="fade-left"
+              data-reveal-delay="180"
+            >
+              <div class="about-spotlight-media-frame">
+                <img :src="primaryImage" :alt="plainTitle" loading="lazy">
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useI18n } from '#imports'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import type { HomepageSection } from '~/types/homepage'
 import { useMedia } from '~/composables/useMedia'
 
@@ -50,90 +76,373 @@ const props = defineProps<{
 const { getImageUrl } = useMedia()
 const { locale } = useLocale()
 
-// Fallbacks matching real university profile
-const title = computed(() => props.section?.title || (locale.value === 'en' ? "Universitas Muhammadiyah PKU Surakarta" : "Universitas Muhammadiyah PKU"))
-const subtitle = computed(() => props.section?.subtitle || (locale.value === 'en' ? "Welcome to Universitas Muhammadiyah PKU Surakarta" : "Universitas Muhammadiyah PKU Surakarta"))
+const sectionRef = ref<HTMLElement | null>(null)
+const bgRef = ref<HTMLElement | null>(null)
+
+let ticking = false
+let reduceMotion = false
+
+const updateParallax = () => {
+  ticking = false
+  const section = sectionRef.value
+  const bg = bgRef.value
+  if (!section || !bg || reduceMotion) return
+
+  const rect = section.getBoundingClientRect()
+  const viewH = window.innerHeight || 1
+
+  // Only update while section is near/in viewport
+  if (rect.bottom < -100 || rect.top > viewH + 100) return
+
+  // Progress: 0 when section enters bottom, 1 when it leaves top
+  const progress = (viewH - rect.top) / (viewH + rect.height)
+  const clamped = Math.min(1, Math.max(0, progress))
+
+  // Move background slower than scroll (simple parallax)
+  const offset = (clamped - 0.5) * 80
+  bg.style.transform = `translate3d(0, ${offset}px, 0)`
+}
+
+const onScroll = () => {
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(updateParallax)
+}
+
+onMounted(() => {
+  if (!import.meta.client) return
+  reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (reduceMotion) return
+
+  updateParallax()
+  window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('resize', onScroll, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  if (!import.meta.client) return
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('resize', onScroll)
+})
+
+const title = computed(() =>
+  props.section?.title ||
+  (locale.value === 'en'
+    ? 'Universitas Muhammadiyah\nPKU Surakarta'
+    : 'Universitas Muhammadiyah\nPKU Surakarta')
+)
+
+const plainTitle = computed(() =>
+  String(title.value || '').replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim()
+)
+
+/** Split title into two visual lines like Bappenas awards block */
+const formattedTitle = computed(() => {
+  const raw = String(title.value || '')
+  if (raw.includes('<')) return raw
+  const parts = raw.split(/\n/).map(s => s.trim()).filter(Boolean)
+  if (parts.length >= 2) {
+    return `${parts[0]} <span>${parts.slice(1).join(' ')}</span>`
+  }
+  const words = raw.trim().split(/\s+/)
+  if (words.length <= 2) return raw
+  const mid = Math.ceil(words.length / 2)
+  return `${words.slice(0, mid).join(' ')} <span>${words.slice(mid).join(' ')}</span>`
+})
+
+const subtitle = computed(() =>
+  props.section?.subtitle ||
+  (locale.value === 'en'
+    ? 'Welcome to Universitas Muhammadiyah PKU Surakarta'
+    : 'Selamat Datang di Universitas Muhammadiyah PKU Surakarta')
+)
 
 const content = computed(() => {
-  if (props.section?.content) {
-    return props.section.content
-  }
-  
+  if (props.section?.content) return props.section.content
+
   if (locale.value === 'en') {
     return `
       <p>Welcome to Universitas Muhammadiyah PKU Surakarta. We are committed to presenting higher education that is excellent, adaptive, and based on Islamic values. Through innovation, collaboration, and a quality academic culture, we prepare graduates who are ready to face global challenges and make real contributions to community development.</p>
       <p>We present this website as an open information center for prospective students, students, alumni, partners, and the wider community to get to know more closely the journey, achievements, and contributions of Universitas Muhammadiyah PKU in the fields of education, research, community service, and international cooperation.</p>
       <p>Together with UMPKU Surakarta, let's build a better future through education, innovation, and service.</p>
-      <p style="margin-top: 25px;"><strong>Weni Hastuti, M.Kes., Ph.D.</strong><br><span style="color: #6c757d; font-size: 0.9em;">Rector of Universitas Muhammadiyah PKU</span></p>
+      <p class="about-signoff"><strong>Weni Hastuti, M.Kes., Ph.D.</strong><br><span>Rector of Universitas Muhammadiyah PKU</span></p>
     `
   }
-  
+
   return `
     <p>Selamat datang di Universitas Muhammadiyah PKU Surakarta. Kami berkomitmen menghadirkan pendidikan tinggi yang unggul, adaptif, dan berlandaskan nilai-nilai Islam. Melalui inovasi, kolaborasi, serta budaya akademik yang berkualitas, kami mempersiapkan lulusan yang siap menghadapi tantangan global dan memberikan kontribusi nyata bagi pembangunan masyarakat.</p>
     <p>Website ini kami hadirkan sebagai pusat informasi yang terbuka bagi calon mahasiswa, mahasiswa, alumni, mitra, dan masyarakat luas untuk mengenal lebih dekat perjalanan, prestasi, serta kontribusi Universitas Muhammadiyah PKU dalam bidang pendidikan, penelitian, pengabdian kepada masyarakat, dan kerja sama internasional.</p>
     <p>Bersama UMPKU Surakarta, mari membangun masa depan yang lebih baik melalui pendidikan, inovasi, dan pengabdian.</p>
-    <p style="margin-top: 25px;"><strong>Weni Hastuti, M.Kes., Ph.D.</strong><br><span style="color: #6c757d; font-size: 0.9em;">Rektor Universitas Muhammadiyah PKU</span></p>
+    <p class="about-signoff"><strong>Weni Hastuti, M.Kes., Ph.D.</strong><br><span>Rektor Universitas Muhammadiyah PKU</span></p>
   `
 })
 
 const primaryImage = computed(() => {
-  if (props.section?.image) {
-    return getImageUrl(props.section.image)
-  }
+  if (props.section?.image) return getImageUrl(props.section.image)
   return '/assets/img/about/about-page-1.jpg'
 })
 
-const hasSettings = computed(() => {
-  return props.section?.settings && (props.section.settings.experience_year || props.section.settings.highlight_text)
-})
+const hasSettings = computed(() =>
+  !!(props.section?.settings && (props.section.settings.experience_year || props.section.settings.highlight_text))
+)
 
 const experienceYear = computed(() => props.section?.settings?.experience_year)
 const highlightText = computed(() => props.section?.settings?.highlight_text)
 
-const buttonText = computed(() => props.section?.button_text)
-const buttonUrl = computed(() => props.section?.button_url)
+const ctaText = computed(() =>
+  props.section?.button_text || (locale.value === 'en' ? 'Explore' : 'Jelajahi')
+)
+const ctaUrl = computed(() => props.section?.button_url || '/profil')
 
 const isValid = computed(() => {
-  if (!props.section) return true // Show fallback if no section passed but used statically
-  // Check if all essential data is empty to hide
-  if (!props.section.title && !props.section.content && !props.section.image) {
-    return false
-  }
+  if (!props.section) return true
+  if (!props.section.title && !props.section.content && !props.section.image) return false
   return true
 })
 </script>
 
 <style scoped>
-.section-title h6 {
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  color: #3b6580 !important; /* Desaturated blue matching screenshot */
-  text-transform: uppercase !important;
-  letter-spacing: 0.15em !important;
-  margin-bottom: 12px !important;
-  font-family: var(--font-body, 'Inter', sans-serif) !important;
+.about-spotlight {
+  position: relative;
+  padding: 88px 0;
+  color: #1a1a1a;
+  overflow: hidden;
 }
 
-.section-title h2 {
-  font-family: var(--font-heading, 'Inter', sans-serif) !important;
-  font-weight: 700 !important;
-  color: #0f172a !important; /* Very dark navy/black */
-  font-size: clamp(32px, 4vw, 44px) !important;
-  line-height: 1.2 !important;
-  letter-spacing: -0.02em !important;
-  margin-top: 0 !important;
-  margin-bottom: 24px !important;
+/* Parallax image layer (taller than section, moved via JS translate) */
+.about-spotlight-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12%;
+  height: 124%;
+  z-index: 0;
+  background-image: url('/assets/img/sbbi.webp');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
-.about-content-wrapper:deep(p) {
-  margin-bottom: 15px;
+/* Purple overlay via ::before */
+.about-spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(88, 28, 135, 0.82) 0%,
+    rgba(124, 58, 237, 0.72) 42%,
+    rgba(76, 29, 149, 0.78) 100%
+  );
 }
-.about-content-wrapper:deep(ul) {
+
+.about-spotlight-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85), transparent 78%);
+}
+
+.about-spotlight-inner {
+  position: relative;
+  z-index: 3;
+}
+
+.about-spotlight-panel {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.86) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 28px;
+  padding: 36px 28px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px);
+}
+
+@media (min-width: 992px) {
+  .about-spotlight-panel {
+    padding: 52px 48px;
+  }
+}
+
+.about-spotlight-kicker {
+  margin: 0 0 12px;
+  color: #3b6580;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.about-spotlight-title {
+  margin: 0 0 22px;
+  color: #0f172a;
+  font-size: clamp(30px, 4.2vw, 48px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.about-spotlight-title :deep(span),
+.about-spotlight-title :deep(p) {
+  display: block;
+  margin: 0;
+  color: #0b2e59;
+}
+
+.about-spotlight-body {
+  color: #475569;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.about-spotlight-body :deep(p) {
+  margin: 0 0 14px;
+}
+
+.about-spotlight-body :deep(ul) {
   list-style: disc;
   padding-left: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 14px;
 }
-.about-content-wrapper:deep(li) {
-  margin-bottom: 5px;
+
+.about-spotlight-body :deep(.about-signoff) {
+  margin-top: 22px;
+  color: #0f172a;
+}
+
+.about-spotlight-body :deep(.about-signoff span) {
+  color: #6c757d;
+  font-size: 0.9em;
+}
+
+.about-spotlight-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  margin-top: 22px;
+}
+
+.about-spotlight-stat {
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
+}
+
+.stat-num {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: #0b2e59;
+}
+
+.stat-label {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.about-spotlight-highlight {
+  flex: 1;
+  margin: 0;
+  min-width: 200px;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.about-spotlight-actions {
+  margin-top: 28px;
+}
+
+.about-spotlight-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  background: #0b2e59;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 28px rgba(11, 46, 89, 0.28);
+}
+
+.about-spotlight-btn:hover {
+  background: #f5b301;
+  color: #111 !important;
+  transform: translateY(-2px);
+}
+
+.about-spotlight-btn i {
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.about-spotlight-btn:hover i {
+  transform: translateX(3px);
+}
+
+.about-spotlight-media-frame {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #eef2f7;
+  aspect-ratio: 1 / 1;
+  box-shadow: 0 18px 40px rgba(11, 46, 89, 0.18);
+}
+
+.about-spotlight-media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.about-spotlight-media:hover .about-spotlight-media-frame img {
+  transform: scale(1.04);
+}
+
+@media (max-width: 991px) {
+  .about-spotlight {
+    padding: 64px 0;
+  }
+
+  .about-spotlight-media {
+    max-width: 420px;
+    margin: 8px auto 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-spotlight-bg {
+    top: 0;
+    height: 100%;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .about-spotlight-btn,
+  .about-spotlight-media-frame img {
+    transition: none;
+  }
 }
 </style>

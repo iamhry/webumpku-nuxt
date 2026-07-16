@@ -63,5 +63,15 @@
     "title": "Momen Kampus",
     "subtitle": "Dokumentasi kegiatan, prestasi, kolaborasi, dan kehidupan kampus Universitas Muhammadiyah PKU.",
     "view_all": "Lihat Semua Galeri"
+  },
+  "faculty_section": {
+    "eyebrow": "Fakultas UMPKU",
+    "title": "Jelajahi Fakultas dan Bidang Keilmuan",
+    "subtitle": "Temukan lingkungan akademik yang mendukung pembelajaran, riset, inovasi, dan pengabdian masyarakat.",
+    "error": "Terjadi kesalahan saat memuat data fakultas.",
+    "empty": "Data fakultas belum tersedia.",
+    "label": "Fakultas",
+    "fallback_desc": "Lingkungan akademik yang mendukung keunggulan di bidang {name}.",
+    "view_detail": "Lihat detail fakultas"
   }
 }

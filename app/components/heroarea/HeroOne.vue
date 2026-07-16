@@ -49,25 +49,28 @@ const initCarousel = () => {
 		$carousel.removeClass('owl-hidden')
 		$carousel.find('.owl-stage-outer').children().unwrap()
 	}
-
-	$carousel.owlCarousel({
-		items: 1,
-		dots: false,
-		nav: true,
-		loop: true,
-		autoplay: true,
-		autoplayTimeout: 5000,
-		smartSpeed: 2000,
-		slideSpeed: 600,
-		animateOut: 'fadeOut',
-		navText: ["<i class='la la-angle-left'></i>", "<i class='la la-angle-right'></i>"],
-		responsive: {
-			0: { items: 1, nav: false, dots: false },
-			600: { items: 1, nav: false, dots: false },
-			768: { items: 1, nav: false, dots: false },
-			1100: { items: 1, nav: true, dots: false }
-		}
-	});
+$carousel.owlCarousel({
+    items: 1,
+    dots: false,
+    nav: true,
+    loop: true,
+    autoplay: true,
+    autoplayTimeout: 5000,      // Sudah pas (5 detik diam)
+    autoplayHoverPause: true,   // PENTING: Berhenti berputar saat di-hover mouse
+    
+    // Perbaikan Kecepatan Transisi
+    smartSpeed: 500,            // Diturunkan ke 500ms agar efek fade terasa smooth & responsif
+    animateOut: 'fadeOut',      // Efek memudar
+    // animateIn: 'fadeIn',     // Opsional: bisa ditambahkan jika ingin efek masuknya juga memudar
+    
+    navText: ["<i class='la la-angle-left'></i>", "<i class='la la-angle-right'></i>"],
+    responsive: {
+        0: { items: 1, nav: false, dots: false },
+        600: { items: 1, nav: false, dots: false },
+        768: { items: 1, nav: false, dots: false },
+        1100: { items: 1, nav: true, dots: false }
+    }
+});
 
 	$carousel.on("translate.owl.carousel", function () {
 		$(".single-slide-item h1").removeClass("animated fadeInUp").css("opacity", "1");

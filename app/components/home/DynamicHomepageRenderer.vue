@@ -15,7 +15,7 @@
         <StatisticsSection v-else-if="section.type === 'statistics'" />
         <ReputationSection v-else-if="section.type === 'reputation'" />
         <HomeQuickAccessSection v-else-if="false && section.type === 'campus_services'" />
-        <FacultySection v-else-if="section.type === 'faculties'" />
+        <FacultySection v-else-if="section.type === 'faculties'" :section="section" />
         <ServicesOne v-else-if="false && section.type === 'study_programs'" />
         <HomeEventSection v-else-if="section.type === 'events'" />
         <CampusGallerySection v-else-if="section.type === 'campus_gallery'" />

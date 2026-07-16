@@ -63,5 +63,15 @@
     "title": "Campus Moments",
     "subtitle": "Documentation of activities, achievements, collaborations, and campus life at Universitas Muhammadiyah PKU.",
     "view_all": "View All Galleries"
+  },
+  "faculty_section": {
+    "eyebrow": "UMPKU Faculties",
+    "title": "Explore Faculties and Fields of Study",
+    "subtitle": "Discover an academic environment that supports learning, research, innovation, and community service.",
+    "error": "Failed to load faculty data.",
+    "empty": "Faculty data is not available yet.",
+    "label": "Faculty",
+    "fallback_desc": "An academic environment that supports excellence in {name}.",
+    "view_detail": "View faculty details"
   }
 }
