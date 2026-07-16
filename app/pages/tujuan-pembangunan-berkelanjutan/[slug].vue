@@ -81,7 +81,7 @@ useSeoMeta({
 
       <SdgsNewsGrid :news="newsArticles" />
 
-      <SdgsGoalNav :prev="adjacent.prev" :next="adjacent.next" />
+      <!-- <SdgsGoalNav :prev="adjacent.prev" :next="adjacent.next" /> -->
 
       <SdgsRelatedGoals :currentSdgId="sdg.id" :allSdgs="allSdgs" />
     </div>

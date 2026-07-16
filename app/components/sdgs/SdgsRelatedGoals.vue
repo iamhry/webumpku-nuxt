@@ -46,9 +46,9 @@ const relatedSdgs = computed(() => {
                 {{ sdg.goal_number || sdg.number || sdg.id }}
               </div>
             </div>
-            <div class="card-body">
+            <!-- <div class="card-body">
               <h5 class="text-center">{{ sdg.short_name || sdg.name || sdg.title }}</h5>
-            </div>
+            </div> -->
           </NuxtLink>
         </div>
       </div>

@@ -4,7 +4,7 @@
     <SdgsHeroSection />
 
     <!-- Impact Counters Section -->
-    <SdgsCounter />
+    <!-- <SdgsCounter /> -->
 
     <!-- 17 SDGs Grid Explorer -->
     <SdgsExplorer :sdgsData="sdgsData?.data || sdgsData" />
