@@ -40,8 +40,6 @@
 /* Cards */
 .card-premium,
 .single-blog-item,
-.faculty-card,
-.reputation-card,
 .quick-access-card {
   background-color: var(--bg) !important;
   border: 1px solid var(--border) !important;
@@ -55,8 +53,6 @@
 
 .card-premium:hover,
 .single-blog-item:hover,
-.faculty-card:hover,
-.reputation-card:hover,
 .quick-access-card:hover {
   transform: translateY(-4px) !important;
   box-shadow: var(--shadow-medium) !important;

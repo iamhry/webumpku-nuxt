@@ -23,6 +23,13 @@
     }
 }
 
+/* Match the site header's content width (1500px, see header-umpku.css) */
+@media (min-width: 1560px) {
+    .content-wide {
+        max-width: 1500px !important;
+    }
+}
+
 /* 2. Header Area Enlargement
    ========================= */
 @media (min-width: 992px) {

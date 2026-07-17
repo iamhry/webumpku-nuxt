@@ -1,6 +1,11 @@
 /* assets/css/sdgs-detail-modern.css */
 /* Bappenas-inspired aesthetics for SDGs detail page */
 
+/* Match the site header's content width (1500px) on this page's sections */
+.sdgs-detail-page .container {
+    max-width: 1500px;
+}
+
 /* ── Full-color Bappenas hero ─────────────────────────────────────────────── */
 .sdgs-hero-bappenas {
     position: relative;

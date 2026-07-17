@@ -34,6 +34,9 @@ const fallback = {
 }
 
 const siteLogo  = computed(() => settings.value?.logo  || fallback.logo)
+// Swap to the compact logotype once the header shrinks on scroll
+const scrolledLogo = '/assets/img/umpku_logotype.png'
+const headerLogo = computed(() => (scrolled.value ? scrolledLogo : siteLogo.value))
 const siteEmail = computed(() => settings.value?.email || fallback.email)
 const sitePhone = computed(() => settings.value?.phone || fallback.phone)
 const pmbUrl    = computed(() => fallback.pmbUrl)
@@ -87,17 +90,44 @@ const searchKeyword     = ref('')
 const openedMobileMenus = ref<Record<string | number, boolean>>({})
 
 // ─── Shrink-on-scroll (rAF-throttled, direction-aware) ───────────────────────
-const SCROLL_SHRINK_THRESHOLD = 8
-const UTILITY_HIDE_THRESHOLD  = 80
-const DIRECTION_DELTA         = 6 // ignore tiny scroll noise / jitter
+// Hysteresis: each toggled state uses two different thresholds (enter/leave)
+// instead of one shared value. A single shared threshold makes the class
+// flap on/off whenever scrollY oscillates by a pixel around that number
+// (trackpad micro-movements, momentum scroll, sub-pixel deltas) — that flapping
+// is what produces the "berkedip / meloncat" flicker-jump during scroll.
+const SCROLLED_ON_THRESHOLD  = 12  // scrolled state turns ON past this
+const SCROLLED_OFF_THRESHOLD = 4   // scrolled state turns OFF below this
+const UTILITY_HIDE_THRESHOLD = 80
+const UTILITY_SHOW_THRESHOLD = 40
+const NEAR_TOP_THRESHOLD     = 4   // always restore utility bar near the very top
+const DIRECTION_DELTA        = 6   // ignore tiny scroll noise / jitter
+
+// A single wheel/trackpad tick can easily move scrollY by 40-100px — enough to
+// cross the *entire* hysteresis gap in one go right as the boundary is
+// reached. Without a cooldown, hovering near that point re-triggers the
+// hide/show (or logo-swap) transition mid-flight over and over, which is what
+// reads as "berkedip" (flicker) exactly at the scroll boundary. Locking each
+// toggle for roughly its own transition duration lets it finish once, cleanly,
+// before it's allowed to reverse.
+const SCROLLED_TOGGLE_COOLDOWN_MS = 280
+const UTILITY_TOGGLE_COOLDOWN_MS  = 340
 
 const headerRef = ref<HTMLElement | null>(null)
 
+// Reflects `scrolled` but also folds in the mobile-drawer guard, so template
+// bindings + CSS class toggling only ever depend on one boolean.
+const isHeaderWide = computed(() => scrolled.value && !isMobileOpen.value)
+
 let scrollTicking = false
+let rafId: number | null = null
+let scrolledLockedUntil = 0
+let utilityLockedUntil = 0
 
 const updateScrollState = () => {
+  rafId = null
   const y = Math.max(0, window.scrollY)
   const delta = y - lastScrollY.value
+  const now = performance.now()
 
   // Mobile drawer open → keep full-size header
   if (isMobileOpen.value) {
@@ -108,18 +138,32 @@ const updateScrollState = () => {
     return
   }
 
-  scrolled.value = y > SCROLL_SHRINK_THRESHOLD
-
-  if (Math.abs(delta) >= DIRECTION_DELTA) {
-    if (delta > 0 && y > UTILITY_HIDE_THRESHOLD) {
-      hideUtilityBar.value = true
-    } else if (delta < 0) {
-      hideUtilityBar.value = false
+  // Hysteresis + cooldown: only flip `scrolled` when crossing the ON/OFF band
+  // AND the previous toggle's transition has had time to finish — never on
+  // every frame while hovering around a single boundary value.
+  if (now >= scrolledLockedUntil) {
+    if (!scrolled.value && y > SCROLLED_ON_THRESHOLD) {
+      scrolled.value = true
+      scrolledLockedUntil = now + SCROLLED_TOGGLE_COOLDOWN_MS
+    } else if (scrolled.value && y < SCROLLED_OFF_THRESHOLD) {
+      scrolled.value = false
+      scrolledLockedUntil = now + SCROLLED_TOGGLE_COOLDOWN_MS
     }
   }
 
-  // Near top: always restore utility bar
-  if (y <= SCROLL_SHRINK_THRESHOLD) {
+  if (now >= utilityLockedUntil && Math.abs(delta) >= DIRECTION_DELTA) {
+    if (delta > 0 && y > UTILITY_HIDE_THRESHOLD && !hideUtilityBar.value) {
+      hideUtilityBar.value = true
+      utilityLockedUntil = now + UTILITY_TOGGLE_COOLDOWN_MS
+    } else if (delta < 0 && y < UTILITY_SHOW_THRESHOLD && hideUtilityBar.value) {
+      hideUtilityBar.value = false
+      utilityLockedUntil = now + UTILITY_TOGGLE_COOLDOWN_MS
+    }
+  }
+
+  // Near top: always restore utility bar — a firm, deliberate boundary, not
+  // subject to jitter, so it intentionally bypasses the cooldown lock.
+  if (y <= NEAR_TOP_THRESHOLD) {
     hideUtilityBar.value = false
   }
 
@@ -130,7 +174,7 @@ const updateScrollState = () => {
 const onScroll = () => {
   if (scrollTicking) return
   scrollTicking = true
-  requestAnimationFrame(updateScrollState)
+  rafId = requestAnimationFrame(updateScrollState)
 }
 
 onMounted(() => {
@@ -141,6 +185,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
+  if (rafId !== null) cancelAnimationFrame(rafId)
 })
 
 // Re-evaluate when mobile drawer closes
@@ -198,7 +243,7 @@ const closeMobileDrawer = () => {
 </script>
 
 <template>
-  <div class="rs-header-root">
+  <div class="rs-header-root" :class="{ 'rs-header-root--wide': isHeaderWide }">
     <!-- ── TOPBAR (utility-bar) ────────────────────── -->
     <div
       class="rs-header-top"
@@ -250,7 +295,7 @@ const closeMobileDrawer = () => {
     <div
       ref="headerRef"
       class="rs-header-area"
-      :class="{ 'rs-header-area--scrolled': scrolled && !isMobileOpen }"
+      :class="{ 'rs-header-area--scrolled': isHeaderWide }"
     >
       <div class="rs-header-inner">
 
@@ -259,7 +304,7 @@ const closeMobileDrawer = () => {
           <div class="rs-header-logo-wrapper">
             <div class="rs-header-logo">
               <NuxtLink to="/">
-                <img :src="siteLogo" :alt="settings?.site_name || 'UMPKU'" />
+                <img :src="headerLogo" :alt="settings?.site_name || 'UMPKU'" />
               </NuxtLink>
             </div>
           </div>

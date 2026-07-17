@@ -76,6 +76,10 @@ const props = defineProps<{
 const { getImageUrl } = useMedia()
 const { locale } = useLocale()
 
+// ─── JS-driven parallax (translate3d) ────────────────────────────────────
+// CSS-only `background-attachment: fixed` is unreliable across browsers/GPU
+// compositing (silently no-ops in several real-world cases), so the
+// background layer is moved directly via a rAF-throttled scroll listener.
 const sectionRef = ref<HTMLElement | null>(null)
 const bgRef = ref<HTMLElement | null>(null)
 
@@ -91,7 +95,7 @@ const updateParallax = () => {
   const rect = section.getBoundingClientRect()
   const viewH = window.innerHeight || 1
 
-  // Only update while section is near/in viewport
+  // Skip work while section is far outside the viewport
   if (rect.bottom < -100 || rect.top > viewH + 100) return
 
   // Progress: 0 when section enters bottom, 1 when it leaves top
@@ -207,6 +211,7 @@ const isValid = computed(() => {
   padding: 88px 0;
   color: #1a1a1a;
   overflow: hidden;
+  isolation: isolate;
 }
 
 /* Parallax image layer (taller than section, moved via JS translate) */
@@ -226,7 +231,7 @@ const isValid = computed(() => {
   backface-visibility: hidden;
 }
 
-/* Purple overlay via ::before */
+/* Purple overlay via ::before — keep existing overlay, no new layer */
 .about-spotlight::before {
   content: '';
   position: absolute;

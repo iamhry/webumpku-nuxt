@@ -18,9 +18,28 @@
    ROOT WRAPPER — sticky so topbar + main-nav stay as one unit
    ============================================================ */
 .rs-header-root {
+  /* Matches ums.ac.id's .fe-ums-header-wrapper computed width (1500px) */
+  --rs-header-width: min(calc(100% - 30px), 1500px);
   position: sticky;
   top: 0;
   z-index: 1000;
+  /* Prevent Chrome's scroll-anchoring from nudging scrollY when the
+     utility bar collapses/expands above the fold — this was the root
+     cause of the scroll jitter / feedback loop. */
+  overflow-anchor: none;
+}
+
+.rs-header-top,
+.rs-header-area {
+  overflow-anchor: none;
+}
+
+/* Driven directly by the `isHeaderWide` class (set from the scroll handler)
+   rather than a `:has()` relational selector — plain class matching is
+   cheaper for the style engine to (re-)evaluate on every scroll-driven
+   class toggle, which keeps this state flip from adding to the jank. */
+.rs-header-root.rs-header-root--wide {
+  --rs-header-width: 100%;
 }
 
 /* ============================================================
@@ -33,6 +52,7 @@
   max-height: 72px;
   opacity: 1;
   overflow: hidden;
+  width: 100%;
   transition:
     max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
@@ -53,7 +73,15 @@
   justify-content: space-between;
   padding: 0 32px;
   gap: 24px;
+  width: var(--rs-header-width);
   max-width: 100%;
+  margin-inline: auto;
+  /* `width` is a layout property — animating it forces a reflow on every
+     frame of the transition. Since a true width/reflow change can't be
+     faithfully replaced with a transform without distorting the menu
+     layout, it's applied instantly (no transition) instead of smoothly
+     animated, so the cost is a single one-off reflow rather than one
+     per frame for 240ms. */
 }
 
 .rs-header-info-wrapper {
@@ -127,7 +155,7 @@
   color: var(--rs-body);
   font-size: 16px;
   text-decoration: none;
-  transition: all var(--rs-transition);
+  transition: background-color var(--rs-transition), color var(--rs-transition);
 }
 
 .rs-topbar-social a:hover {
@@ -170,8 +198,14 @@
   background: var(--rs-white);
   position: relative;
   z-index: 999;
-  transition: box-shadow var(--rs-transition), background var(--rs-transition);
-  width: 100%;
+  width: var(--rs-header-width);
+  margin-inline: auto;
+  /* Only paint-level properties are animated here (box-shadow/background are
+     compositor-friendly-ish and cheap); `width` changes instantly — see the
+     note on .rs-header-top-inner for why it isn't transitioned. */
+  transition:
+    box-shadow var(--rs-transition),
+    background var(--rs-transition);
 }
 
 .rs-header-inner {
@@ -180,28 +214,11 @@
   min-height: 86px;
   padding: 0.9rem 32px;
   position: relative;
-  transition:
-    min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Scrolled / shrink state — shadow + tighter vertical padding */
+/* Scrolled — full-width panel + shadow; height stays the same */
 .rs-header-area--scrolled {
   box-shadow: var(--rs-shadow);
-}
-
-.rs-header-area--scrolled .rs-header-inner {
-  min-height: 64px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.rs-header-area--scrolled .rs-header-logo-wrapper {
-  height: 64px;
-}
-
-.rs-header-area--scrolled .rs-header-logo img {
-  max-height: 48px;
 }
 
 /* ============================================================
@@ -280,7 +297,7 @@
   color: var(--rs-body);
   font-size: 13px;
   text-decoration: none;
-  transition: all var(--rs-transition);
+  transition: color var(--rs-transition);
   background: transparent;
 }
 
@@ -528,7 +545,7 @@
   border-radius: 4px;
   text-decoration: none;
   white-space: nowrap;
-  transition: all var(--rs-transition);
+  transition: background var(--rs-transition), border-color var(--rs-transition), color var(--rs-transition);
   position: relative;
   overflow: hidden;
 }
@@ -580,7 +597,7 @@
   height: 2px;
   background: var(--rs-body);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .rs-hamburger-btn.is-open span:nth-child(1) {
@@ -657,7 +674,7 @@
   cursor: pointer;
   font-size: 18px;
   color: var(--rs-heading);
-  transition: all var(--rs-transition);
+  transition: background var(--rs-transition), border-color var(--rs-transition), color var(--rs-transition);
 }
 
 .rs-drawer-close:hover {
@@ -692,7 +709,7 @@
   border-radius: 4px;
   text-decoration: none;
   width: 100%;
-  transition: all var(--rs-transition);
+  transition: background var(--rs-transition), color var(--rs-transition);
 }
 
 .rs-drawer-cta:hover {
@@ -780,6 +797,29 @@
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* Tablet — smaller side gap before scroll; full width after scroll */
+@media (max-width: 1024px) {
+  .rs-header-root {
+    --rs-header-width: calc(100% - 40px);
+  }
+
+  .rs-header-root.rs-header-root--wide {
+    --rs-header-width: 100%;
+  }
+}
+
+/* Mobile — near-full before scroll; full width after scroll */
+@media (max-width: 640px) {
+  .rs-header-root {
+    --rs-header-width: calc(100% - 24px);
+  }
+
+  .rs-header-root.rs-header-root--wide {
+    --rs-header-width: 100%;
+  }
+}
+
 @media (max-width: 1599px) {
   .rs-header-inner {
     padding-right: 24px;
@@ -879,18 +919,6 @@
     max-height: 44px;
   }
 
-  .rs-header-area--scrolled .rs-header-inner {
-    min-height: 60px;
-  }
-
-  .rs-header-area--scrolled .rs-header-logo-wrapper {
-    height: 60px;
-  }
-
-  .rs-header-area--scrolled .rs-header-logo img {
-    max-height: 38px;
-  }
-
   .rs-header-btn {
     display: none;
   }
@@ -915,6 +943,7 @@
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .rs-header-top,
+  .rs-header-top-inner,
   .rs-header-inner,
   .rs-header-logo-wrapper,
   .rs-header-logo img,

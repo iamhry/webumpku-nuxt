@@ -121,16 +121,19 @@ const formatDate = (dateString: string | undefined) => {
           data-reveal="fade-up"
           :data-reveal-delay="index * 100"
         >
-          <div class="single-blog-item hover-lift">
-              <div class="blog-bg image-zoom">
+          <div class="single-blog-item news-card-clean">
+              <NuxtLink :to="`/berita/${article.slug}`" class="blog-bg">
                <img :src="getImageUrl(article.featured_image)" :alt="article.title" class="featured-img">
-               <span class="blog-date">{{ formatDate(article.published_at) }}</span>
-             </div>
+             </NuxtLink>
             <div class="blog-content">
-              <p class="blog-meta">News</p>
+              <p class="blog-meta">
+                <span>News</span>
+                <span class="blog-meta-dot" aria-hidden="true">&middot;</span>
+                <span class="blog-date">{{ formatDate(article.published_at) }}</span>
+              </p>
 
               <!-- SDG label + badges (UMS-like layout) -->
-              
+
               <h5><NuxtLink :to="`/berita/${article.slug}`">{{ article.title }}</NuxtLink></h5>
               <p>{{ article.excerpt ? (article.excerpt.length > 100 ? article.excerpt.substring(0, 100) + '...' : article.excerpt) : '' }}</p>
               <div class="sdg-container">
@@ -162,6 +165,98 @@ const formatDate = (dateString: string | undefined) => {
 </template>
 
 <style scoped>
+/* Clean minimal news card (image / title / excerpt), no overlay badges */
+.news-card-clean {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  margin-bottom: 0;
+}
+
+.news-card-clean:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.news-card-clean .blog-bg {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+  aspect-ratio: 3 / 2;
+}
+
+.news-card-clean .featured-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.news-card-clean:hover .featured-img {
+  transform: scale(1.05);
+}
+
+.news-card-clean .blog-content {
+  padding: 20px 0 0;
+}
+
+.news-card-clean .blog-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #84888c;
+  text-transform: none;
+  letter-spacing: normal;
+  margin: 0 0 10px;
+}
+
+.news-card-clean .blog-meta-dot {
+  color: #c4c7ca;
+}
+
+.news-card-clean h5 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.news-card-clean h5 a {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: #171717;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.news-card-clean h5 a:hover {
+  color: #0b2e59;
+}
+
+.news-card-clean .blog-content > p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #84888c;
+  margin: 0;
+}
+
+.news-card-clean .sdg-container {
+  margin-top: 14px;
+  min-height: 0;
+}
+
 .featured-img{ width:100%; height:250px; object-fit:cover }
 .sdg-badges{ margin-bottom:8px }
 .sdg-item{ margin-right:6px; display:inline-block; vertical-align:middle }
