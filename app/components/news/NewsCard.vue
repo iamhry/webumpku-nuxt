@@ -13,116 +13,91 @@ const openSdgsModal = (sdgs: any[]) => {
   isModalOpen.value = true
 }
 
-// Resolve sdgs bullet image using Vite base so it works with different base URLs
+const formatDate = (dateString: string | undefined) => {
+  if (!dateString) return ''
+  try {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+  } catch (e) {
+    return dateString
+  }
+}
+
 let sdgsBulletUrl = '/assets/img/sdgs.png'
 try {
   if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) {
-    // import.meta.env.BASE_URL may be undefined in some runtimes (SSR), guard it
     sdgsBulletUrl = new URL('/assets/img/sdgs.png', import.meta.env.BASE_URL).href
   }
 } catch (e) {
-  // fallback to absolute public path
   sdgsBulletUrl = '/assets/img/sdgs.png'
 }
 </script>
 
 <template>
-  <div class="single-blog-item">
-    <div class="blog-bg">
-      <img :src="props.article.featured_image" :alt="props.article.title" class="featured-img" />
-    </div>
+  <article class="single-blog-item h-100 bg-white d-flex flex-column overflow-hidden border rounded-3 shadow-sm">
     
-    <div class="blog-content">
-      <p class="blog-meta">{{ props.article.published_at }}</p>
+    <div class="blog-bg position-relative overflow-hidden w-100" style="height: 250px;">
+      <img 
+        :src="props.article.featured_image" 
+        class="featured-img object-fit-cover w-100 h-100" 
+        :alt="props.article.title"
+        loading="lazy" 
+      />
+      <span class="blog-date">{{ formatDate(props.article.published_at) }}</span>
+    </div>
 
-      <!-- EDIT DI SINI: Tag judul <h5> diberikan class "news-title" -->
-      <h5 class="news-title">
-        <NuxtLink :to="`/berita/${props.article.slug}`">{{ props.article.title }}</NuxtLink>
-      </h5>
-      
-      <!-- EDIT DI SINI: Tag <p> diberikan class "news-excerpt" untuk memotong teks -->
-      <p class="news-excerpt">{{ props.article.excerpt }}</p>
-      
-      <div v-if="props.article.sdgs && props.article.sdgs.length" class="sdg-container">
-        <a class="mr-1" href="/tujuan-pembangunan-berkelanjutan" data-toggle="tooltip" data-placement="bottom" title="Tujuan Pembangunan Berkelanjutan" aria-label="sdg content link">
-          <img :src="sdgsBulletUrl" alt="sdgs-label" loading="lazy" class="sdgLabelImg" style="width:110px; height:40px;" />
-        </a>
-
-        <div v-for="goal in props.article.sdgs.slice(0,3)" :key="goal.id" class="sdgs-banner mr-1">
-          <NuxtLink :to="`/tujuan-pembangunan-berkelanjutan/${goal.slug || goal.id}`" data-toggle="tooltip" data-placement="bottom" :title="`${goal.id} ${goal.title || goal.name}`" aria-label="sdg content link">
-            <img v-if="goal.icon_image && goal.icon_image.startsWith('http')" :src="goal.icon_image" alt="sdgs-badge" loading="lazy" style="width:40px; height:40px;" />
-            <div v-else class="sdg-number-badge" :style="{ backgroundColor: goal.color || '#f5f5f5', color: goal.color ? '#fff' : '#000' }">{{ goal.id }}</div>
+    <!-- Konten Isi Kartu Berita -->
+    <div class="blog-content p-4 d-flex flex-column flex-grow-1 justify-content-between">
+      <div>
+        <p class="blog-meta text-uppercase font-monospace mb-2">News</p>
+        
+        <!-- Judul Berita -->
+        <h5 class="news-title fw-bold mb-3">
+          <NuxtLink :to="`/berita/${props.article.slug}`" class="text-dark text-decoration-none">
+            {{ props.article.title }}
           </NuxtLink>
-        </div>
+        </h5>
+        
+        <!-- Excerpt Singkat dengan Batasan Karakter bawaan Proyek Anda -->
+        <p class="news-excerpt text-secondary text-sm mb-4">
+          {{ props.article.excerpt ? (props.article.excerpt.length > 100 ? props.article.excerpt.substring(0, 100) + '...' : props.article.excerpt) : '' }}
+        </p>
+      </div>
 
-        <div v-if="props.article.sdgs.length > 3" class="sdgs-banner mr-1">
-          <div class="sdg-more" style="cursor: pointer;" @click.prevent="openSdgsModal(props.article.sdgs)">+{{ props.article.sdgs.length - 3 }}</div>
-        </div>
+      <!-- Container Modul Jalur Badges SDGs -->
+      <div class="sdg-container mt-auto pt-3 border-top">
+        <template v-if="props.article.sdgs && props.article.sdgs.length">
+          <!-- Bullet Label Utama SDGs -->
+          <a class="mr-1" href="/tujuan-pembangunan-berkelanjutan" data-toggle="tooltip" data-placement="bottom" title="Tujuan Pembangunan Berkelanjutan">
+            <img :src="sdgsBulletUrl" alt="sdgs-label" loading="lazy" class="sdgLabelImg" style="width:110px; height:40px;" />
+          </a>
+
+          <div v-for="goal in props.article.sdgs.slice(0, 3)" :key="goal.id" class="sdgs-banner mr-1">
+            <NuxtLink :to="`/tujuan-pembangunan-berkelanjutan/${goal.slug || goal.id}`" data-toggle="tooltip" data-placement="bottom" :title="`${goal.id} ${goal.title || goal.name}`" aria-label="sdg content link">
+              <!-- Render Ikon Gambar Jika Tersedia -->
+              <img v-if="goal.icon_image && goal.icon_image.startsWith('http')" :src="goal.icon_image" alt="sdgs-badge" loading="lazy" class="sdg-icon" style="width:40px; height:40px;" />
+              <!-- Render Badge Angka Tekstual sebagai Cadangan -->
+              <div v-else class="sdg-number-badge" :style="{ backgroundColor: goal.color || '#f5f5f5', color: goal.color ? '#fff' : '#000' }">
+                {{ goal.id }}
+              </div>
+            </NuxtLink>
+          </div>
+
+          <!-- Indikator Angka Tambahan Jika Item Lebih dari 3 -->
+          <div v-if="props.article.sdgs.length > 3" class="sdgs-banner mr-1">
+            <div class="sdg-more" style="cursor: pointer;" @click.prevent="openSdgsModal(props.article.sdgs)">
+              +{{ props.article.sdgs.length - 3 }}
+            </div>
+          </div>
+        </template>
       </div>
     </div>
+
+    <!-- Dialog Modal SDGs -->
     <SdgsModal :show="isModalOpen" :sdgs="selectedSdgs" @close="isModalOpen = false" />
-  </div>
+  </article>
 </template>
 
 <style scoped>
-.single-blog-item {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: #fff; /* sesuaikan jika ada background color */
-  border-radius: 8px; /* sesuaikan style website */
-  overflow: hidden;
-}
-
-.featured-img { 
-  width: 100%; 
-  height: 220px; /* Diubah sedikit agar proporsional */
-  object-fit: cover; 
-}
-
-.blog-content {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  padding: 20px; /* sesuaikan padding dalam card */
-}
-
-.blog-meta {
-  margin-bottom: 10px;
-}
-
-.news-title {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-height: 2.8em; /* Mengunci ruang agar judul 1 baris & 2 baris tingginya sama */
-  margin-bottom: 10px;
-}
-
-.news-excerpt {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-height: 4.5em; /* Mengunci ruang agar tinggi tulisan seragam */
-  margin-bottom: 20px;
-  color: #666;
-}
-
-.sdg-container { 
-  margin-top: auto; 
-  display: flex; 
-  flex-wrap: wrap; 
-  justify-content: flex-start; 
-  align-items: center; 
-}
-
-.sdg-more { display: inline-block; background: #f1f1f1; color: #333; font-size: 12px; padding: 2px 6px; border-radius: 12px; vertical-align: middle }
-.sdgLabelImg { display: block }
-.sdgs-banner { display: inline-block }
-.mr-1 { margin-right: 8px }
-.sdg-number-badge { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 6px; font-weight: 700 }
+@import '~/assets/css/news-card.css';
 </style>
