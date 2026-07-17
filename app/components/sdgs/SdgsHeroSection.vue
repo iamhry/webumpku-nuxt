@@ -6,7 +6,7 @@
           <div class="hero-content">
             <span class="sub-title">UMPKU untuk Dunia</span>
             <h2>Sustainable Development Goals (SDGs)</h2>
-            <p>Universitas Muhammadiyah Pekajangan Pekalongan berkomitmen penuh dalam mendukung Agenda 2030 PBB. Kami mengintegrasikan 17 Tujuan Pembangunan Berkelanjutan melalui Tri Dharma Perguruan Tinggi: Pendidikan, Penelitian, dan Pengabdian kepada Masyarakat.</p>
+            <p>Universitas Muhammadiyah PKU Surakarta berkomitmen penuh dalam mendukung Agenda 2030 PBB. Kami mengintegrasikan 17 Tujuan Pembangunan Berkelanjutan melalui Tri Dharma Perguruan Tinggi: Pendidikan, Penelitian, dan Pengabdian kepada Masyarakat.</p>
             <NuxtLink to="#goals" class="main-btn mt-4">Jelajahi 17 Goals</NuxtLink>
           </div>
         </div>

@@ -18,9 +18,28 @@
    ROOT WRAPPER — sticky so topbar + main-nav stay as one unit
    ============================================================ */
 .rs-header-root {
+  /* Matches ums.ac.id's .fe-ums-header-wrapper computed width (1500px) */
+  --rs-header-width: min(calc(100% - 30px), 1500px);
   position: sticky;
   top: 0;
   z-index: 1000;
+  /* Prevent Chrome's scroll-anchoring from nudging scrollY when the
+     utility bar collapses/expands above the fold — this was the root
+     cause of the scroll jitter / feedback loop. */
+  overflow-anchor: none;
+}
+
+.rs-header-top,
+.rs-header-area {
+  overflow-anchor: none;
+}
+
+/* Driven directly by the `isHeaderWide` class (set from the scroll handler)
+   rather than a `:has()` relational selector — plain class matching is
+   cheaper for the style engine to (re-)evaluate on every scroll-driven
+   class toggle, which keeps this state flip from adding to the jank. */
+.rs-header-root.rs-header-root--wide {
+  --rs-header-width: 100%;
 }
 
 /* ============================================================
@@ -33,6 +52,7 @@
   max-height: 72px;
   opacity: 1;
   overflow: hidden;
+  width: 100%;
   transition:
     max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
@@ -53,7 +73,16 @@
   justify-content: space-between;
   padding: 0 32px;
   gap: 24px;
+  width: var(--rs-header-width);
   max-width: 100%;
+  margin-inline: auto;
+  /* `width` can jump ~300-400px between the constrained and full-bleed
+     states — snapping it instantly (no transition) made that jump look like
+     a pop/flicker of its own. The JS-side cooldown lock (see
+     SCROLLED_TOGGLE_COOLDOWN_MS in the component) guarantees this can't be
+     re-triggered mid-flight, so a short, single transition is safe and reads
+     smoother than an instant snap. */
+  transition: width 220ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rs-header-info-wrapper {
@@ -127,7 +156,7 @@
   color: var(--rs-body);
   font-size: 16px;
   text-decoration: none;
-  transition: all var(--rs-transition);
+  transition: background-color var(--rs-transition), color var(--rs-transition);
 }
 
 .rs-topbar-social a:hover {
@@ -172,11 +201,23 @@
   top: 0;
   left: 0;
   z-index: 999;
+<<<<<<< HEAD
   transition: 
     box-shadow var(--rs-transition), 
     background var(--rs-transition),
     transform 0.3s ease;
   width: 100%;
+=======
+  width: var(--rs-header-width);
+  margin-inline: auto;
+  /* Same short, cooldown-protected width transition as .rs-header-top-inner
+     (see note there) — kept in sync so both bars resize together instead of
+     one snapping instantly while the other eases. */
+  transition:
+    width 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow var(--rs-transition),
+    background var(--rs-transition);
+>>>>>>> d494e200fb4b8f16d09bd6d7fe5cc90fea878c6f
 }
 
 .rs-header-inner {
@@ -185,28 +226,21 @@
   min-height: 86px;
   padding: 0.9rem 32px;
   position: relative;
-  transition:
-    min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: min-height 220ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Scrolled / shrink state — shadow + tighter vertical padding */
+/* Scrolled — full-width panel + shadow + a shorter, still touch-friendly
+   height. 64px keeps a comfortable margin above the 44px minimum touch
+   target (WCAG 2.5.5 / platform HIG guidance) while feeling noticeably more
+   "ringkas" than the 86px resting height. The logo's tap area is stretched
+   to match (see .rs-header-logo) so it stays just as reachable even though
+   the artwork itself renders smaller. */
 .rs-header-area--scrolled {
   box-shadow: var(--rs-shadow);
 }
 
 .rs-header-area--scrolled .rs-header-inner {
   min-height: 64px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.rs-header-area--scrolled .rs-header-logo-wrapper {
-  height: 64px;
-}
-
-.rs-header-area--scrolled .rs-header-logo img {
-  max-height: 48px;
 }
 
 /* ============================================================
@@ -227,14 +261,24 @@
   transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.rs-header-area--scrolled .rs-header-logo-wrapper {
+  height: 64px;
+}
+
 .rs-header-logo {
   position: relative;
   z-index: 2;
+  /* Stretches the (invisible) tap target to the wrapper's full height —
+     without this, the clickable area would shrink to the logo image's own
+     height, which can dip below the 44px touch-target minimum once compact. */
+  align-self: stretch;
+  display: flex;
 }
 
 .rs-header-logo a {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  height: 100%;
   text-decoration: none;
 }
 
@@ -246,6 +290,10 @@
   transition:
     transform var(--rs-transition),
     max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rs-header-area--scrolled .rs-header-logo img {
+  max-height: 40px;
 }
 
 .rs-header-logo img:hover {
@@ -285,7 +333,7 @@
   color: var(--rs-body);
   font-size: 13px;
   text-decoration: none;
-  transition: all var(--rs-transition);
+  transition: color var(--rs-transition);
   background: transparent;
 }
 
@@ -326,8 +374,14 @@
   color: var(--rs-body);
   text-decoration: none;
   white-space: nowrap;
-  transition: color var(--rs-transition);
+  transition: color var(--rs-transition), min-height 220ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+}
+
+/* Matches the compact .rs-header-inner height — still comfortably above the
+   44px touch-target minimum, so the whole nav row stays easy to tap/click. */
+.rs-header-area--scrolled .multipage-menu > li > a {
+  min-height: 64px;
 }
 
 .multipage-menu > li > a::after {
@@ -537,7 +591,7 @@
   border-radius: 4px;
   text-decoration: none;
   white-space: nowrap;
-  transition: all var(--rs-transition);
+  transition: background var(--rs-transition), border-color var(--rs-transition), color var(--rs-transition);
   position: relative;
   overflow: hidden;
 }
@@ -589,7 +643,7 @@
   height: 2px;
   background: var(--rs-body);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .rs-hamburger-btn.is-open span:nth-child(1) {
@@ -666,7 +720,7 @@
   cursor: pointer;
   font-size: 18px;
   color: var(--rs-heading);
-  transition: all var(--rs-transition);
+  transition: background var(--rs-transition), border-color var(--rs-transition), color var(--rs-transition);
 }
 
 .rs-drawer-close:hover {
@@ -701,7 +755,7 @@
   border-radius: 4px;
   text-decoration: none;
   width: 100%;
-  transition: all var(--rs-transition);
+  transition: background var(--rs-transition), color var(--rs-transition);
 }
 
 .rs-drawer-cta:hover {
@@ -789,6 +843,29 @@
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* Tablet — smaller side gap before scroll; full width after scroll */
+@media (max-width: 1024px) {
+  .rs-header-root {
+    --rs-header-width: calc(100% - 40px);
+  }
+
+  .rs-header-root.rs-header-root--wide {
+    --rs-header-width: 100%;
+  }
+}
+
+/* Mobile — near-full before scroll; full width after scroll */
+@media (max-width: 640px) {
+  .rs-header-root {
+    --rs-header-width: calc(100% - 24px);
+  }
+
+  .rs-header-root.rs-header-root--wide {
+    --rs-header-width: 100%;
+  }
+}
+
 @media (max-width: 1599px) {
   .rs-header-inner {
     padding-right: 24px;
@@ -888,18 +965,6 @@
     max-height: 44px;
   }
 
-  .rs-header-area--scrolled .rs-header-inner {
-    min-height: 60px;
-  }
-
-  .rs-header-area--scrolled .rs-header-logo-wrapper {
-    height: 60px;
-  }
-
-  .rs-header-area--scrolled .rs-header-logo img {
-    max-height: 38px;
-  }
-
   .rs-header-btn {
     display: none;
   }
@@ -924,10 +989,12 @@
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .rs-header-top,
+  .rs-header-top-inner,
   .rs-header-inner,
   .rs-header-logo-wrapper,
   .rs-header-logo img,
-  .rs-header-area {
+  .rs-header-area,
+  .multipage-menu > li > a {
     transition: none !important;
     animation: none !important;
   }

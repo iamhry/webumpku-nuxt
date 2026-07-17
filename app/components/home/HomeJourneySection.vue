@@ -3,8 +3,8 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-8 text-center">
-          <h2 class="journey-title reveal reveal-up">Start your UMPKU journey</h2>
-          <div class="reveal reveal-up" style="transition-delay: 120ms">
+          <h2 class="journey-title" v-reveal data-reveal="fade-up">Start your UMPKU journey</h2>
+          <div v-reveal data-reveal="fade-up" data-reveal-delay="120">
             <NuxtLink to="https://pmb.umpku.ac.id" target="_blank" rel="noopener" class="journey-btn">
               Apply now
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="journey-icon">

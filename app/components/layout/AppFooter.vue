@@ -23,11 +23,17 @@ const unitsGroup = computed(() => footerMenus.value?.find(g => g.section === 'un
  			<div class="footer-up">
  				<div class="row gy-5">
  					<div class="col-lg-3 col-md-6 col-sm-12">
+<<<<<<< HEAD
  						<div class="logo">
  							<img 
                             :src="settings.logo || '/assets/img/logo.png'"
                     :alt="settings.site_name || 'UMPKU'"
  						</div>
+=======
+						<div class="logo">
+							<img src="/assets/img/umpku_logotype.png" :alt="settings.site_name || 'Universitas'">
+						</div>
+>>>>>>> d494e200fb4b8f16d09bd6d7fe5cc90fea878c6f
  						<p class="mb-3">{{ settings.site_description || 'Website resmi Universitas' }}</p>
                         <p v-if="settings.address"><i class="las la-map-marker"></i> {{ settings.address }}</p>
                         <p v-if="settings.email"><i class="las la-envelope"></i> {{ settings.email }}</p>

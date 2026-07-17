@@ -1,14 +1,8 @@
 <template>
   <section
     v-if="isValid"
-    ref="sectionRef"
     class="about-spotlight"
   >
-    <div
-      ref="bgRef"
-      class="about-spotlight-bg"
-      aria-hidden="true"
-    />
     <div class="about-spotlight-grid" aria-hidden="true" />
 
     <div class="container content-wide about-spotlight-inner">
@@ -65,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed } from 'vue'
 import type { HomepageSection } from '~/types/homepage'
 import { useMedia } from '~/composables/useMedia'
 
@@ -75,55 +69,6 @@ const props = defineProps<{
 
 const { getImageUrl } = useMedia()
 const { locale } = useLocale()
-
-const sectionRef = ref<HTMLElement | null>(null)
-const bgRef = ref<HTMLElement | null>(null)
-
-let ticking = false
-let reduceMotion = false
-
-const updateParallax = () => {
-  ticking = false
-  const section = sectionRef.value
-  const bg = bgRef.value
-  if (!section || !bg || reduceMotion) return
-
-  const rect = section.getBoundingClientRect()
-  const viewH = window.innerHeight || 1
-
-  // Only update while section is near/in viewport
-  if (rect.bottom < -100 || rect.top > viewH + 100) return
-
-  // Progress: 0 when section enters bottom, 1 when it leaves top
-  const progress = (viewH - rect.top) / (viewH + rect.height)
-  const clamped = Math.min(1, Math.max(0, progress))
-
-  // Move background slower than scroll (simple parallax)
-  const offset = (clamped - 0.5) * 80
-  bg.style.transform = `translate3d(0, ${offset}px, 0)`
-}
-
-const onScroll = () => {
-  if (ticking) return
-  ticking = true
-  requestAnimationFrame(updateParallax)
-}
-
-onMounted(() => {
-  if (!import.meta.client) return
-  reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (reduceMotion) return
-
-  updateParallax()
-  window.addEventListener('scroll', onScroll, { passive: true })
-  window.addEventListener('resize', onScroll, { passive: true })
-})
-
-onBeforeUnmount(() => {
-  if (!import.meta.client) return
-  window.removeEventListener('scroll', onScroll)
-  window.removeEventListener('resize', onScroll)
-})
 
 const title = computed(() =>
   props.section?.title ||
@@ -207,26 +152,26 @@ const isValid = computed(() => {
   padding: 88px 0;
   color: #1a1a1a;
   overflow: hidden;
-}
+  isolation: isolate;
 
-/* Parallax image layer (taller than section, moved via JS translate) */
-.about-spotlight-bg {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: -12%;
-  height: 124%;
-  z-index: 0;
-  background-image: url('/assets/img/sbbi.webp');
+  background-image: url('/assets/img/new_umpku.jpg');
+  background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  background-repeat: no-repeat;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
+  background-attachment: scroll;
 }
 
-/* Purple overlay via ::before */
+/* True fixed background — desktop only. `background-attachment: fixed` is
+   unreliable on iOS Safari and some mobile/Android browsers, so it's kept
+   as `scroll` below 992px (see the max-width: 991px block) instead of being
+   forced everywhere. */
+@media (min-width: 992px) {
+  .about-spotlight {
+    background-attachment: fixed;
+  }
+}
+
+/* Purple overlay via ::before — keep existing overlay, no new layer */
 .about-spotlight::before {
   content: '';
   position: absolute;
@@ -424,6 +369,7 @@ const isValid = computed(() => {
 @media (max-width: 991px) {
   .about-spotlight {
     padding: 64px 0;
+    background-attachment: scroll;
   }
 
   .about-spotlight-media {
@@ -433,13 +379,6 @@ const isValid = computed(() => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-spotlight-bg {
-    top: 0;
-    height: 100%;
-    transform: none !important;
-    will-change: auto;
-  }
-
   .about-spotlight-btn,
   .about-spotlight-media-frame img {
     transition: none;
