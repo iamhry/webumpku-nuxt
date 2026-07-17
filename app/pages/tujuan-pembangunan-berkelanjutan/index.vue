@@ -10,13 +10,13 @@
     <SdgsExplorer :sdgsData="sdgsData?.data || sdgsData" />
 
     <!-- Priority Goals Section -->
-    <SdgsPriority />
+    <!-- <SdgsPriority /> -->
 
     <!-- Global Partnerships Section -->
-    <SdgsPartnership />
+    <!-- <SdgsPartnership /> -->
 
     <!-- SDGs Related News Section -->
-    <SdgsNews :newsData="newsData?.data || newsData" />
+    <SdgsNews :newsData="newsData?.latest || newsData?.data || newsData" />
 
     <!-- Call to Action Section -->
     <SdgsCTA />
@@ -51,7 +51,7 @@ const { data: sdgsData } = await useFetch(`${apiBase}/api/v1/sdgs`, {
 
 // Fetch Latest News related to SDGs
 const { data: newsData } = await useFetch(`${apiBase}/api/v1/news/latest`, {
-  query: { category: 'sdgs', limit: 3 },
+  query: { category: 'sdgs', limit: 3,populate: 'sdgs' },
   lazy: true,
   server: false
 })

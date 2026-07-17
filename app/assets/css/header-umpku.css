@@ -168,9 +168,14 @@
    ============================================================ */
 .rs-header-area {
   background: var(--rs-white);
-  position: relative;
+ position: sticky;
+  top: 0;
+  left: 0;
   z-index: 999;
-  transition: box-shadow var(--rs-transition), background var(--rs-transition);
+  transition: 
+    box-shadow var(--rs-transition), 
+    background var(--rs-transition),
+    transform 0.3s ease;
   width: 100%;
 }
 
@@ -390,6 +395,9 @@
 
 .rs-submenu li {
   position: relative;
+  display: block !important;   
+  float: none !important;    
+  width: 100%;
 }
 
 .rs-submenu li a {
@@ -407,6 +415,7 @@
 .rs-submenu li a.router-link-active {
   color: var(--rs-theme-yellow);
   padding-left: 26px;
+  display: block !important;
 }
 
 /* Nested sub-submenu */

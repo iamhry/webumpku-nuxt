@@ -162,42 +162,6 @@ const formatDate = (dateString: string | undefined) => {
 </template>
 
 <style scoped>
-.featured-img{ width:100%; height:250px; object-fit:cover }
-.sdg-badges{ margin-bottom:8px }
-.sdg-item{ margin-right:6px; display:inline-block; vertical-align:middle }
-.sdg-icon{ width:24px; height:24px; border-radius:50%; object-fit:cover; display:block }
-.sdg-more{ display:inline-block; background:#f1f1f1; color:#333; font-size:12px; padding:2px 6px; border-radius:12px; vertical-align:middle }
-.sdgs-bullet{ width:18px; height:18px; object-fit:contain; margin-right:6px; vertical-align:middle }
-.sdg-number{ font-size:13px; font-weight:600; margin-right:6px; vertical-align:middle }
-
-/* Tooltip styles for SDG icons */
-.tooltip{ position:relative }
-.tooltip .tooltip-text{ visibility:hidden; opacity:0; position:absolute; bottom:130%; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.75); color:#fff; padding:6px 8px; border-radius:4px; font-size:12px; white-space:nowrap; transition:opacity .12s ease; z-index:20 }
-.tooltip .tooltip-text::after{ content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border-width:6px; border-style:solid; border-color: rgba(0,0,0,0.75) transparent transparent transparent }
-.tooltip:hover .tooltip-text, .tooltip:focus-within .tooltip-text{ visibility:visible; opacity:1 }
-.sdg-container{ display:flex; flex-wrap:wrap; justify-content:flex-start; align-items:center; min-height:40px; }
-.sdgLabelImg{ display:block }
-.sdgs-banner{ display:inline-block }
-.mr-1{ margin-right:8px }
-.sdg-number-badge{ width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:#f5f5f5; border-radius:6px; font-weight:700 }
-
-.home-news-header-btn {
-  display: inline-flex;
-  align-items: center;
-  font-weight: 600;
-  color: var(--color-primary, #0b2e59);
-  font-size: 16px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border-bottom: 2px solid transparent;
-  padding-bottom: 4px;
-}
-
-.home-news-header-btn:hover {
-  color: var(--color-secondary, #0b7a75);
-  border-color: var(--color-secondary, #0b7a75);
-  transform: translateX(4px);
-  text-decoration: none;
-}
+@import '~/assets/css/news-card.css';
 </style>
 

@@ -87,7 +87,7 @@ const searchKeyword     = ref('')
 const openedMobileMenus = ref<Record<string | number, boolean>>({})
 
 // ─── Shrink-on-scroll (rAF-throttled, direction-aware) ───────────────────────
-const SCROLL_SHRINK_THRESHOLD = 8
+const SCROLL_SHRINK_THRESHOLD = 140
 const UTILITY_HIDE_THRESHOLD  = 80
 const DIRECTION_DELTA         = 6 // ignore tiny scroll noise / jitter
 
@@ -391,7 +391,8 @@ const closeMobileDrawer = () => {
         </div>
 
       </div><!-- /.rs-header-inner -->
-    </div><!-- /.rs-header-area -->
+    </div>
+    <!-- /.rs-header-area -->
 
     <!-- ── MOBILE BACKDROP ────────────────────────── -->
     <div
