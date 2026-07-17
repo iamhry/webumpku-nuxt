@@ -76,12 +76,13 @@
   width: var(--rs-header-width);
   max-width: 100%;
   margin-inline: auto;
-  /* `width` is a layout property — animating it forces a reflow on every
-     frame of the transition. Since a true width/reflow change can't be
-     faithfully replaced with a transform without distorting the menu
-     layout, it's applied instantly (no transition) instead of smoothly
-     animated, so the cost is a single one-off reflow rather than one
-     per frame for 240ms. */
+  /* `width` can jump ~300-400px between the constrained and full-bleed
+     states — snapping it instantly (no transition) made that jump look like
+     a pop/flicker of its own. The JS-side cooldown lock (see
+     SCROLLED_TOGGLE_COOLDOWN_MS in the component) guarantees this can't be
+     re-triggered mid-flight, so a short, single transition is safe and reads
+     smoother than an instant snap. */
+  transition: width 220ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rs-header-info-wrapper {
@@ -200,10 +201,11 @@
   z-index: 999;
   width: var(--rs-header-width);
   margin-inline: auto;
-  /* Only paint-level properties are animated here (box-shadow/background are
-     compositor-friendly-ish and cheap); `width` changes instantly — see the
-     note on .rs-header-top-inner for why it isn't transitioned. */
+  /* Same short, cooldown-protected width transition as .rs-header-top-inner
+     (see note there) — kept in sync so both bars resize together instead of
+     one snapping instantly while the other eases. */
   transition:
+    width 220ms cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow var(--rs-transition),
     background var(--rs-transition);
 }
@@ -214,11 +216,21 @@
   min-height: 86px;
   padding: 0.9rem 32px;
   position: relative;
+  transition: min-height 220ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Scrolled — full-width panel + shadow; height stays the same */
+/* Scrolled — full-width panel + shadow + a shorter, still touch-friendly
+   height. 64px keeps a comfortable margin above the 44px minimum touch
+   target (WCAG 2.5.5 / platform HIG guidance) while feeling noticeably more
+   "ringkas" than the 86px resting height. The logo's tap area is stretched
+   to match (see .rs-header-logo) so it stays just as reachable even though
+   the artwork itself renders smaller. */
 .rs-header-area--scrolled {
   box-shadow: var(--rs-shadow);
+}
+
+.rs-header-area--scrolled .rs-header-inner {
+  min-height: 64px;
 }
 
 /* ============================================================
@@ -239,14 +251,24 @@
   transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.rs-header-area--scrolled .rs-header-logo-wrapper {
+  height: 64px;
+}
+
 .rs-header-logo {
   position: relative;
   z-index: 2;
+  /* Stretches the (invisible) tap target to the wrapper's full height —
+     without this, the clickable area would shrink to the logo image's own
+     height, which can dip below the 44px touch-target minimum once compact. */
+  align-self: stretch;
+  display: flex;
 }
 
 .rs-header-logo a {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  height: 100%;
   text-decoration: none;
 }
 
@@ -258,6 +280,10 @@
   transition:
     transform var(--rs-transition),
     max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rs-header-area--scrolled .rs-header-logo img {
+  max-height: 40px;
 }
 
 .rs-header-logo img:hover {
@@ -338,8 +364,14 @@
   color: var(--rs-body);
   text-decoration: none;
   white-space: nowrap;
-  transition: color var(--rs-transition);
+  transition: color var(--rs-transition), min-height 220ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+}
+
+/* Matches the compact .rs-header-inner height — still comfortably above the
+   44px touch-target minimum, so the whole nav row stays easy to tap/click. */
+.rs-header-area--scrolled .multipage-menu > li > a {
+  min-height: 64px;
 }
 
 .multipage-menu > li > a::after {
@@ -947,7 +979,8 @@
   .rs-header-inner,
   .rs-header-logo-wrapper,
   .rs-header-logo img,
-  .rs-header-area {
+  .rs-header-area,
+  .multipage-menu > li > a {
     transition: none !important;
     animation: none !important;
   }

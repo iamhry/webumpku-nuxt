@@ -23,9 +23,9 @@ const unitsGroup = computed(() => footerMenus.value?.find(g => g.section === 'un
  			<div class="footer-up">
  				<div class="row gy-5">
  					<div class="col-lg-3 col-md-6 col-sm-12">
- 						<div class="logo">
- 							<img :src="settings.logo_white || settings.logo || '/assets/img/logo-white.png'" :alt="settings.site_name || 'Universitas'">
- 						</div>
+						<div class="logo">
+							<img src="/assets/img/umpku_logotype.png" :alt="settings.site_name || 'Universitas'">
+						</div>
  						<p class="mb-3">{{ settings.site_description || 'Website resmi Universitas' }}</p>
                         <p v-if="settings.address"><i class="las la-map-marker"></i> {{ settings.address }}</p>
                         <p v-if="settings.email"><i class="las la-envelope"></i> {{ settings.email }}</p>
