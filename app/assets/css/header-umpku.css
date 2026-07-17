@@ -201,23 +201,11 @@
   top: 0;
   left: 0;
   z-index: 999;
-<<<<<<< HEAD
   transition: 
     box-shadow var(--rs-transition), 
     background var(--rs-transition),
     transform 0.3s ease;
   width: 100%;
-=======
-  width: var(--rs-header-width);
-  margin-inline: auto;
-  /* Same short, cooldown-protected width transition as .rs-header-top-inner
-     (see note there) — kept in sync so both bars resize together instead of
-     one snapping instantly while the other eases. */
-  transition:
-    width 220ms cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow var(--rs-transition),
-    background var(--rs-transition);
->>>>>>> d494e200fb4b8f16d09bd6d7fe5cc90fea878c6f
 }
 
 .rs-header-inner {
