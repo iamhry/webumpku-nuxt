@@ -8,16 +8,12 @@
 
     <!-- 17 SDGs Grid Explorer -->
     <SdgsExplorer :sdgsData="sdgsData?.data || sdgsData" />
-
     <!-- Priority Goals Section -->
     <!-- <SdgsPriority /> -->
-
     <!-- Global Partnerships Section -->
     <!-- <SdgsPartnership /> -->
-
     <!-- SDGs Related News Section -->
     <SdgsNews :newsData="newsData?.latest || newsData?.data || newsData" />
-
     <!-- Call to Action Section -->
     <SdgsCTA />
   </div>
@@ -26,7 +22,6 @@
 <script setup lang="ts">
 import { useHead, useFetch, useRuntimeConfig } from '#imports'
 
-// Modern specific styling
 useHead({
   title: 'Tujuan Pembangunan Berkelanjutan (SDGs) | Universitas Muhammadiyah PKU Surakarta',
   meta: [

@@ -2,7 +2,6 @@
   <section class="section-news py-6 bg-canvas border-top border-light mb-5">
     <div class="container">
 
-      <!-- HEADER LAYOUT -->
       <div class="header-block mb-5">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end g-3">
           <div>
