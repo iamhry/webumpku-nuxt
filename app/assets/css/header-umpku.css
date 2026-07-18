@@ -4,7 +4,7 @@
    ============================================================ */
 
 :root {
-  --rs-theme-yellow: #f5b301;
+  --rs-theme-yellow: #FF5C00;
   --rs-theme-yellow-2: #f9b233;
   --rs-heading: #111111;
   --rs-body: #616161;
@@ -18,8 +18,11 @@
    ROOT WRAPPER — sticky so topbar + main-nav stay as one unit
    ============================================================ */
 .rs-header-root {
-  /* Matches ums.ac.id's .fe-ums-header-wrapper computed width (1500px) */
-  --rs-header-width: min(calc(100% - 30px), 1500px);
+  /* Full-bleed edge-to-edge, like RSTheme Industrie's `.container-fluid`
+     header wrapper — the wide, modern look comes from the bar spanning the
+     viewport at all times (not from a centered max-width box), with inner
+     padding on .rs-header-inner / .rs-header-top-inner providing the gutter. */
+  --rs-header-width: 100%;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -32,14 +35,6 @@
 .rs-header-top,
 .rs-header-area {
   overflow-anchor: none;
-}
-
-/* Driven directly by the `isHeaderWide` class (set from the scroll handler)
-   rather than a `:has()` relational selector — plain class matching is
-   cheaper for the style engine to (re-)evaluate on every scroll-driven
-   class toggle, which keeps this state flip from adding to the jank. */
-.rs-header-root.rs-header-root--wide {
-  --rs-header-width: 100%;
 }
 
 /* ============================================================
@@ -76,13 +71,6 @@
   width: var(--rs-header-width);
   max-width: 100%;
   margin-inline: auto;
-  /* `width` can jump ~300-400px between the constrained and full-bleed
-     states — snapping it instantly (no transition) made that jump look like
-     a pop/flicker of its own. The JS-side cooldown lock (see
-     SCROLLED_TOGGLE_COOLDOWN_MS in the component) guarantees this can't be
-     re-triggered mid-flight, so a short, single transition is safe and reads
-     smoother than an instant snap. */
-  transition: width 220ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rs-header-info-wrapper {
@@ -138,32 +126,6 @@
   gap: 20px;
 }
 
-/* Topbar social */
-.rs-topbar-social {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.rs-topbar-social a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background-color: transparent;
-  color: var(--rs-body);
-  font-size: 16px;
-  text-decoration: none;
-  transition: background-color var(--rs-transition), color var(--rs-transition);
-}
-
-.rs-topbar-social a:hover {
-  background-color: var(--rs-theme-yellow);
-  color: var(--rs-white);
-}
-
 /* Language switcher */
 .rs-lang-switcher {
   display: inline-flex;
@@ -197,15 +159,13 @@
    ============================================================ */
 .rs-header-area {
   background: var(--rs-white);
- position: sticky;
-  top: 0;
-  left: 0;
+  position: relative;
   z-index: 999;
-  transition: 
-    box-shadow var(--rs-transition), 
-    background var(--rs-transition),
-    transform 0.3s ease;
-  width: 100%;
+  width: var(--rs-header-width);
+  margin-inline: auto;
+  transition:
+    box-shadow var(--rs-transition),
+    background var(--rs-transition);
 }
 
 .rs-header-inner {
@@ -303,30 +263,41 @@
   flex: 1;
 }
 
-/* Social strip inside header */
+/* Social strip inside header — sized to match the reference's
+   .rs-header-four .rs-header-left .rs-theme-social (40px boxes, 18px icons,
+   15px gap) rather than the smaller 28px topbar-style icons it replaced. */
 .rs-theme-social {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 24px 0;
+  gap: 15px;
+  flex-shrink: 0;
+  padding-right: 24px;
+  margin-right: 24px;
+  border-right: 1px solid var(--rs-border);
 }
 
 .rs-theme-social a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
+  width: 40px;
+  height: 40px;
   color: var(--rs-body);
-  font-size: 13px;
+  font-size: 18px;
   text-decoration: none;
-  transition: color var(--rs-transition);
-  background: transparent;
 }
 
 .rs-theme-social a:hover {
-  color: var(--rs-theme-yellow);
+  background-color: var(--rs-theme-yellow);
+  color: var(--rs-white);
+}
+
+@media (max-width: 1599px) {
+  .rs-theme-social a {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
 }
 
 /* ============================================================
@@ -437,9 +408,6 @@
 
 .rs-submenu li {
   position: relative;
-  display: block !important;   
-  float: none !important;    
-  width: 100%;
 }
 
 .rs-submenu li a {
@@ -457,7 +425,6 @@
 .rs-submenu li a.router-link-active {
   color: var(--rs-theme-yellow);
   padding-left: 26px;
-  display: block !important;
 }
 
 /* Nested sub-submenu */
@@ -833,27 +800,6 @@
    ============================================================ */
 
 /* Tablet — smaller side gap before scroll; full width after scroll */
-@media (max-width: 1024px) {
-  .rs-header-root {
-    --rs-header-width: calc(100% - 40px);
-  }
-
-  .rs-header-root.rs-header-root--wide {
-    --rs-header-width: 100%;
-  }
-}
-
-/* Mobile — near-full before scroll; full width after scroll */
-@media (max-width: 640px) {
-  .rs-header-root {
-    --rs-header-width: calc(100% - 24px);
-  }
-
-  .rs-header-root.rs-header-root--wide {
-    --rs-header-width: 100%;
-  }
-}
-
 @media (max-width: 1599px) {
   .rs-header-inner {
     padding-right: 24px;

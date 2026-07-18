@@ -1,8 +1,5 @@
 <template>
-  <section
-    v-if="section.items && section.items.length > 0"
-    class="dynamic-page-section page-bg-white"
-  >
+  <section class="dynamic-page-section page-bg-white">
     <div class="dynamic-page-container">
 
       <!-- Header -->
@@ -12,8 +9,15 @@
         <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
       </div>
 
+      <PageSectionEmpty
+        v-if="!hasItems"
+        message="Timeline belum memiliki langkah."
+        icon="las la-stream"
+        :preview="preview"
+      />
+
       <!-- Timeline -->
-      <div class="page-timeline">
+      <div v-else class="page-timeline">
         <div class="page-timeline-line" aria-hidden="true"></div>
 
         <div
@@ -45,10 +49,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { PageSection } from '~/types/page'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
 const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
+
+const hasItems = computed(() => !!(props.section.items && props.section.items.length > 0))
 
 const sortedItems = computed(() => {
   if (!props.section.items) return []

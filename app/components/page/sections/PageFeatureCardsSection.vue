@@ -1,8 +1,5 @@
 <template>
-  <section
-    v-if="section.items && section.items.length > 0"
-    class="dynamic-page-section page-bg-white"
-  >
+  <section class="dynamic-page-section page-bg-white">
     <div class="dynamic-page-container">
 
       <!-- Header -->
@@ -12,8 +9,15 @@
         <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
       </div>
 
+      <PageSectionEmpty
+        v-if="!hasItems"
+        message="Kartu fitur belum memiliki items dari CMS."
+        icon="las la-th-large"
+        :preview="preview"
+      />
+
       <!-- Cards Grid -->
-      <div class="page-cards-grid">
+      <div v-else class="page-cards-grid">
         <article
           class="page-card"
           v-for="(item, index) in section.items"
@@ -62,14 +66,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useMedia } from '~/composables/useMedia'
 import type { PageSection } from '~/types/page'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
-defineProps<{
+const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
 
 const { getImageUrl } = useMedia()
+
+const hasItems = computed(() => !!(props.section.items && props.section.items.length > 0))
 
 const isExternal = (url?: string) => url?.startsWith('http') || false
 </script>

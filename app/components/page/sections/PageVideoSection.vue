@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasVideo" class="page-video-section">
+  <div class="page-video-section">
     <!-- Header -->
     <div v-if="section.title || section.subtitle" class="page-section-header page-center">
       <span v-if="kicker" class="page-kicker">{{ kicker }}</span>
@@ -7,8 +7,15 @@
       <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
     </div>
 
+    <PageSectionEmpty
+      v-if="!hasVideo"
+      message="Belum ada video. Set settings.video_file / video_url di CMS."
+      icon="las la-play-circle"
+      :preview="preview"
+    />
+
     <!-- Video Embed Wrapper -->
-    <div class="page-video-wrapper">
+    <div v-else class="page-video-wrapper">
       <!-- YouTube embed from video_url -->
       <template v-if="youtubeEmbedUrl">
         <div class="page-video-responsive">
@@ -45,9 +52,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { PageSection } from '~/types/page'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
 const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
 
 const kicker = computed(() => props.section.settings?.kicker || '')
@@ -56,7 +65,11 @@ const kicker = computed(() => props.section.settings?.kicker || '')
  * Convert various YouTube URL formats to embed URL
  */
 const youtubeEmbedUrl = computed<string | null>(() => {
-  const url = props.section.settings?.video_url
+  const s = props.section.settings
+  const settings = s && !Array.isArray(s) && typeof s === 'object' ? s : {}
+  const url = settings.video_file
+    || settings.video_url
+    || settings.youtube_url
     || (props.section as any).video_url
     || props.section.image // some backends store video_url in image field
     || ''

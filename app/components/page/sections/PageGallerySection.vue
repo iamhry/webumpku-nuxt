@@ -1,9 +1,5 @@
 <template>
-  <!-- Gallery only renders if there are items with actual images -->
-  <section
-    v-if="itemsWithImages.length > 0"
-    class="dynamic-page-section page-bg-white"
-  >
+  <section class="dynamic-page-section page-bg-white">
     <div class="dynamic-page-container">
 
       <!-- Header -->
@@ -13,8 +9,15 @@
         <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
       </div>
 
+      <PageSectionEmpty
+        v-if="!hasImages"
+        message="Galeri belum memiliki gambar."
+        icon="las la-images"
+        :preview="preview"
+      />
+
       <!-- Gallery Grid -->
-      <div class="page-gallery-grid">
+      <div v-else class="page-gallery-grid">
         <div
           class="page-gallery-item"
           v-for="(item, index) in itemsWithImages"
@@ -100,9 +103,11 @@
 import { ref, computed } from 'vue'
 import { useMedia } from '~/composables/useMedia'
 import type { PageSection, PageSectionItem } from '~/types/page'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
 const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
 
 const { getImageUrl } = useMedia()
@@ -112,6 +117,8 @@ const itemsWithImages = computed<PageSectionItem[]>(() => {
   if (!props.section.items) return []
   return props.section.items.filter(item => !!item.image)
 })
+
+const hasImages = computed(() => itemsWithImages.value.length > 0)
 
 // Lightbox state
 const lightboxOpen = ref(false)

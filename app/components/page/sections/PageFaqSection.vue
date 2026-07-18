@@ -1,8 +1,5 @@
 <template>
-  <section
-    v-if="section.items && section.items.length > 0"
-    class="dynamic-page-section page-bg-soft"
-  >
+  <section class="dynamic-page-section page-bg-soft">
     <div class="dynamic-page-container">
       <div class="dynamic-page-reading">
 
@@ -13,8 +10,15 @@
           <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
         </div>
 
+        <PageSectionEmpty
+          v-if="!hasItems"
+          message="Belum ada pertanyaan FAQ untuk section ini."
+          icon="las la-question-circle"
+          :preview="preview"
+        />
+
         <!-- Accordion -->
-        <div class="page-faq-list" role="list">
+        <div v-else class="page-faq-list" role="list">
           <div
             class="page-faq-item"
             :class="{ 'is-open': activeIndex === index }"
@@ -53,14 +57,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import type { PageSection } from '~/types/page'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
-defineProps<{
+const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
 
 const activeIndex = ref<number | null>(null)
+
+const hasItems = computed(() => !!(props.section.items && props.section.items.length > 0))
 
 const toggle = (index: number) => {
   activeIndex.value = activeIndex.value === index ? null : index

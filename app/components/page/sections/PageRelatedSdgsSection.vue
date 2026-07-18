@@ -1,46 +1,41 @@
 <template>
   <div class="page-related-sdgs-section">
-    <!-- Header -->
     <div v-if="section.title || section.subtitle" class="page-section-header page-center">
       <span v-if="kicker" class="page-kicker">{{ kicker }}</span>
       <h2 v-if="section.title" class="page-section-title">{{ section.title }}</h2>
       <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
     </div>
 
-    <!-- SDG Badge Grid (from items) -->
-    <div v-if="hasItems" class="page-sdgs-grid">
-      <div
-        v-for="item in section.items"
+    <div v-if="displayItems.length" class="page-sdgs-grid">
+      <NuxtLink
+        v-for="item in displayItems"
         :key="item.id"
+        :to="item.url || '/tujuan-pembangunan-berkelanjutan'"
         class="page-sdg-badge"
         :style="getSdgStyle(item)"
         :title="item.title"
       >
-        <!-- SDG Image if available -->
         <img
           v-if="item.image"
           :src="getImageUrl(item.image)"
           :alt="item.title || 'SDG'"
           class="page-sdg-badge-img"
           loading="lazy"
-        />
-        <!-- SDG Number + Label fallback -->
+        >
         <div v-else class="page-sdg-badge-inner">
           <span class="page-sdg-number">{{ item.subtitle || getSdgNumber(item.title) }}</span>
           <span class="page-sdg-label">{{ item.title }}</span>
         </div>
-      </div>
+      </NuxtLink>
     </div>
 
-    <!-- Placeholder -->
-    <div v-else class="page-related-placeholder">
-      <div class="page-related-placeholder-icon">
-        <i class="las la-globe" />
-      </div>
-      <p class="page-related-placeholder-text">SDG terkait akan ditampilkan di sini.</p>
-    </div>
+    <PageSectionEmpty
+      v-else
+      message="SDG terkait akan ditampilkan di sini."
+      icon="las la-globe"
+      :preview="preview"
+    />
 
-    <!-- Optional description -->
     <div
       v-if="section.content"
       class="page-sdgs-content page-prose dynamic-page-reading mx-auto mt-5"
@@ -52,17 +47,53 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useMedia } from '~/composables/useMedia'
+import { sdgsService } from '~/services/sdgs'
 import type { PageSection, PageSectionItem } from '~/types/page'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
 const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
 
 const { getImageUrl } = useMedia()
+const { locale } = useLocale()
 const kicker = computed(() => props.section.settings?.kicker || '')
-const hasItems = computed(() => !!(props.section.items && props.section.items.length > 0))
+const limit = computed(() => Number(props.section.settings?.limit) || 6)
 
-// Official SDG colors per goal number
+const cmsItems = computed(() => props.section.items || [])
+
+const { data: fetchedSdgs } = await useAsyncData(
+  () => `page-related-sdgs-${props.section.id}-${locale.value}-${limit.value}`,
+  async () => {
+    if (cmsItems.value.length > 0) return []
+    const res = await sdgsService.getSdgs(1)
+    const list = res?.data || []
+    return Array.isArray(list) ? list : []
+  },
+  { watch: [locale, () => props.section.id] }
+)
+
+const displayItems = computed<PageSectionItem[]>(() => {
+  if (cmsItems.value.length) return cmsItems.value
+
+  return (fetchedSdgs.value || []).slice(0, limit.value).map((goal: any) => {
+    const g = goal.attributes || goal
+    const num = g.goal_number || g.number || g.id
+    const slug = g.slug || num
+
+    return {
+      id: goal.id || g.id || num,
+      title: g.name || g.title || `SDG ${num}`,
+      subtitle: String(num),
+      image: g.icon || g.icon_image || g.image || '',
+      url: `/tujuan-pembangunan-berkelanjutan/${slug}`,
+      sort_order: Number(num) || 0,
+      settings: { color: g.color },
+    }
+  })
+})
+
 const SDG_COLORS: Record<number, string> = {
   1: '#E5243B', 2: '#DDA63A', 3: '#4C9F38', 4: '#C5192D',
   5: '#FF3A21', 6: '#26BDE2', 7: '#FCC30B', 8: '#A21942',
@@ -79,7 +110,7 @@ const getSdgNumber = (title?: string): string => {
 
 const getSdgStyle = (item: PageSectionItem) => {
   const num = parseInt(item.subtitle || getSdgNumber(item.title) || '0')
-  const color = SDG_COLORS[num] || '#0a192f'
+  const color = (item.settings as any)?.color || SDG_COLORS[num] || '#0a192f'
   return { backgroundColor: color }
 }
 </script>

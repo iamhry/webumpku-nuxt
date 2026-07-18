@@ -18,19 +18,10 @@ await useAsyncData('homepage-reputations-data', async () => {
     <div class="container reputation-container-narrow">
       
       <!-- Section Header -->
-      <div class="reputation-header text-center" v-reveal data-reveal="fade-up">
-        <span class="reputation-subtitle text-primary">
-          {{ locale === 'en' ? 'OUR REPUTATION' : 'REPUTASI KAMI' }}
-        </span>
+      <div class="reputation-header text-left" v-reveal data-reveal="fade-up">
         <h2 class="reputation-main-title">
           {{ locale === 'en' ? 'Accreditation & Rankings' : 'Akreditasi & Reputasi' }}
         </h2>
-        <p class="reputation-description text-muted">
-          {{ locale === 'en' 
-            ? 'Commitment to high-quality education recognized by national and international institutions.' 
-            : 'Komitmen kami terhadap pendidikan berkualitas tinggi yang diakui secara nasional maupun internasional.' 
-          }}
-        </p>
       </div>
 
       <!-- Loading State (Skeleton) -->

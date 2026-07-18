@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasCards" class="page-cards-section">
+  <div class="page-cards-section">
     <!-- Header -->
     <div v-if="section.title || section.subtitle" class="page-section-header page-center">
       <span v-if="kicker" class="page-kicker">{{ kicker }}</span>
@@ -7,8 +7,15 @@
       <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
     </div>
 
+    <PageSectionEmpty
+      v-if="!hasCards"
+      message="Kartu section ini belum memiliki items dari CMS."
+      icon="las la-th-large"
+      :preview="preview"
+    />
+
     <!-- Cards Grid -->
-    <div class="page-modern-cards-grid" :class="`cols-${columnCount}`">
+    <div v-else class="page-modern-cards-grid" :class="`cols-${columnCount}`">
       <article
         v-for="item in section.items"
         :key="item.id"
@@ -71,9 +78,11 @@ import { computed } from 'vue'
 import { useMedia } from '~/composables/useMedia'
 import type { PageSection } from '~/types/page'
 import { normalizeSectionSettings } from '~/composables/useSectionSettings'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
 const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
 
 const { getImageUrl } = useMedia()

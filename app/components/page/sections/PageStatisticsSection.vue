@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasStats" class="page-statistics-section">
+  <div class="page-statistics-section">
     <!-- Header -->
     <div v-if="section.title || section.subtitle" class="page-section-header page-center">
       <span v-if="kicker" class="page-kicker">{{ kicker }}</span>
@@ -7,41 +7,50 @@
       <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
     </div>
 
-    <!-- Institutional Metrics Grid -->
-    <div class="page-institutional-metrics">
-      <div
-        v-for="item in section.items"
-        :key="item.id"
-        class="page-institutional-metric"
-      >
-        <!-- Icon (optional) -->
-        <div v-if="item.icon" class="page-institutional-metric-icon">
-          <i :class="item.icon" />
-        </div>
+    <PageSectionEmpty
+      v-if="!hasStats"
+      message="Statistik belum memiliki data."
+      icon="las la-chart-bar"
+      :preview="preview"
+    />
 
-        <!-- Number / Value -->
-        <div class="page-institutional-metric-value">
-          {{ item.description || item.title }}
-        </div>
+    <template v-else>
+      <!-- Institutional Metrics Grid -->
+      <div class="page-institutional-metrics">
+        <div
+          v-for="item in section.items"
+          :key="item.id"
+          class="page-institutional-metric"
+        >
+          <!-- Icon (optional) -->
+          <div v-if="item.icon" class="page-institutional-metric-icon">
+            <i :class="item.icon" />
+          </div>
 
-        <!-- Label -->
-        <div class="page-institutional-metric-label">
-          {{ item.description ? item.title : item.subtitle }}
-        </div>
+          <!-- Number / Value -->
+          <div class="page-institutional-metric-value">
+            {{ item.description || item.title }}
+          </div>
 
-        <!-- Optional sublabel -->
-        <div v-if="item.description && item.subtitle" class="page-institutional-metric-sub">
-          {{ item.subtitle }}
+          <!-- Label -->
+          <div class="page-institutional-metric-label">
+            {{ item.description ? item.title : item.subtitle }}
+          </div>
+
+          <!-- Optional sublabel -->
+          <div v-if="item.description && item.subtitle" class="page-institutional-metric-sub">
+            {{ item.subtitle }}
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Optional intro text -->
-    <div
-      v-if="section.content"
-      class="page-statistics-content page-prose dynamic-page-reading mx-auto mt-5"
-      v-html="section.content"
-    />
+      <!-- Optional intro text -->
+      <div
+        v-if="section.content"
+        class="page-statistics-content page-prose dynamic-page-reading mx-auto mt-5"
+        v-html="section.content"
+      />
+    </template>
   </div>
 </template>
 
@@ -49,9 +58,11 @@
 import { computed } from 'vue'
 import type { PageSection } from '~/types/page'
 import { normalizeSectionSettings } from '~/composables/useSectionSettings'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
 const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
 
 const settings = computed(() => normalizeSectionSettings(props.section.settings))

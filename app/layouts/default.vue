@@ -7,6 +7,7 @@
     <AppFooter />
     <QuickAccessSidebar />
     <QuickAccessOverlay />
+    <FloatingBtnContainer />
     <ClientOnly>
       <AccessibilityWidget />
     </ClientOnly>

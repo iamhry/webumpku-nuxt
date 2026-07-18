@@ -1,8 +1,5 @@
 <template>
-  <section
-    v-if="section.items && section.items.length > 0"
-    class="dynamic-page-section page-bg-white"
-  >
+  <section class="dynamic-page-section page-bg-white">
     <div class="dynamic-page-container">
 
       <!-- Header -->
@@ -12,8 +9,15 @@
         <p v-if="section.subtitle" class="page-section-subtitle">{{ section.subtitle }}</p>
       </div>
 
+      <PageSectionEmpty
+        v-if="!hasItems"
+        message="Statistik belum memiliki data."
+        icon="las la-chart-line"
+        :preview="preview"
+      />
+
       <!-- Stats Grid (Wrapped in Soft Background) -->
-      <div class="page-stats-wrapper">
+      <div v-else class="page-stats-wrapper">
         <div class="page-stats-grid">
           <div
             class="page-stat-item"
@@ -36,9 +40,14 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { PageSection } from '~/types/page'
+import PageSectionEmpty from './PageSectionEmpty.vue'
 
-defineProps<{
+const props = defineProps<{
   section: PageSection
+  preview?: boolean
 }>()
+
+const hasItems = computed(() => !!(props.section.items && props.section.items.length > 0))
 </script>

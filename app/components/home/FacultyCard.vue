@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useI18n } from '#imports'
+import { useI18n, useLocalePath } from '#imports'
 import type { Faculty } from '~/types/faculty'
 
 const props = defineProps<{
@@ -8,6 +8,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 
 const imageUrl = computed(() => {
   if (props.faculty.banner) return props.faculty.banner
@@ -19,43 +20,31 @@ const description = computed(() => {
   if (props.faculty.description) return props.faculty.description
   return t('faculty_section.fallback_desc', { name: props.faculty.name })
 })
+
+const badgeLabel = computed(() =>
+  props.faculty.short_name || t('faculty_section.label')
+)
+
+const detailTo = computed(() => localePath(`/fakultas/${props.faculty.slug}`))
 </script>
 
 <template>
-  <div class="feature-item style-two hover-content faculty-card">
-    <div class="image">
-      <img :src="imageUrl" :alt="faculty.name">
-    </div>
+  <article class="faculty-hl-card">
+    <NuxtLink :to="detailTo" class="faculty-hl-card-media">
+      <img :src="imageUrl" :alt="faculty.name" loading="lazy">
+      <span class="faculty-hl-card-badge">{{ badgeLabel }}</span>
+    </NuxtLink>
 
-    <div class="content">
-      <div class="tags">
-        <NuxtLink to="/fakultas">
-          {{ t('faculty_section.label') }}
-        </NuxtLink>
-        <NuxtLink v-if="faculty.short_name" :to="`/fakultas/${faculty.slug}`">
-          {{ faculty.short_name }}
-        </NuxtLink>
-      </div>
+    <div class="faculty-hl-card-body">
+      <p v-if="faculty.short_name" class="faculty-hl-card-meta">
+        {{ faculty.short_name }}
+      </p>
 
-      <h3 class="title">
-        <NuxtLink :to="`/fakultas/${faculty.slug}`">
-          {{ faculty.name }}
-        </NuxtLink>
+      <h3 class="faculty-hl-card-title">
+        <NuxtLink :to="detailTo">{{ faculty.name }}</NuxtLink>
       </h3>
 
-      <div class="inner-content">
-        <p>
-          {{ description }}
-        </p>
-
-        <NuxtLink
-          class="details-btn"
-          :to="`/fakultas/${faculty.slug}`"
-          :aria-label="t('faculty_section.view_detail')"
-        >
-          <i class="las la-arrow-right"></i>
-        </NuxtLink>
-      </div>
+      <p class="faculty-hl-card-excerpt">{{ description }}</p>
     </div>
-  </div>
+  </article>
 </template>

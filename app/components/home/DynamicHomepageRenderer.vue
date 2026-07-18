@@ -15,8 +15,8 @@
         <StatisticsSection v-else-if="section.type === 'statistics'" />
         <ReputationSection v-else-if="section.type === 'reputation'" />
         <HomeQuickAccessSection v-else-if="false && section.type === 'campus_services'" />
+        <HomeStudyProgramsSection v-else-if="section.type === 'study_programs'" :section="section" />
         <FacultySection v-else-if="section.type === 'faculties'" :section="section" />
-        <ServicesOne v-else-if="false && section.type === 'study_programs'" />
         <HomeEventSection v-else-if="section.type === 'events'" />
         <CampusGallerySection v-else-if="section.type === 'campus_gallery'" />
         <NewsSection 
@@ -27,6 +27,7 @@
         />
         <ProjectOne v-else-if="section.type === 'gallery'" />
         <FeatureOne v-else-if="section.type === 'sdgs' || section.type === 'partners'" />
+        <HomeVideoSection v-else-if="section.type === 'video'" :section="section" />
         <CTAOne v-else-if="section.type === 'cta'" :section="section" />
         <TestimonialOne v-else-if="section.type === 'testimonial'" />
         <ChooseOne v-else-if="section.type === 'choose_us'" />
@@ -44,6 +45,7 @@
       <ChooseOne/>
       <StatisticsSection/>
       <ReputationSection/>
+      <HomeStudyProgramsSection/>
       <!-- <HomeQuickAccessSection/> -->
       <FacultySection/>
       <HomeEventSection/>
@@ -60,7 +62,6 @@ import { useHomepage } from '~/composables/useHomepage'
 import HeroOne from '~/components/heroarea/HeroOne.vue'
 import HomeJourneySection from '~/components/home/HomeJourneySection.vue'
 import AboutSection from '~/components/home/AboutSection.vue'
-import ServicesOne from '~/components/services/ServicesOne.vue'
 import FeatureOne from '~/components/feature/FeatureOne.vue'
 import StatisticsSection from '~/components/home/StatisticsSection.vue'
 import ProjectOne from '~/components/project/ProjectOne.vue'
@@ -71,8 +72,10 @@ import CTAOne from '~/components/cta/CTAOne.vue'
 import ReputationSection from '~/components/home/ReputationSection.vue'
 import HomeQuickAccessSection from '~/components/home/HomeQuickAccessSection.vue'
 import FacultySection from '~/components/home/FacultySection.vue'
+import HomeStudyProgramsSection from '~/components/home/HomeStudyProgramsSection.vue'
 import HomeEventSection from '~/components/home/HomeEventSection.vue'
 import CampusGallerySection from '~/components/home/CampusGallerySection.vue'
+import HomeVideoSection from '~/components/home/HomeVideoSection.vue'
 
 const { sections, isLoading, fetchSections } = useHomepage()
 
@@ -98,12 +101,29 @@ const orderedSections = computed(() => {
     items.splice(newNewsIndex, 0, statsItem)
   }
   
-  // Inject reputation section
-  const currentStatsIndex = items.findIndex(s => s.type === 'statistics')
-  if (currentStatsIndex !== -1) {
-    items.splice(currentStatsIndex + 1, 0, { id: 'injected-reputation', type: 'reputation' } as any)
+  // Keep study_programs (Binus-style dual cards) directly above Faculties.
+  // CMS currently ships it with sort_order 0 (before hero) — relocate so it
+  // sits in the academic block rather than above the hero.
+  const studyProgramsIndex = items.findIndex(s => s.type === 'study_programs')
+  if (studyProgramsIndex !== -1) {
+    const [studyProgramsItem] = items.splice(studyProgramsIndex, 1)
+    const facultiesForPrograms = items.findIndex(s => s.type === 'faculties')
+    if (facultiesForPrograms !== -1) {
+      items.splice(facultiesForPrograms, 0, studyProgramsItem)
+    } else {
+      items.push(studyProgramsItem)
+    }
+  }
+
+  // Inject reputation section — always keep it directly above study_programs
+  // (or Faculties if study_programs is absent).
+  const studyOrFacultiesIndex = items.findIndex(
+    s => s.type === 'study_programs' || s.type === 'faculties'
+  )
+  if (studyOrFacultiesIndex !== -1) {
+    items.splice(studyOrFacultiesIndex, 0, { id: 'injected-reputation', type: 'reputation' } as any)
   } else {
-    const targetIndex = items.findIndex(s => s.type === 'faculties' || s.type === 'study_programs' || s.type === 'news')
+    const targetIndex = items.findIndex(s => s.type === 'news')
     if (targetIndex !== -1) {
       items.splice(targetIndex, 0, { id: 'injected-reputation', type: 'reputation' } as any)
     } else {

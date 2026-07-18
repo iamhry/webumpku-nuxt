@@ -39,6 +39,7 @@ const scrolledLogo = '/assets/img/umpku_logotype.png'
 const headerLogo = computed(() => (scrolled.value ? scrolledLogo : siteLogo.value))
 const siteEmail = computed(() => settings.value?.email || fallback.email)
 const sitePhone = computed(() => settings.value?.phone || fallback.phone)
+const siteSchedule = computed(() => settings.value?.schedule || fallback.schedule)
 const pmbUrl    = computed(() => fallback.pmbUrl)
 
 // ─── Helper: normalize menu title (supports i18n object or string) ───────────
@@ -111,7 +112,6 @@ const DIRECTION_DELTA        = 6   // ignore tiny scroll noise / jitter
 // before it's allowed to reverse.
 const SCROLLED_TOGGLE_COOLDOWN_MS = 280
 const UTILITY_TOGGLE_COOLDOWN_MS  = 340
-
 
 const headerRef = ref<HTMLElement | null>(null)
 
@@ -244,7 +244,7 @@ const closeMobileDrawer = () => {
 </script>
 
 <template>
-  <div class="rs-header-root" :class="{ 'rs-header-root--wide': isHeaderWide }">
+  <div class="rs-header-root">
     <!-- ── TOPBAR (utility-bar) ────────────────────── -->
     <div
       class="rs-header-top"
@@ -267,21 +267,13 @@ const closeMobileDrawer = () => {
           </div>
         </div>
 
-        <!-- Right: Social + Lang -->
+        <!-- Right: Schedule + Lang -->
         <div class="rs-header-top-right">
-          <div class="rs-topbar-social">
-            <a v-if="settings?.facebook" :href="settings.facebook" target="_blank" rel="noopener" aria-label="Facebook">
-              <i class="lab la-facebook-f"></i>
-            </a>
-            <a v-if="settings?.instagram" :href="settings.instagram" target="_blank" rel="noopener" aria-label="Instagram">
-              <i class="lab la-instagram"></i>
-            </a>
-            <a v-if="settings?.youtube" :href="settings.youtube" target="_blank" rel="noopener" aria-label="YouTube">
-              <i class="lab la-youtube"></i>
-            </a>
-            <a v-if="settings?.linkedin" :href="settings.linkedin" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <i class="lab la-linkedin-in"></i>
-            </a>
+          <div class="rs-header-info-item" v-if="siteSchedule">
+            <div class="rs-header-contact-item">
+              <span>Jadwal.</span>
+              <h6>{{ siteSchedule }}</h6>
+            </div>
           </div>
           <div class="rs-lang-switcher">
             <a :class="{ active: locale === 'id' }" @click.prevent="setLocale('id')">ID</a>
@@ -313,7 +305,21 @@ const closeMobileDrawer = () => {
 
         <!-- CENTER: Social strip + Desktop Menu -->
         <div class="rs-header-menu">
-
+          <!-- Social strip -->
+          <div class="rs-theme-social" v-if="settings?.facebook || settings?.instagram || settings?.youtube || settings?.linkedin">
+            <a v-if="settings?.facebook" :href="settings.facebook" target="_blank" rel="noopener" aria-label="Facebook">
+              <i class="lab la-facebook-f"></i>
+            </a>
+            <a v-if="settings?.instagram" :href="settings.instagram" target="_blank" rel="noopener" aria-label="Instagram">
+              <i class="lab la-instagram"></i>
+            </a>
+            <a v-if="settings?.youtube" :href="settings.youtube" target="_blank" rel="noopener" aria-label="YouTube">
+              <i class="lab la-youtube"></i>
+            </a>
+            <a v-if="settings?.linkedin" :href="settings.linkedin" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <i class="lab la-linkedin-in"></i>
+            </a>
+          </div>
 
           <!-- Desktop menu -->
           <nav class="rs-main-nav" aria-label="Main Navigation">
@@ -437,8 +443,7 @@ const closeMobileDrawer = () => {
         </div>
 
       </div><!-- /.rs-header-inner -->
-    </div>
-    <!-- /.rs-header-area -->
+    </div><!-- /.rs-header-area -->
 
     <!-- ── MOBILE BACKDROP ────────────────────────── -->
     <div

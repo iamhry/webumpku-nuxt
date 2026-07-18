@@ -63,19 +63,44 @@ const displaySubtitle = computed(() => {
 const { getImageUrl } = useMedia()
 
 // Resolve sdgs bullet image using Vite base so it works with different base URLs
-let sdgsBulletUrl = '/assets/img/sdgs.png'
+let sdgsBulletUrl = '/assets/img/sdgs_web.png'
 try {
   if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) {
-    sdgsBulletUrl = new URL('/assets/img/sdgs.png', import.meta.env.BASE_URL).href
+    sdgsBulletUrl = new URL('/assets/img/sdgs_web.png', import.meta.env.BASE_URL).href
   }
 } catch (e) {
-  sdgsBulletUrl = '/assets/img/sdgs.png'
+  sdgsBulletUrl = '/assets/img/sdgs_web.png'
 }
 
 const formatDate = (dateString: string | undefined) => {
     if (!dateString) return ''
     const date = new Date(dateString)
     return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+// Author may come back as a plain string or { name, photo, bio } from the API
+const getAuthorName = (article: any) => {
+  if (!article?.author) return 'UMPKU'
+  if (typeof article.author === 'string') return article.author
+  return article.author.name || 'UMPKU'
+}
+
+// category may come back as a plain string or { name, slug } from the API
+// (see SdgsNewsCard.vue's categoryLabel for the same handling elsewhere)
+const getCategoryLabel = (article: any) => {
+  const cat = article?.category
+  if (!cat) return locale.value === 'en' ? 'News' : 'Berita'
+  if (typeof cat === 'string') return cat
+  return cat.name || cat.slug || (locale.value === 'en' ? 'News' : 'Berita')
+}
+
+// No "read time" field from the API — estimate it from the article body so the
+// figure is real rather than static filler text like the reference template.
+const getReadingTimeLabel = (article: any) => {
+  const raw = (article?.content || article?.excerpt || '').toString()
+  const words = raw.replace(/<[^>]*>/g, ' ').trim().split(/\s+/).filter(Boolean).length
+  const minutes = Math.max(1, Math.round(words / 200))
+  return locale.value === 'en' ? `${minutes} min read` : `${minutes} menit baca`
 }
 </script>
 
@@ -126,20 +151,22 @@ const formatDate = (dateString: string | undefined) => {
                <img :src="getImageUrl(article.featured_image)" :alt="article.title" class="featured-img">
              </NuxtLink>
             <div class="blog-content">
+              <span class="news-card-tag">{{ getCategoryLabel(article) }}</span>
+
+              <h5><NuxtLink :to="`/berita/${article.slug}`">{{ article.title }}</NuxtLink></h5>
+              <p class="news-card-excerpt">{{ article.excerpt }}</p>
               <p class="blog-meta">
-                <span>News</span>
+                <span>{{ locale === 'en' ? 'By' : 'Oleh' }} <b class="blog-meta-author">{{ getAuthorName(article) }}</b></span>
                 <span class="blog-meta-dot" aria-hidden="true">&middot;</span>
                 <span class="blog-date">{{ formatDate(article.published_at) }}</span>
               </p>
 
-              <!-- SDG label + badges (UMS-like layout) -->
-
-              <h5><NuxtLink :to="`/berita/${article.slug}`">{{ article.title }}</NuxtLink></h5>
-              <p>{{ article.excerpt ? (article.excerpt.length > 100 ? article.excerpt.substring(0, 100) + '...' : article.excerpt) : '' }}</p>
+              <div class="news-card-footer">
+                <!-- SDG label + badges (like layout) -->
               <div class="sdg-container">
                 <template v-if="article.sdgs && article.sdgs.length">
                   <a class="mr-1" href="/tujuan-pembangunan-berkelanjutan" data-toggle="tooltip" data-placement="bottom" title="Tujuan Pembangunan Berkelanjutan" aria-label="sdg content link">
-                    <img :src="sdgsBulletUrl" alt="sdgs-label" loading="lazy" class="sdgLabelImg" style="width:110px; height:40px;" />
+                    <img :src="sdgsBulletUrl" alt="sdgs-label" loading="lazy" class="sdgLabelImg" style="width:90px; height:40px;" />
                   </a>
 
                   <div v-for="goal in article.sdgs.slice(0,3)" :key="goal.id" class="sdgs-banner mr-1">
@@ -154,6 +181,13 @@ const formatDate = (dateString: string | undefined) => {
                   </div>
                 </template>
               </div>
+                <NuxtLink :to="`/berita/${article.slug}`" class="rs-square-btn" aria-label="Read more">
+                  <span class="icon-box">
+                    <i class="las la-arrow-right icon-first"></i>
+                    <i class="las la-arrow-right icon-second"></i>
+                  </span>
+                </NuxtLink>
+              </div>
             </div>
           </div>
         </div>
@@ -167,4 +201,3 @@ const formatDate = (dateString: string | undefined) => {
 <style scoped>
 @import '~/assets/css/news-card.css';
 </style>
-

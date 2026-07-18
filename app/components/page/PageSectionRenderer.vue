@@ -7,6 +7,7 @@
       :section="section"
       :page="page"
       :is-dark="isDark"
+      :preview="preview"
     />
 
     <!-- Semua section lain dibungkus PageSectionWrapper agar appearance engine berjalan -->
@@ -16,6 +17,7 @@
         :section="section"
         :page="page"
         :is-dark="isDark"
+        :preview="preview"
       />
     </PageSectionWrapper>
   </template>
@@ -80,6 +82,7 @@ const props = defineProps<{
   section: PageSection
   page: PageDetail
   index?: number
+  preview?: boolean
 }>()
 
 // ─── Resolved component ───────────────────────────────────────────────────

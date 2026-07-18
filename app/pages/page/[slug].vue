@@ -29,10 +29,13 @@
 
   <!-- Page Content -->
   <div v-else-if="page" class="dynamic-page">
-    <!-- Page Header (always uses page.banner_image) -->
-    <PageHero :page="page" />
+    <!-- Page banner only when CMS did not add a hero section (avoids double hero) -->
+    <PageHero v-if="!hasHeroSection" :page="page" />
 
-    <!-- Sections (including hero sections placed correctly according to sort_order) -->
+    <div v-if="isPreview" class="page-preview-banner" role="status">
+      Mode preview aktif — semua section ditampilkan, termasuk yang masih kosong.
+    </div>
+
     <main>
       <PageSectionRenderer
         v-for="(section, index) in activeSections"
@@ -40,6 +43,7 @@
         :section="section"
         :page="page"
         :index="index"
+        :preview="isPreview"
       />
     </main>
   </div>
@@ -52,15 +56,16 @@ import { useI18n } from 'vue-i18n'
 import { useSeoMeta } from '#imports'
 import { usePages } from '~/composables/usePages'
 import { useMedia } from '~/composables/useMedia'
+import { usePageSections } from '~/composables/usePageSections'
 import PageHero from '~/components/page/PageHero.vue'
 import PageSectionRenderer from '~/components/page/PageSectionRenderer.vue'
-import type { PageSection } from '~/types/page'
 
 const route = useRoute()
 const slug = route.params.slug as string
 const { locale } = useI18n()
 const { fetchPageDetail } = usePages()
 const { getImageUrl } = useMedia()
+const { isPreview, filterSections } = usePageSections()
 
 const { data: page, status, error, refresh } = await fetchPageDetail(slug)
 
@@ -72,69 +77,7 @@ const hasHeroSection = computed(() => {
   return page.value?.sections?.some(s => s?.type === 'hero') || false
 })
 
-const activeSections = computed(() => {
-  if (!page.value || !page.value.sections) return []
-
-  return [...page.value.sections]
-    .filter(section => {
-      if (!section) return false
-
-      const type = section.type
-
-      // ── Sections yang butuh items ─────────────────────────────────
-      const itemOnlySections = [
-        'feature_cards', 'timeline', 'downloads',
-        'cards', 'statistics', 'stats',
-      ]
-      if (itemOnlySections.includes(type)) {
-        return !!(section.items && section.items.length > 0)
-      }
-
-      // ── Gallery: butuh items dengan image ─────────────────────────
-      if (type === 'gallery') {
-        return !!(section.items?.some(item => !!item.image))
-      }
-
-      // ── Sections yang selalu tampil (placeholder jika kosong) ─────
-      const alwaysShowSections = [
-        'related_news', 'related_events', 'related_sdgs',
-        'related_research', 'related_partnerships', 'contact',
-      ]
-      if (alwaysShowSections.includes(type)) {
-        // Tampilkan jika ada title ATAU ada items (placeholder akan muncul jika items kosong)
-        return !!(section.title || section.subtitle || (section.items && section.items.length > 0))
-      }
-
-      // ── rich_text / content: butuh konten atau judul ──────────────
-      if (type === 'rich_text' || type === 'content') {
-        return !!(section.content || section.title || section.subtitle)
-      }
-
-      // ── FAQ: butuh items ──────────────────────────────────────────
-      if (type === 'faq') {
-        return !!(section.items && section.items.length > 0)
-      }
-
-      // ── CTA: cukup title atau button_text ─────────────────────────
-      if (type === 'cta') {
-        return !!(section.title || section.button_text)
-      }
-
-      // ── Video: hanya tampil jika ada video_url atau iframe ────────
-      if (type === 'video') {
-        const videoUrl = section.settings?.video_url || (section as any).video_url || section.image
-        const hasIframe = section.content?.includes('<iframe')
-        return !!(videoUrl || hasIframe)
-      }
-
-      // ── Hero: selalu tampil ───────────────────────────────────────
-      if (type === 'hero') return true
-
-      // ── Default: ada konten, items, judul, atau gambar ────────────
-      return !!(section.content || (section.items && section.items.length > 0) || section.title || section.image)
-    })
-    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
-})
+const activeSections = computed(() => filterSections(page.value?.sections))
 
 const getMetaImage = () => {
   if (!page.value) return ''
@@ -165,3 +108,15 @@ useSeoMeta({
   ogImage: () => getMetaImage(),
 })
 </script>
+
+<style scoped>
+.page-preview-banner {
+  background: #fff3cd;
+  color: #664d03;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 1px solid #ffecb5;
+}
+</style>
