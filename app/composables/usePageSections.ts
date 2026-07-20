@@ -1,4 +1,8 @@
 import type { PageSection } from '~/types/page'
+import {
+  hasMeaningfulHtml,
+  sectionHasResolvableItems,
+} from '~/composables/usePageSectionData'
 
 const ITEM_ONLY_TYPES = [
   'feature_cards',
@@ -17,6 +21,12 @@ const RELATED_TYPES = [
   'related_research',
   'related_partnerships',
   'contact',
+] as const
+
+const AUTO_FETCH_RELATED = [
+  'related_news',
+  'related_events',
+  'related_sdgs',
 ] as const
 
 function settingsObj(section: PageSection): Record<string, any> {
@@ -45,7 +55,7 @@ export function shouldShowPageSection(section: PageSection | null | undefined, p
   if (preview) return true
 
   const type = section.type
-  const hasItems = !!(section.items && section.items.length > 0)
+  const hasItems = sectionHasResolvableItems(section)
 
   if ((ITEM_ONLY_TYPES as readonly string[]).includes(type)) {
     return hasItems
@@ -55,12 +65,22 @@ export function shouldShowPageSection(section: PageSection | null | undefined, p
     return !!(section.items?.some(item => !!item.image))
   }
 
+  // Related news/events/sdgs can auto-fetch when items are empty
+  if ((AUTO_FETCH_RELATED as readonly string[]).includes(type)) {
+    return true
+  }
+
   if ((RELATED_TYPES as readonly string[]).includes(type)) {
     return !!(section.title || section.subtitle || hasItems)
   }
 
   if (type === 'rich_text' || type === 'content') {
-    return !!(section.content || section.title || section.subtitle)
+    return !!(
+      hasMeaningfulHtml(section.content) ||
+      section.title ||
+      section.subtitle ||
+      section.image
+    )
   }
 
   if (type === 'cta') {
@@ -74,10 +94,20 @@ export function shouldShowPageSection(section: PageSection | null | undefined, p
   if (type === 'hero') return true
 
   if (type === 'image_text') {
-    return !!(section.title || section.subtitle || section.content || section.image)
+    return !!(
+      section.title ||
+      section.subtitle ||
+      hasMeaningfulHtml(section.content) ||
+      section.image
+    )
   }
 
-  return !!(section.content || hasItems || section.title || section.image)
+  return !!(
+    hasMeaningfulHtml(section.content) ||
+    hasItems ||
+    section.title ||
+    section.image
+  )
 }
 
 export function sortPageSections(sections: PageSection[]): PageSection[] {

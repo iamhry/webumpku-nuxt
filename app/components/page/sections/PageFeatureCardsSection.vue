@@ -20,7 +20,7 @@
       <div v-else class="page-cards-grid">
         <article
           class="page-card"
-          v-for="(item, index) in section.items"
+          v-for="(item, index) in cards"
           :key="item.id"
         >
           <!-- Icon or number badge -->
@@ -67,8 +67,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useMedia } from '~/composables/useMedia'
+import { useI18n } from 'vue-i18n'
 import type { PageSection } from '~/types/page'
+import { resolveSectionItems } from '~/composables/usePageSectionData'
 import PageSectionEmpty from './PageSectionEmpty.vue'
 
 const props = defineProps<{
@@ -76,9 +77,9 @@ const props = defineProps<{
   preview?: boolean
 }>()
 
-const { getImageUrl } = useMedia()
-
-const hasItems = computed(() => !!(props.section.items && props.section.items.length > 0))
+const { locale } = useI18n()
+const cards = computed(() => resolveSectionItems(props.section, locale.value))
+const hasItems = computed(() => cards.value.length > 0)
 
 const isExternal = (url?: string) => url?.startsWith('http') || false
 </script>

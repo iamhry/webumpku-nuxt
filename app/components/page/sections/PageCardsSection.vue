@@ -17,7 +17,7 @@
     <!-- Cards Grid -->
     <div v-else class="page-modern-cards-grid" :class="`cols-${columnCount}`">
       <article
-        v-for="item in section.items"
+        v-for="item in cards"
         :key="item.id"
         class="page-modern-card"
       >
@@ -75,9 +75,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useMedia } from '~/composables/useMedia'
 import type { PageSection } from '~/types/page'
 import { normalizeSectionSettings } from '~/composables/useSectionSettings'
+import { resolveSectionItems } from '~/composables/usePageSectionData'
 import PageSectionEmpty from './PageSectionEmpty.vue'
 
 const props = defineProps<{
@@ -85,16 +87,17 @@ const props = defineProps<{
   preview?: boolean
 }>()
 
+const { locale } = useI18n()
 const { getImageUrl } = useMedia()
 const settings = computed(() => normalizeSectionSettings(props.section.settings))
-const kicker = computed(() => props.section.settings?.kicker || '')
+const kicker = computed(() => settings.value.kicker || '')
 
-const hasCards = computed(() => !!(props.section.items && props.section.items.length > 0))
+const cards = computed(() => resolveSectionItems(props.section, locale.value))
+const hasCards = computed(() => cards.value.length > 0)
 
-// Responsive column count from settings or auto by count
 const columnCount = computed(() => {
   if (settings.value.columns) return Number(settings.value.columns)
-  const count = props.section.items?.length || 0
+  const count = cards.value.length
   if (count <= 2) return 2
   if (count <= 4) return 3
   return 4

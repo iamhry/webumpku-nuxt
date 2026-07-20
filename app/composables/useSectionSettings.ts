@@ -17,8 +17,16 @@ export function normalizeSectionSettings(settings: any) {
   }
 
   if (!settings || Array.isArray(settings) || typeof settings !== 'object') {
-    return defaults
+    return { ...defaults }
   }
 
-  return { ...defaults, ...settings }
+  // Drop null/undefined so CMS nulls don't wipe defaults
+  const cleaned: Record<string, any> = {}
+  for (const [key, value] of Object.entries(settings)) {
+    if (value !== null && value !== undefined) {
+      cleaned[key] = value
+    }
+  }
+
+  return { ...defaults, ...cleaned }
 }
