@@ -339,7 +339,6 @@ const closeMobileDrawer = () => {
         <div class="rs-header-menu">
           <!-- Social strip -->
 
-
           <!-- Desktop menu -->
           <nav class="rs-main-nav" aria-label="Main Navigation">
             <ul class="multipage-menu">
