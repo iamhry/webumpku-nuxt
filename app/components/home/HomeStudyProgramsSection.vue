@@ -46,16 +46,15 @@ const rolesSubtitle = computed(() =>
 const roles = computed(() => {
   if (locale.value === 'en') {
     return [
-      { label: 'Student', href: 'https://siakad.umpku.ac.id', external: true },
+      { label: 'Student', href: 'https://myakademik.umpku.ac.id', external: true },
       { label: 'Prospective Student', href: 'https://pmb.umpku.ac.id', external: true },
-      { label: 'Parents', href: 'https://pmb.umpku.ac.id', external: true },
-      { label: 'Alumni', href: 'https://pmb.umpku.ac.id', external: true }
+      { label: 'Alumni', href: 'https://cdc.umpku.ac.id', external: true }
     ]
   }
   return [
-    { label: 'Mahasiswa', href: 'https://siakad.umpku.ac.id', external: true },
+    { label: 'Mahasiswa', href: 'https://myakademik.umpku.ac.id', external: true },
     { label: 'Calon Mahasiswa', href: 'https://pmb.umpku.ac.id', external: true },
-    { label: 'Alumni', href: 'https://pmb.umpku.ac.id', external: true }
+    { label: 'Alumni', href: 'https://cdc.umpku.ac.id', external: true }
   ]
 })
 
