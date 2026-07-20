@@ -33,14 +33,14 @@ const fallback = {
   pmbUrl: 'https://pmb.umpku.ac.id'
 }
 
-const siteLogo  = computed(() => settings.value?.logo  || fallback.logo)
+const siteLogo = computed(() => settings.value?.logo || fallback.logo)
 // Swap to the compact logotype once the header shrinks on scroll
 const scrolledLogo = '/assets/img/umpku_logotype.png'
 const headerLogo = computed(() => (scrolled.value ? scrolledLogo : siteLogo.value))
 const siteEmail = computed(() => settings.value?.email || fallback.email)
 const sitePhone = computed(() => settings.value?.phone || fallback.phone)
 const siteSchedule = computed(() => settings.value?.schedule || fallback.schedule)
-const pmbUrl    = computed(() => fallback.pmbUrl)
+const pmbUrl = computed(() => fallback.pmbUrl)
 
 // ─── Helper: normalize menu title (supports i18n object or string) ───────────
 const getTitle = (item: MenuItemType): string => {
@@ -82,12 +82,12 @@ const isActiveMenu = (menu: HeaderMenu): boolean => {
 }
 
 // ─── Reactive state ──────────────────────────────────────────────────────────
-const scrolled          = ref(false)       // shrink main-nav (scrollY > 8)
-const hideUtilityBar    = ref(false)       // collapse topbar (direction + threshold)
-const lastScrollY       = ref(0)
-const isSearchOpen      = ref(false)
-const isMobileOpen      = ref(false)
-const searchKeyword     = ref('')
+const scrolled = ref(false)       // shrink main-nav (scrollY > 8)
+const hideUtilityBar = ref(false)       // collapse topbar (direction + threshold)
+const lastScrollY = ref(0)
+const isSearchOpen = ref(false)
+const isMobileOpen = ref(false)
+const searchKeyword = ref('')
 const openedMobileMenus = ref<Record<string | number, boolean>>({})
 
 // ─── Shrink-on-scroll (rAF-throttled, direction-aware) ───────────────────────
@@ -96,12 +96,12 @@ const openedMobileMenus = ref<Record<string | number, boolean>>({})
 // flap on/off whenever scrollY oscillates by a pixel around that number
 // (trackpad micro-movements, momentum scroll, sub-pixel deltas) — that flapping
 // is what produces the "berkedip / meloncat" flicker-jump during scroll.
-const SCROLLED_ON_THRESHOLD  = 12  // scrolled state turns ON past this
+const SCROLLED_ON_THRESHOLD = 12  // scrolled state turns ON past this
 const SCROLLED_OFF_THRESHOLD = 4   // scrolled state turns OFF below this
 const UTILITY_HIDE_THRESHOLD = 80
 const UTILITY_SHOW_THRESHOLD = 40
-const NEAR_TOP_THRESHOLD     = 4   // always restore utility bar near the very top
-const DIRECTION_DELTA        = 6   // ignore tiny scroll noise / jitter
+const NEAR_TOP_THRESHOLD = 4   // always restore utility bar near the very top
+const DIRECTION_DELTA = 6   // ignore tiny scroll noise / jitter
 
 // A single wheel/trackpad tick can easily move scrollY by 40-100px — enough to
 // cross the *entire* hysteresis gap in one go right as the boundary is
@@ -111,7 +111,7 @@ const DIRECTION_DELTA        = 6   // ignore tiny scroll noise / jitter
 // toggle for roughly its own transition duration lets it finish once, cleanly,
 // before it's allowed to reverse.
 const SCROLLED_TOGGLE_COOLDOWN_MS = 280
-const UTILITY_TOGGLE_COOLDOWN_MS  = 340
+const UTILITY_TOGGLE_COOLDOWN_MS = 340
 
 const headerRef = ref<HTMLElement | null>(null)
 
@@ -246,10 +246,7 @@ const closeMobileDrawer = () => {
 <template>
   <div class="rs-header-root">
     <!-- ── TOPBAR (utility-bar) ────────────────────── -->
-    <div
-      class="rs-header-top"
-      :class="{ 'rs-header-top--hidden': hideUtilityBar && !isMobileOpen }"
-    >
+    <div class="rs-header-top" :class="{ 'rs-header-top--hidden': hideUtilityBar && !isMobileOpen }">
       <div class="rs-header-top-inner">
         <!-- Left: Email + Phone -->
         <div class="rs-header-info-wrapper">
@@ -271,9 +268,48 @@ const closeMobileDrawer = () => {
         <div class="rs-header-top-right">
           <div class="rs-header-info-item" v-if="siteSchedule">
             <div class="rs-header-contact-item">
-              <span>Jadwal.</span>
-              <h6>{{ siteSchedule }}</h6>
+              <div class="rs-theme-social"
+                v-if="settings?.facebook || settings?.instagram || settings?.youtube || settings?.linkedin">
+                <a v-if="settings?.facebook" :href="settings.facebook" target="_blank" rel="noopener"
+                  aria-label="Facebook">
+                  <i class="lab la-facebook-f"></i>
+                </a>
+                <a v-if="settings?.instagram" :href="settings.instagram" target="_blank" rel="noopener"
+                  aria-label="Instagram">
+                  <i class="lab la-instagram"></i>
+                </a>
+                <a v-if="settings?.youtube" :href="settings.youtube" target="_blank" rel="noopener"
+                  aria-label="YouTube">
+                  <i class="lab la-youtube"></i>
+                </a>
+                <a v-if="settings?.linkedin" :href="settings.linkedin" target="_blank" rel="noopener"
+                  aria-label="LinkedIn">
+                  <i class="lab la-linkedin-in"></i>
+                </a>
+              </div>
+              <!-- <span>Jadwal.</span> -->
+              <!-- <h6>{{ siteSchedule }}</h6> -->
             </div>
+          </div>
+          <div class="rs-header-btn">
+            <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-btn" style="color: white !important;">
+              {{ $t('admission') }}
+              <span class="rs-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
+                  <path
+                    d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z" />
+                </svg>
+              </span>
+            </NuxtLink>
+            <a v-else :href="pmbUrl" target="_blank" rel="noopener" class="rs-btn" style="color: white !important;">
+              {{ $t('admission') }}
+              <span class="rs-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
+                  <path
+                    d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z" />
+                </svg>
+              </span>
+            </a>
           </div>
           <div class="rs-lang-switcher">
             <a :class="{ active: locale === 'id' }" @click.prevent="setLocale('id')">ID</a>
@@ -285,11 +321,7 @@ const closeMobileDrawer = () => {
     </div>
 
     <!-- ── MAIN HEADER (main-nav) ──────────────────── -->
-    <div
-      ref="headerRef"
-      class="rs-header-area"
-      :class="{ 'rs-header-area--scrolled': isHeaderWide }"
-    >
+    <div ref="headerRef" class="rs-header-area" :class="{ 'rs-header-area--scrolled': isHeaderWide }">
       <div class="rs-header-inner">
 
         <!-- LEFT: Logo in yellow block -->
@@ -306,69 +338,32 @@ const closeMobileDrawer = () => {
         <!-- CENTER: Social strip + Desktop Menu -->
         <div class="rs-header-menu">
           <!-- Social strip -->
-          <div class="rs-theme-social" v-if="settings?.facebook || settings?.instagram || settings?.youtube || settings?.linkedin">
-            <a v-if="settings?.facebook" :href="settings.facebook" target="_blank" rel="noopener" aria-label="Facebook">
-              <i class="lab la-facebook-f"></i>
-            </a>
-            <a v-if="settings?.instagram" :href="settings.instagram" target="_blank" rel="noopener" aria-label="Instagram">
-              <i class="lab la-instagram"></i>
-            </a>
-            <a v-if="settings?.youtube" :href="settings.youtube" target="_blank" rel="noopener" aria-label="YouTube">
-              <i class="lab la-youtube"></i>
-            </a>
-            <a v-if="settings?.linkedin" :href="settings.linkedin" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <i class="lab la-linkedin-in"></i>
-            </a>
-          </div>
+
 
           <!-- Desktop menu -->
           <nav class="rs-main-nav" aria-label="Main Navigation">
             <ul class="multipage-menu">
-              <li
-                v-for="menu in menus"
-                :key="menu.id"
-                :class="{ 'menu-item-has-children': menu.children.length > 0 }"
-              >
+              <li v-for="menu in menus" :key="menu.id" :class="{ 'menu-item-has-children': menu.children.length > 0 }">
                 <!-- No children -->
                 <template v-if="menu.children.length === 0">
-                  <a
-                    v-if="!isInternalLink(menu.to)"
-                    :href="menu.to"
-                    :target="menu.target"
-                    rel="noopener"
-                    :class="{ 'router-link-active': isActiveMenu(menu) }"
-                  >{{ menu.label }}</a>
-                  <NuxtLink
-                    v-else
-                    :to="menu.to"
-                    :class="{ 'router-link-active': isActiveMenu(menu) }"
-                  >{{ menu.label }}</NuxtLink>
+                  <a v-if="!isInternalLink(menu.to)" :href="menu.to" :target="menu.target" rel="noopener"
+                    :class="{ 'router-link-active': isActiveMenu(menu) }">{{ menu.label }}</a>
+                  <NuxtLink v-else :to="menu.to" :class="{ 'router-link-active': isActiveMenu(menu) }">{{ menu.label }}
+                  </NuxtLink>
                 </template>
 
                 <!-- Has children -->
                 <template v-else>
-                  <a
-                    href="#"
-                    @click.prevent
-                    :class="{ 'router-link-active': isActiveMenu(menu) }"
-                  >
+                  <a href="#" @click.prevent :class="{ 'router-link-active': isActiveMenu(menu) }">
                     {{ menu.label }}
                     <i class="fa fa-angle-down rs-arrow"></i>
                   </a>
                   <ul class="rs-submenu">
                     <li v-for="child in menu.children" :key="child.id">
-                      <a
-                        v-if="!isInternalLink(child.to)"
-                        :href="child.to"
-                        :target="child.target"
-                        rel="noopener"
-                        :class="{ 'router-link-active': isActiveMenu(child) }"
-                      >{{ child.label }}</a>
-                      <NuxtLink
-                        v-else
-                        :to="child.to"
-                        :class="{ 'router-link-active': isActiveMenu(child) }"
-                      >{{ child.label }}</NuxtLink>
+                      <a v-if="!isInternalLink(child.to)" :href="child.to" :target="child.target" rel="noopener"
+                        :class="{ 'router-link-active': isActiveMenu(child) }">{{ child.label }}</a>
+                      <NuxtLink v-else :to="child.to" :class="{ 'router-link-active': isActiveMenu(child) }">{{
+                        child.label }}</NuxtLink>
                     </li>
                   </ul>
                 </template>
@@ -381,23 +376,15 @@ const closeMobileDrawer = () => {
         <div class="rs-header-right">
           <!-- Search -->
           <div class="rs-header-search-wrapper" ref="searchWrapperRef">
-            <button
-              class="rs-search-icon-btn"
-              :aria-label="isSearchOpen ? 'Tutup Pencarian' : 'Buka Pencarian'"
-              @click.stop="isSearchOpen = !isSearchOpen"
-            >
+            <button class="rs-search-icon-btn" :aria-label="isSearchOpen ? 'Tutup Pencarian' : 'Buka Pencarian'"
+              @click.stop="isSearchOpen = !isSearchOpen">
               <i v-if="!isSearchOpen" class="las la-search"></i>
               <i v-else class="las la-times"></i>
             </button>
             <div class="rs-header-search-inner" :class="{ open: isSearchOpen }">
               <form class="rs-header-search-form" @submit.prevent="submitSearch">
-                <input
-                  v-model="searchKeyword"
-                  type="text"
-                  placeholder="Cari..."
-                  autofocus
-                  @keydown.esc="isSearchOpen = false"
-                />
+                <input v-model="searchKeyword" type="text" placeholder="Cari..." autofocus
+                  @keydown.esc="isSearchOpen = false" />
                 <button type="submit" aria-label="Cari">
                   <i class="las la-search"></i>
                 </button>
@@ -406,35 +393,14 @@ const closeMobileDrawer = () => {
           </div>
 
           <!-- CTA Button -->
-          <div class="rs-header-btn">
-            <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-btn" style="color: white !important;">
-              {{ $t('admission') }}
-              <span class="rs-btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
-                  <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"/>
-                </svg>
-              </span>
-            </NuxtLink>
-            <a v-else :href="pmbUrl" target="_blank" rel="noopener" class="rs-btn" style="color: white !important;">
-              {{ $t('admission') }}
-              <span class="rs-btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
-                  <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"/>
-                </svg>
-              </span>
-            </a>
-          </div>
+
 
           <QuickAccessToggle />
 
           <!-- Hamburger (mobile only) -->
           <div class="rs-header-hamburger">
-            <button
-              class="rs-hamburger-btn"
-              :class="{ 'is-open': isMobileOpen }"
-              aria-label="Toggle Menu"
-              @click="isMobileOpen = !isMobileOpen"
-            >
+            <button class="rs-hamburger-btn" :class="{ 'is-open': isMobileOpen }" aria-label="Toggle Menu"
+              @click="isMobileOpen = !isMobileOpen">
               <span></span>
               <span></span>
               <span></span>
@@ -446,14 +412,11 @@ const closeMobileDrawer = () => {
     </div><!-- /.rs-header-area -->
 
     <!-- ── MOBILE BACKDROP ────────────────────────── -->
-    <div
-      class="rs-mobile-backdrop"
-      :class="{ open: isMobileOpen }"
-      @click="closeMobileDrawer"
-    />
+    <div class="rs-mobile-backdrop" :class="{ open: isMobileOpen }" @click="closeMobileDrawer" />
 
     <!-- ── MOBILE DRAWER ──────────────────────────── -->
-    <div class="rs-mobile-drawer" :class="{ open: isMobileOpen }" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+    <div class="rs-mobile-drawer" :class="{ open: isMobileOpen }" role="dialog" aria-modal="true"
+      aria-label="Mobile Navigation">
 
       <!-- Drawer header -->
       <div class="rs-drawer-header">
@@ -470,60 +433,30 @@ const closeMobileDrawer = () => {
       <!-- Drawer body: mobile menu -->
       <div class="rs-drawer-body">
         <ul class="rs-mobile-menu-list">
-          <li
-            v-for="menu in menus"
-            :key="menu.id"
-            class="rs-mobile-menu-item"
-          >
+          <li v-for="menu in menus" :key="menu.id" class="rs-mobile-menu-item">
             <!-- Has children -->
             <template v-if="menu.children.length > 0">
-              <button
-                class="rs-mobile-menu-link"
-                @click="toggleMobileMenu(menu.id)"
-                :aria-expanded="!!openedMobileMenus[menu.id]"
-              >
+              <button class="rs-mobile-menu-link" @click="toggleMobileMenu(menu.id)"
+                :aria-expanded="!!openedMobileMenus[menu.id]">
                 <span>{{ menu.label }}</span>
-                <i
-                  class="fa fa-angle-down rs-mobile-arrow"
-                  :class="{ open: openedMobileMenus[menu.id] }"
-                ></i>
+                <i class="fa fa-angle-down rs-mobile-arrow" :class="{ open: openedMobileMenus[menu.id] }"></i>
               </button>
               <ul v-show="openedMobileMenus[menu.id]" class="rs-mobile-submenu">
                 <li v-for="child in menu.children" :key="child.id">
-                  <a
-                    v-if="!isInternalLink(child.to)"
-                    :href="child.to"
-                    :target="child.target"
-                    rel="noopener"
-                    @click="closeMobileDrawer"
-                  >{{ child.label }}</a>
-                  <NuxtLink
-                    v-else
-                    :to="child.to"
-                    @click="closeMobileDrawer"
-                  >{{ child.label }}</NuxtLink>
+                  <a v-if="!isInternalLink(child.to)" :href="child.to" :target="child.target" rel="noopener"
+                    @click="closeMobileDrawer">{{ child.label }}</a>
+                  <NuxtLink v-else :to="child.to" @click="closeMobileDrawer">{{ child.label }}</NuxtLink>
                 </li>
               </ul>
             </template>
 
             <!-- No children -->
             <template v-else>
-              <a
-                v-if="!isInternalLink(menu.to)"
-                :href="menu.to"
-                :target="menu.target"
-                rel="noopener"
-                class="rs-mobile-menu-link"
-                @click="closeMobileDrawer"
-              >
+              <a v-if="!isInternalLink(menu.to)" :href="menu.to" :target="menu.target" rel="noopener"
+                class="rs-mobile-menu-link" @click="closeMobileDrawer">
                 <span>{{ menu.label }}</span>
               </a>
-              <NuxtLink
-                v-else
-                :to="menu.to"
-                class="rs-mobile-menu-link"
-                @click="closeMobileDrawer"
-              >
+              <NuxtLink v-else :to="menu.to" class="rs-mobile-menu-link" @click="closeMobileDrawer">
                 <span>{{ menu.label }}</span>
               </NuxtLink>
             </template>
@@ -533,7 +466,8 @@ const closeMobileDrawer = () => {
 
       <!-- Drawer footer: CTA -->
       <div class="rs-drawer-footer">
-        <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-drawer-cta" @click="closeMobileDrawer" style="color: white !important;">
+        <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-drawer-cta" @click="closeMobileDrawer"
+          style="color: white !important;">
           {{ $t('admission') }}
           <i class="las la-arrow-right"></i>
         </NuxtLink>
