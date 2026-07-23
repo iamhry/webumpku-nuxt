@@ -151,6 +151,27 @@ const hasContent = computed(() => {
   object-fit: contain;
 }
 
+/* Ensure CMS lists keep bullets/numbers (theme resets global ul/li) */
+.page-prose :deep(ul),
+.page-prose :deep(ol) {
+  display: block;
+  margin: 0 0 1.5rem;
+  padding-left: 1.75rem;
+  list-style-position: outside;
+}
+.page-prose :deep(ul) {
+  list-style-type: disc;
+}
+.page-prose :deep(ol) {
+  list-style-type: decimal;
+}
+.page-prose :deep(li) {
+  display: list-item;
+  float: none;
+  width: auto;
+  margin-bottom: 0.5rem;
+}
+
 @media (max-width: 768px) {
   .page-content-section--with-image {
     grid-template-columns: 1fr;

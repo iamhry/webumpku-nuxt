@@ -34,8 +34,12 @@
           <!-- Title -->
           <h3 v-if="item.title" class="page-card-title">{{ item.title }}</h3>
 
-          <!-- Description — only if has content -->
-          <p v-if="item.description" class="page-card-desc">{{ item.description }}</p>
+          <!-- Description / content from CMS (may include HTML) -->
+          <div
+            v-if="item.description || item.content"
+            class="page-card-desc page-prose"
+            v-html="item.description || item.content"
+          />
 
           <!-- Button — only if url + button_text present -->
           <template v-if="item.url && item.button_text">

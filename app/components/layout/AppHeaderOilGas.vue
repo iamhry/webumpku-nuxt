@@ -316,6 +316,7 @@ const closeMobileDrawer = () => {
             <a v-if="settings?.youtube" :href="settings.youtube" target="_blank" rel="noopener" aria-label="YouTube">
               <i class="lab la-youtube"></i>
             </a>
+
           </div>
 
           <!-- Desktop menu -->
