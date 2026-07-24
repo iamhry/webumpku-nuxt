@@ -1,3 +1,7 @@
+import type { Facility } from '~/types/facility'
+import type { Research } from '~/types/research'
+import type { Leader } from '~/types/leader'
+
 export interface PageSeo {
   title: string;
   description: string;
@@ -31,6 +35,12 @@ export interface PageSection {
   settings?: any;
   sort_order: number;
   items?: PageSectionItem[];
+  /** Master embeds — facility_grid (not items) */
+  facilities?: Facility[];
+  /** Master embeds — research_grid (API key is researchs) */
+  researchs?: Research[];
+  /** Master embeds — leader_grid */
+  leaders?: Leader[];
 }
 
 export interface PageDetail {

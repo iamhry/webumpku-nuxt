@@ -88,6 +88,23 @@ export function sectionHasResolvableItems(section: PageSection): boolean {
   const s = settingsObj(section)
   if (Array.isArray(s.cards) && s.cards.length > 0) return true
   if (Array.isArray(s.stats) && s.stats.length > 0) return true
+  if (Array.isArray(section.facilities) && section.facilities.length > 0) return true
+  if (Array.isArray(section.researchs) && section.researchs.length > 0) return true
+  if (Array.isArray(section.leaders) && section.leaders.length > 0) return true
+  return false
+}
+
+/** Master content grids embed data on dedicated keys (not items). */
+export function sectionHasMasterGridItems(section: PageSection): boolean {
+  if (section.type === 'facility_grid') {
+    return Array.isArray(section.facilities) && section.facilities.length > 0
+  }
+  if (section.type === 'research_grid') {
+    return Array.isArray(section.researchs) && section.researchs.length > 0
+  }
+  if (section.type === 'leader_grid') {
+    return Array.isArray(section.leaders) && section.leaders.length > 0
+  }
   return false
 }
 

@@ -1,6 +1,7 @@
 import type { PageSection } from '~/types/page'
 import {
   hasMeaningfulHtml,
+  sectionHasMasterGridItems,
   sectionHasResolvableItems,
 } from '~/composables/usePageSectionData'
 
@@ -12,6 +13,12 @@ const ITEM_ONLY_TYPES = [
   'statistics',
   'stats',
   'faq',
+] as const
+
+const MASTER_GRID_TYPES = [
+  'facility_grid',
+  'research_grid',
+  'leader_grid',
 ] as const
 
 const RELATED_TYPES = [
@@ -59,6 +66,11 @@ export function shouldShowPageSection(section: PageSection | null | undefined, p
 
   if ((ITEM_ONLY_TYPES as readonly string[]).includes(type)) {
     return hasItems
+  }
+
+  // Master grids: facilities[] / researchs[] / leaders[] (items usually empty)
+  if ((MASTER_GRID_TYPES as readonly string[]).includes(type)) {
+    return sectionHasMasterGridItems(section)
   }
 
   if (type === 'gallery') {

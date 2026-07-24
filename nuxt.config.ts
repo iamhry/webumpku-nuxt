@@ -83,6 +83,10 @@ runtimeConfig: {
         id: '/kontak',
         en: '/contact'
       },
+      'fasilitas/[slug]': {
+        id: '/fasilitas/[slug]',
+        en: '/facilities/[slug]'
+      },
       '[slug]': {
         id: '/profil/[slug]',
         en: '/profile/[slug]'

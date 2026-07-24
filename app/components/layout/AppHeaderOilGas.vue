@@ -291,26 +291,6 @@ const closeMobileDrawer = () => {
               <!-- <h6>{{ siteSchedule }}</h6> -->
             </div>
           </div>
-          <div class="rs-header-btn">
-            <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-btn" style="color: white !important;">
-              {{ $t('admission') }}
-              <span class="rs-btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
-                  <path
-                    d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z" />
-                </svg>
-              </span>
-            </NuxtLink>
-            <a v-else :href="pmbUrl" target="_blank" rel="noopener" class="rs-btn" style="color: white !important;">
-              {{ $t('admission') }}
-              <span class="rs-btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
-                  <path
-                    d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z" />
-                </svg>
-              </span>
-            </a>
-          </div>
           <div class="rs-lang-switcher">
             <a :class="{ active: locale === 'id' }" @click.prevent="setLocale('id')">ID</a>
             <span class="rs-lang-divider">|</span>
@@ -369,8 +349,30 @@ const closeMobileDrawer = () => {
           </nav>
         </div>
 
-        <!-- RIGHT: Search + CTA + Hamburger -->
+        <!-- RIGHT: CTA + Search + Hamburger -->
         <div class="rs-header-right">
+          <!-- Admission CTA (beside menu, right side) -->
+          <div class="rs-header-btn">
+            <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-btn">
+              {{ $t('admission') }}
+              <span class="rs-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
+                  <path
+                    d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z" />
+                </svg>
+              </span>
+            </NuxtLink>
+            <a v-else :href="pmbUrl" target="_blank" rel="noopener" class="rs-btn">
+              {{ $t('admission') }}
+              <span class="rs-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
+                  <path
+                    d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z" />
+                </svg>
+              </span>
+            </a>
+          </div>
+
           <!-- Search -->
           <div class="rs-header-search-wrapper" ref="searchWrapperRef">
             <button class="rs-search-icon-btn" :aria-label="isSearchOpen ? 'Tutup Pencarian' : 'Buka Pencarian'"
@@ -388,9 +390,6 @@ const closeMobileDrawer = () => {
               </form>
             </div>
           </div>
-
-          <!-- CTA Button -->
-
 
           <QuickAccessToggle />
 

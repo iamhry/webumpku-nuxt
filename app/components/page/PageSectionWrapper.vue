@@ -42,7 +42,10 @@ const wrapperStyles = computed(() => {
 })
 
 const containerClass = computed(() => {
-  if (settings.value.full_width) return 'layout-full'
+  // UMS-style facility checkerboard needs edge-to-edge tiles
+  if (props.section.type === 'facility_grid' || settings.value.full_width) {
+    return 'layout-full'
+  }
   return `layout-${settings.value.container}`
 })
 

@@ -255,6 +255,7 @@
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   padding-left: 28px;
   min-width: 0;
 }
@@ -306,6 +307,7 @@
 .rs-main-nav {
   display: flex;
   align-items: center;
+  margin-left: auto;
   padding: 0 10px;
 }
 

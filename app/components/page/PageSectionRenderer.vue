@@ -48,6 +48,9 @@ import PageRelatedEventsSection   from './sections/PageRelatedEventsSection.vue'
 import PageRelatedSdgsSection     from './sections/PageRelatedSdgsSection.vue'
 import PageRelatedResearchSection from './sections/PageRelatedResearchSection.vue'
 import PageRelatedPartnershipSection from './sections/PageRelatedPartnershipSection.vue'
+import PageFacilityGridSection    from './sections/PageFacilityGridSection.vue'
+import PageResearchGridSection    from './sections/PageResearchGridSection.vue'
+import PageLeaderGridSection      from './sections/PageLeaderGridSection.vue'
 import PageCtaSection             from './sections/PageCtaSection.vue'
 import PageFallbackSection        from './sections/PageFallbackSection.vue'
 import PageSectionWrapper         from './PageSectionWrapper.vue'
@@ -74,6 +77,9 @@ const sectionRegistry: Record<string, Component> = {
   related_sdgs:          PageRelatedSdgsSection,
   related_research:      PageRelatedResearchSection,
   related_partnerships:  PageRelatedPartnershipSection,
+  facility_grid:         PageFacilityGridSection,
+  research_grid:         PageResearchGridSection,
+  leader_grid:           PageLeaderGridSection,
   cta:                   PageCtaSection,
 }
 
