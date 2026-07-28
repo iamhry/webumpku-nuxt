@@ -114,13 +114,13 @@
 /* Tombol Utama (Solid Dark Modern) */
 .btn-editorial-primary {
   padding: 16px 30px;
-  background-color: #f5b301;
+  background-color: #EA5501;
   color: #ffffff !important;
   border-radius: 10px;
   font-size: 0.95rem;
   align-items: center;
   transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid #f5b301;
+  border: 1px solid #EA5501;
 }
 
 .btn-editorial-primary:hover {

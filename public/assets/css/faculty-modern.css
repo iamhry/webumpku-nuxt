@@ -11,7 +11,7 @@
 
 .faculty-highlight-band {
   position: relative;
-  background: #f5b301;
+  background: var(--brand-accent, #EA5501);
   padding: 72px 0 140px;
   overflow: hidden;
 }

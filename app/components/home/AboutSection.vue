@@ -241,7 +241,7 @@ const isValid = computed(() => {
 .about-spotlight-title :deep(p) {
   display: block;
   margin: 0;
-  color: #0b2e59;
+  color: var(--brand-navy);
 }
 
 .about-spotlight-body {
@@ -288,7 +288,7 @@ const isValid = computed(() => {
   font-size: 36px;
   font-weight: 800;
   line-height: 1;
-  color: #0b2e59;
+  color: var(--brand-navy);
 }
 
 .stat-label {
@@ -319,7 +319,7 @@ const isValid = computed(() => {
   gap: 10px;
   padding: 14px 26px;
   border-radius: 999px;
-  background: #0b2e59;
+  background: var(--brand-navy);
   color: #fff !important;
   font-size: 14px;
   font-weight: 700;
@@ -331,7 +331,7 @@ const isValid = computed(() => {
 }
 
 .about-spotlight-btn:hover {
-  background: #f5b301;
+  background: var(--brand-accent);
   color: #111 !important;
   transform: translateY(-2px);
 }

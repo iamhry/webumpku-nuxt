@@ -1,6 +1,10 @@
+<script setup lang="ts">
+import AppHeaderUmpku from '~/components/layout/AppHeaderUmpku.vue'
+</script>
+
 <template>
   <div>
-    <AppHeaderOilGas />
+    <AppHeaderUmpku />
     <main>
       <slot />
     </main>

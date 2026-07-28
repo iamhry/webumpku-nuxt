@@ -203,14 +203,14 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--rs-theme-yellow, #f5b301);
+  color: var(--rs-theme-yellow, #EA5501);
   margin-bottom: 20px;
 }
 
 .home-video-subtitle-bar {
   width: 40px;
   height: 2px;
-  background: var(--rs-theme-yellow, #f5b301);
+  background: var(--rs-theme-yellow, #EA5501);
   display: inline-block;
 }
 
@@ -241,7 +241,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   align-items: center;
   gap: 12px;
   padding: 14px 30px;
-  background: var(--rs-theme-yellow, #f5b301);
+  background: var(--rs-theme-yellow, #EA5501);
   color: #111111;
   font-size: 15px;
   font-weight: 700;
@@ -249,13 +249,13 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   letter-spacing: 0.05em;
   border-radius: 4px;
   text-decoration: none;
-  border: 2px solid var(--rs-theme-yellow, #f5b301);
+  border: 2px solid var(--rs-theme-yellow, #EA5501);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .rs-btn.has-icon:hover {
   background: transparent;
-  color: var(--rs-theme-yellow, #f5b301);
+  color: var(--rs-theme-yellow, #EA5501);
 }
 
 .rs-btn .icon-box {
@@ -301,7 +301,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   flex-shrink: 0;
   border-radius: 50%;
   border: none;
-  background: var(--rs-theme-yellow, #f5b301);
+  background: var(--rs-theme-yellow, #EA5501);
   color: #111111;
   font-size: 20px;
   cursor: pointer;
@@ -331,7 +331,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   inset: 0;
   z-index: -1;
   border-radius: 50%;
-  background: var(--rs-theme-yellow, #f5b301);
+  background: var(--rs-theme-yellow, #EA5501);
   animation: home-video-pulse 2000ms ease-out infinite;
 }
 
@@ -430,7 +430,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 }
 
 .home-video-modal-close:hover {
-  background: var(--rs-theme-yellow, #f5b301);
+  background: var(--rs-theme-yellow, #EA5501);
   color: #111111;
 }
 

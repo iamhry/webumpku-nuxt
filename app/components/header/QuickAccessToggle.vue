@@ -21,19 +21,19 @@ const store = useQuickAccessStore()
 .bar-icon {
   background: transparent;
   border: none;
-  color: #0b2e59;
+  color: inherit;
   cursor: pointer;
   padding: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
   vertical-align: middle;
   margin-left: 15px;
 }
 
 .bar-icon:hover {
-  color: #ffc107;
+  color: var(--rs-theme-yellow, #ea5501);
   transform: scale(1.05);
 }
 

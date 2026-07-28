@@ -72,9 +72,9 @@ const formatDate = (dateString: string) => {
   bottom: 0;
   background: linear-gradient(
     to bottom,
-    rgba(11, 46, 89, 0.3) 0%,
-    rgba(11, 46, 89, 0.6) 50%,
-    rgba(11, 46, 89, 0.8) 100%
+    rgba(11, 46, 89, 0.72) 0%,
+    rgba(11, 46, 89, 0.45) 40%,
+    rgba(11, 46, 89, 0.82) 100%
   );
 }
 

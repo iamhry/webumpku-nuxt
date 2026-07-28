@@ -1,0 +1,147 @@
+/**
+ * UMPKU Brand Theme + Button System
+ * Load LAST (after style.css).
+ * Button reference: orange fill, white label, thin arrow, radius 2px.
+ */
+
+:root {
+  --brand-navy: #071b3a;
+  --brand-accent: #EA5501;
+  --brand-accent-hover: #D14A01;
+  --primary-contrast: #ffffff;
+
+  --btn-bg: var(--brand-accent);
+  --btn-bg-hover: var(--brand-accent-hover);
+  --btn-text: #ffffff;
+  --btn-radius: 2px;
+  --btn-pad-y: 16px;
+  --btn-pad-x: 36px;
+  --btn-font-size: 15px;
+  --btn-font-weight: 600;
+  --btn-gap: 10px;
+  --btn-transition: 0.25s ease;
+}
+
+/* ── Primary CTA ──────────────────────────────────────────────────── */
+.btn-brand,
+.main-btn,
+.theme-btn,
+.btn-premium,
+.rs-header-btn .rs-btn,
+.rs-banner-btn .rs-btn,
+.rs-drawer-cta,
+.page-content-btn,
+.page-cta-btn,
+.page-imagetext-btn,
+.about-spotlight-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--btn-gap) !important;
+  padding: var(--btn-pad-y) var(--btn-pad-x) !important;
+  background: var(--btn-bg) !important;
+  background-color: var(--btn-bg) !important;
+  color: var(--btn-text) !important;
+  font-size: var(--btn-font-size) !important;
+  font-weight: var(--btn-font-weight) !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.2 !important;
+  text-transform: capitalize !important;
+  text-decoration: none !important;
+  border: none !important;
+  border-radius: var(--btn-radius) !important;
+  box-shadow: none !important;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--btn-transition), color var(--btn-transition) !important;
+}
+
+.btn-brand:hover,
+.btn-brand:focus-visible,
+.main-btn:hover,
+.main-btn:focus-visible,
+.theme-btn:hover,
+.btn-premium:hover,
+.rs-header-btn .rs-btn:hover,
+.rs-banner-btn .rs-btn:hover,
+.rs-drawer-cta:hover,
+.page-content-btn:hover,
+.page-cta-btn:hover,
+.page-imagetext-btn:hover,
+.about-spotlight-btn:hover {
+  background: var(--btn-bg-hover) !important;
+  background-color: var(--btn-bg-hover) !important;
+  color: var(--btn-text) !important;
+  border-color: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Arrow when no icon present */
+.btn-brand:not(:has(svg)):not(:has(i)):not(.no-arrow)::after,
+.main-btn:not(:has(svg)):not(:has(i)):not(.btn-white):not(.btn-2):not(.no-arrow)::after,
+.theme-btn:not(:has(svg)):not(:has(i)):not(.no-arrow)::after {
+  content: '→';
+  display: inline-block;
+  font-size: 1.05em;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.btn-brand i,
+.btn-brand svg,
+.main-btn i,
+.main-btn svg,
+.rs-header-btn .rs-btn svg,
+.rs-banner-btn .rs-btn svg,
+.rs-drawer-cta i {
+  color: inherit !important;
+  fill: currentColor;
+}
+
+.rs-header-btn .rs-btn {
+  padding: 12px 28px !important;
+  font-size: 14px !important;
+}
+
+.rs-drawer-cta {
+  width: 100%;
+  padding: 14px 24px !important;
+}
+
+/* Outline / white variants */
+.main-btn.btn-2,
+.btn-brand.btn-outline {
+  background: transparent !important;
+  color: var(--btn-bg) !important;
+  border: 2px solid var(--btn-bg) !important;
+  padding: calc(var(--btn-pad-y) - 2px) calc(var(--btn-pad-x) - 2px) !important;
+}
+
+.main-btn.btn-2:hover,
+.btn-brand.btn-outline:hover {
+  background: var(--btn-bg) !important;
+  color: var(--btn-text) !important;
+}
+
+.main-btn.btn-white,
+.btn-brand.btn-white {
+  background: #fff !important;
+  color: var(--brand-navy) !important;
+}
+
+.main-btn.btn-white:hover,
+.btn-brand.btn-white:hover {
+  background: var(--btn-bg) !important;
+  color: var(--btn-text) !important;
+}
+
+/* Local token scopes */
+.event-schedule-section,
+.news-card,
+.single-blog-item,
+.page-facility-ums-tile--card {
+  --color-primary: var(--brand-navy);
+  --color-secondary: var(--brand-accent);
+  --color-accent: var(--brand-accent);
+}

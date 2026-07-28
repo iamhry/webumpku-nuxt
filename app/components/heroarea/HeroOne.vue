@@ -195,7 +195,7 @@ watch(finalSliders, async () => {
 .rs-border-line {
   width: 60px;
   height: 2px;
-  background: #f5b301;
+  background: var(--brand-accent);
   display: inline-block;
 }
 .rs-banner-title {
@@ -210,26 +210,7 @@ watch(finalSliders, async () => {
   line-height: 1.6;
 }
 .rs-banner-btn .rs-btn {
-  display: inline-flex;
-  align-items: center;
   gap: 12px;
-  padding: 14px 30px;
-  background: #f5b301;
-  color: #111 !important;
-  font-size: 15px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  border: 2px solid #f5b301;
-}
-.rs-banner-btn .rs-btn:hover {
-  background: transparent;
-  color: #f5b301 !important;
 }
 .icon-box {
   position: relative;

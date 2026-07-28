@@ -120,7 +120,7 @@ const ctaLabel = computed(() =>
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #f5b301;
+  color: #EA5501;
 }
 
 .sdgs-actnow-title {
@@ -150,7 +150,7 @@ const ctaLabel = computed(() =>
 }
 
 .sdgs-actnow-desc strong {
-  color: #f5b301;
+  color: #EA5501;
   font-weight: 700;
 }
 
@@ -182,7 +182,7 @@ const ctaLabel = computed(() =>
 }
 
 .sdgs-actnow-btn:hover {
-  background: #f5b301;
+  background: #EA5501;
   color: #111111;
   transform: translateY(-2px);
 }

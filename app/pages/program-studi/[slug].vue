@@ -64,7 +64,7 @@ useHead({
 </script>
 
 <template>
-  <div :style="{ '--program-accent-color': program?.theme_color || '#f35c27' }">
+  <div :style="{ '--program-accent-color': program?.theme_color || 'var(--brand-accent)' }">
     <!-- Loading State -->
     <div v-if="pending && !program" class="loading-container py-5 mt-5">
       <div class="skeleton-box" style="height: 400px; width: 100%; margin-bottom: 30px;"></div>

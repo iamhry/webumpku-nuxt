@@ -1,0 +1,50 @@
+/**
+ * UMPKU brand tokens for public/ CSS (style.css, etc.)
+ * Loaded first so later stylesheets can use var(--brand-*).
+ */
+:root {
+  --brand-navy: #071b3a;
+  --brand-navy-mid: #112240;
+  --brand-navy-light: #1e3a5f;
+  --brand-accent: #EA5501;
+  --brand-accent-hover: #D14A01;
+  --brand-accent-soft: #FFE8D6;
+  --umpku-orange: var(--brand-accent);
+
+  --color-primary: var(--brand-navy);
+  --color-secondary: var(--brand-accent);
+  --color-accent: var(--brand-accent);
+  --color-accent-hover: var(--brand-accent-hover);
+  --color-text-dark: #111111;
+  --color-text-muted: #616161;
+  --color-bg-light: #f7f9fc;
+
+  /* Re-assert page + rs aliases (in case Vite tokens load later/earlier) */
+  --page-navy: var(--brand-navy);
+  --page-navy-mid: var(--brand-navy-mid);
+  --page-navy-light: var(--brand-navy-light);
+  --page-primary: var(--brand-navy);
+  --page-accent: var(--brand-accent);
+  --page-accent-2: var(--brand-navy-light);
+  --page-text: #1a1a2e;
+  --page-text-body: #3d3d5c;
+  --page-text-muted: #6b7280;
+  --page-bg-white: #ffffff;
+  --page-soft: #f7f9fc;
+  --page-bg-subtle: #eef2f7;
+  --page-border: rgba(0, 0, 0, 0.06);
+
+  --rs-theme-yellow: var(--brand-accent);
+  --rs-theme-yellow-2: var(--brand-accent-hover);
+  --rs-heading: #111111;
+  --rs-body: #616161;
+  --rs-border: #e9e9e9;
+  --rs-white: #ffffff;
+  --rs-navy: var(--brand-navy);
+
+  --primary: var(--brand-accent);
+  --primary-hover: var(--brand-accent-hover);
+  --primary-contrast: #ffffff;
+  --secondary: var(--brand-navy);
+  --accent: var(--brand-accent);
+}

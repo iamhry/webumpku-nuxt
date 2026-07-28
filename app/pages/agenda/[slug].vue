@@ -324,7 +324,7 @@ useHead({ title: seoTitle })
 }
 
 .evd-breadcrumb a:hover {
-  color: #f5b301;
+  color: #EA5501;
 }
 
 .evd-breadcrumb .current {
@@ -347,7 +347,7 @@ useHead({ title: seoTitle })
   border-radius: 999px;
   background: rgba(245, 179, 1, 0.18);
   border: 1px solid rgba(245, 179, 1, 0.45);
-  color: #f5b301;
+  color: #EA5501;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -528,7 +528,7 @@ useHead({ title: seoTitle })
   gap: 10px;
   padding: 16px 20px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #f5b301 0%, #e09a00 100%);
+  background: linear-gradient(135deg, #EA5501 0%, #e09a00 100%);
   color: #111 !important;
   font-size: 15px;
   font-weight: 800;

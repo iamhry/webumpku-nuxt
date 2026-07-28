@@ -1,17 +1,17 @@
 /* Styling for Homepage Portal & Layanan Digital section - UMPKU */
 
 :root {
-  --umpku-navy: #0b2e59;
-  --umpku-teal: #0b7a75;
-  --umpku-teal-light: #e6f2f2;
-  --neutral-dark: #1a202c;
-  --neutral-gray: #4a5568;
+  --umpku-navy: var(--brand-navy, #071b3a);
+  --umpku-teal: var(--brand-accent, #EA5501);
+  --umpku-teal-light: var(--brand-accent-soft, #FFE8D6);
+  --neutral-dark: #111111;
+  --neutral-gray: #616161;
   --neutral-light: #cbd5e1;
-  --neutral-bg: #f8fafc;
+  --neutral-bg: #f7f9fc;
   --card-bg: #ffffff;
-  
-  --shadow-premium-sm: 0 4px 20px -2px rgba(11, 46, 89, 0.02), 0 2px 8px -1px rgba(11, 46, 89, 0.01);
-  --shadow-premium-md: 0 20px 25px -5px rgba(11, 46, 89, 0.06), 0 8px 10px -6px rgba(11, 46, 89, 0.02);
+
+  --shadow-premium-sm: 0 4px 20px -2px rgba(7, 27, 58, 0.04), 0 2px 8px -1px rgba(7, 27, 58, 0.02);
+  --shadow-premium-md: 0 20px 25px -5px rgba(7, 27, 58, 0.08), 0 8px 10px -6px rgba(7, 27, 58, 0.04);
 }
 
 .home-quick-access-area {

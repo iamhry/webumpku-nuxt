@@ -21,7 +21,7 @@
       :preview="preview"
     />
 
-    <!-- UMS-style checkerboard: mix of accent cards + photo tiles, no gaps -->
+    <!-- Modern facility mosaic: accent cards + photo tiles -->
     <div v-else class="page-facility-ums-grid">
       <template v-for="item in facilities" :key="item.id">
         <!-- Photo tile -->

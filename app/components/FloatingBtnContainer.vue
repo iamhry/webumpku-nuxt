@@ -233,7 +233,7 @@ onBeforeUnmount(() => {
 }
 
 .float-icon-wrap--help {
-  background: #f5b301;
+  background: #EA5501;
   color: #111111;
   font-size: 20px;
 }

@@ -1,12 +1,12 @@
 /* Custom CSS for Homepage Agenda & Event section - UNSW Key Dates Style */
 
 :root {
-  --umpku-navy: #0b2e59;
-  --umpku-teal: #0b7a75;
-  --umpku-orange: #F35C27; /* Vibrant UMPKU Orange */
-  --neutral-dark: #000000; /* Solid Black text */
-  --neutral-gray: #4a5568;
-  --neutral-light: #718096;
+  --umpku-navy: var(--brand-navy);
+  --umpku-teal: var(--brand-accent);
+  --umpku-orange: var(--brand-accent);
+  --neutral-dark: #111111;
+  --neutral-gray: #616161;
+  --neutral-light: #888888;
 }
 
 /* Header section styling */

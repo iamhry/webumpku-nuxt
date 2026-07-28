@@ -30,7 +30,7 @@ const store = useAccessibilityStore()
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #f5b301;
+  background-color: #EA5501;
   color: #ffffff;
   border: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);

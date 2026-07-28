@@ -140,7 +140,7 @@ const iconUrl = computed(() => (facility.value?.icon ? getImageUrl(facility.valu
   color: #fff;
 }
 .facility-detail-hero--plain {
-  background: linear-gradient(135deg, #071b3a 0%, #0b4ea2 100%);
+  background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-navy-light) 100%);
 }
 .facility-detail-hero--skeleton {
   background: #e5e7eb;
@@ -149,7 +149,12 @@ const iconUrl = computed(() => (facility.value?.icon ? getImageUrl(facility.valu
 .facility-detail-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(7, 27, 58, 0.25) 0%, rgba(7, 27, 58, 0.85) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(7, 27, 58, 0.72) 0%,
+    rgba(7, 27, 58, 0.35) 35%,
+    rgba(7, 27, 58, 0.88) 100%
+  );
 }
 .facility-detail-hero--plain .facility-detail-hero-overlay {
   background: transparent;
@@ -211,7 +216,7 @@ const iconUrl = computed(() => (facility.value?.icon ? getImageUrl(facility.valu
   display: inline-block;
   padding: 0.35rem 0.85rem;
   background: #f3f4f6;
-  color: #071b3a;
+  color: var(--brand-navy);
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;

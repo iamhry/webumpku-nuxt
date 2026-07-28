@@ -157,7 +157,7 @@
   display: inline-flex;
   align-items: center;
   font-weight: 600;
-  color: var(--color-primary, #0b2e59);
+  color: var(--color-primary, var(--brand-navy, #071b3a));
   font-size: 16px;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -166,8 +166,8 @@
 }
 
 .home-news-header-btn:hover {
-  color: var(--color-secondary, #0b7a75);
-  border-color: var(--color-secondary, #0b7a75);
+  color: var(--color-secondary, var(--brand-accent, #EA5501));
+  border-color: var(--color-secondary, var(--brand-accent, #EA5501));
   transform: translateX(4px);
   text-decoration: none;
 }
@@ -239,7 +239,7 @@
 }
 
 .news-card-clean .blog-content h5 a:hover {
-  color: var(--rs-theme-yellow, #f5b301);
+  color: var(--rs-theme-yellow, #EA5501);
   opacity: 1;
 }
 
@@ -263,7 +263,7 @@
   align-items: center;
   height: 30px;
   padding: 0 14px;
-  background: var(--rs-theme-yellow, #f5b301);
+  background: var(--rs-theme-yellow, #EA5501);
   color: #ffffff;
   font-size: 12px;
   font-weight: 700;
@@ -352,7 +352,7 @@
 }
 
 .rs-square-btn:hover {
-  background: var(--rs-theme-yellow, #f5b301);
+  background: var(--rs-theme-yellow, #EA5501);
 }
 
 .rs-square-btn:hover .icon-first {

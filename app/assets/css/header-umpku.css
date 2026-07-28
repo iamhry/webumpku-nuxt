@@ -4,18 +4,12 @@
    ============================================================ */
 
 :root {
-  --rs-theme-yellow: #FF5C00;
-  --rs-theme-yellow-2: #f9b233;
-  --rs-heading: #111111;
-  --rs-body: #616161;
-  --rs-border: #e9e9e9;
-  --rs-white: #ffffff;
-  --rs-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
-  --rs-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Color tokens: see tokens.css — do not redefine brand colors here */
+  --rs-header-width: 100%;
 }
 
 /* ============================================================
-   ROOT WRAPPER — sticky so topbar + main-nav stay as one unit
+   ROOT WRAPPER — sticky by default; fixed when overlaying a hero
    ============================================================ */
 .rs-header-root {
   /* Full-bleed edge-to-edge, like RSTheme Industrie's `.container-fluid`
@@ -32,6 +26,24 @@
   overflow-anchor: none;
 }
 
+/* Hero pages: fixed stack — topbar stays above hero; main nav overlays hero. */
+.rs-header-root--overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+/* In-flow spacer: hero starts after rs-header-top (not under it). */
+.rs-header-hero-offset {
+  display: block;
+  width: 100%;
+  height: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
 .rs-header-top,
 .rs-header-area {
   overflow-anchor: none;
@@ -41,7 +53,7 @@
    TOPBAR (utility-bar)
    ============================================================ */
 .rs-header-top {
-  background-color: #F7F7F7;
+  background-color: var(--umpku-orange, var(--brand-accent, #EA5501));
   border-bottom: none;
   padding: 5px 0;
   max-height: 72px;
@@ -51,7 +63,8 @@
   transition:
     max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.25s ease;
 }
 
 .rs-header-top--hidden {
@@ -95,7 +108,7 @@
 .rs-header-contact-item span {
   font-size: 14px;
   font-weight: 600;
-  color: var(--rs-body);
+  color: #fff;
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -104,19 +117,19 @@
 .rs-header-contact-item h6 {
   font-size: 15px;
   font-weight: 500;
-  color: var(--rs-body);
+  color: #fff;
   margin: 0;
   white-space: nowrap;
 }
 
 .rs-header-contact-item h6 a {
-  color: var(--rs-body);
+  color: #fff;
   text-decoration: none;
   transition: color var(--rs-transition);
 }
 
 .rs-header-contact-item h6 a:hover {
-  color: var(--rs-theme-yellow);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Topbar right group */
@@ -136,7 +149,7 @@
 .rs-lang-switcher a {
   font-size: 14px;
   font-weight: 700;
-  color: var(--rs-body);
+  color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
   text-decoration: none;
   text-transform: uppercase;
@@ -146,11 +159,11 @@
 
 .rs-lang-switcher a:hover,
 .rs-lang-switcher a.active {
-  color: var(--rs-theme-yellow);
+  color: #fff;
 }
 
 .rs-lang-divider {
-  color: var(--rs-border);
+  color: rgba(255, 255, 255, 0.45);
   font-size: 14px;
 }
 
@@ -172,8 +185,13 @@
   display: flex;
   align-items: center;
   min-height: 86px;
-  padding: 0.5rem 30px;
+  /* Match .rs-header-top-inner content width / side gutters */
+  padding: 0.5rem 60px;
   position: relative;
+  width: var(--rs-header-width);
+  max-width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
   transition: min-height 220ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -274,7 +292,7 @@
   flex-shrink: 0;
   padding-right: 24px;
   margin-right: 24px;
-  border-right: 1px solid var(--rs-border);
+  border-right: 1px solid rgba(255, 255, 255, 0.28);
 }
 
 .rs-theme-social a {
@@ -283,14 +301,14 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  color: var(--rs-body);
+  color: #fff;
   font-size: 18px;
   text-decoration: none;
 }
 
 .rs-theme-social a:hover {
-  background-color: var(--rs-theme-yellow);
-  color: var(--rs-white);
+  background-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
 }
 
 @media (max-width: 1599px) {
@@ -460,6 +478,7 @@
   gap: 22px;
   padding-left: 28px;
   flex-shrink: 0;
+  color: var(--rs-body);
 }
 
 /* Search */
@@ -544,41 +563,15 @@
   background: var(--rs-theme-yellow-2);
 }
 
-/* CTA Button */
+/* CTA Button — visual system from buttons.css */
 .rs-header-btn {
   margin-left: 4px;
-}
-
-.rs-header-btn .rs-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: var(--rs-theme-yellow);
-  color: var(--rs-heading) !important;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border: 2px solid var(--rs-theme-yellow);
-  border-radius: 4px;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background var(--rs-transition), border-color var(--rs-transition), color var(--rs-transition);
-  position: relative;
-  overflow: hidden;
 }
 
 .rs-header-btn .rs-btn .rs-btn-icon {
   display: inline-flex;
   align-items: center;
   transition: transform var(--rs-transition);
-}
-
-.rs-header-btn .rs-btn:hover {
-  background: var(--rs-heading);
-  border-color: var(--rs-heading);
-  color: var(--rs-white) !important;
 }
 
 .rs-header-btn .rs-btn:hover .rs-btn-icon {
@@ -822,15 +815,98 @@
 }
 
 /* ============================================================
+   TRANSPARENT OVERLAY (hero pages, before scroll)
+   — fixed on top of hero, no white fill, no blur
+   — topbar keeps brand orange; only main nav is transparent
+   ============================================================ */
+.rs-header-root--transparent .rs-header-top {
+  background: var(--umpku-orange, var(--brand-accent, #EA5501)) !important;
+  background-color: var(--umpku-orange, var(--brand-accent, #EA5501)) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.rs-header-root--transparent .rs-header-area {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none;
+}
+
+/* Topbar text stays readable on orangered */
+.rs-header-root--transparent .rs-header-contact-item span,
+.rs-header-root--transparent .rs-header-contact-item h6,
+.rs-header-root--transparent .rs-header-contact-item h6 a,
+.rs-header-root--transparent .rs-lang-switcher a,
+.rs-header-root--transparent .rs-lang-divider,
+.rs-header-root--transparent .rs-theme-social a {
+  color: #fff;
+}
+
+.rs-header-root--transparent .multipage-menu > li > a,
+.rs-header-root--transparent .rs-search-icon-btn,
+.rs-header-root--transparent .rs-header-right,
+.rs-header-root--transparent .bar-icon {
+  color: #fff;
+}
+
+.rs-header-root--transparent .rs-header-contact-item h6 a:hover,
+.rs-header-root--transparent .rs-lang-switcher a:hover,
+.rs-header-root--transparent .rs-lang-switcher a.active,
+.rs-header-root--transparent .rs-theme-social a:hover,
+.rs-header-root--transparent .multipage-menu > li > a:hover,
+.rs-header-root--transparent .multipage-menu > li > a.router-link-active,
+.rs-header-root--transparent .rs-search-icon-btn:hover,
+.rs-header-root--transparent .bar-icon:hover {
+  color: #fff;
+  opacity: 0.9;
+}
+
+.rs-header-root--transparent .multipage-menu > li > a::after {
+  background: #fff;
+  height: 2px;
+  left: 14px;
+  right: 14px;
+}
+
+.rs-header-root--transparent .rs-search-icon-btn:hover,
+.rs-header-root--transparent .rs-hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.rs-header-root--transparent .rs-hamburger-btn span {
+  background: #fff;
+}
+
+.rs-header-root--transparent .rs-theme-social {
+  border-right-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Keep dropdown panels readable (not transparent white-on-white) */
+.rs-header-root--transparent .rs-submenu > li > a {
+  color: var(--rs-body);
+}
+
+.rs-header-root--transparent .rs-submenu > li > a:hover,
+.rs-header-root--transparent .rs-submenu > li > a.router-link-active {
+  color: var(--rs-theme-yellow);
+}
+
+/* Scrolled solid state on overlay pages */
+.rs-header-root--overlay.rs-header-root--scrolled .rs-header-area {
+  background: var(--rs-white);
+  box-shadow: var(--rs-shadow);
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 
-/* Tablet — smaller side gap before scroll; full width after scroll */
+/* Tablet — keep side gutters aligned with topbar */
 @media (max-width: 1599px) {
-  .rs-header-inner {
-    padding-right: 24px;
-  }
-
   .rs-header-left,
   .rs-header-logo-wrapper {
     flex-basis: 270px;
@@ -869,13 +945,12 @@
 
   .rs-header-right {
     gap: 16px;
-    padding-right: 18px;
   }
 }
 
 @media (max-width: 1199px) {
   .rs-header-inner {
-    padding-left: 0;
+    padding-left: 20px;
     padding-right: 20px;
   }
 
@@ -909,6 +984,7 @@
 @media (max-width: 767px) {
   .rs-header-inner {
     min-height: 74px;
+    padding-left: 14px;
     padding-right: 14px;
   }
 

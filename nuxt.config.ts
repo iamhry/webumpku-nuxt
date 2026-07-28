@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '~/assets/css/typography.css',
     '~/assets/css/layout.css',
     '~/assets/css/components.css',
+    '~/assets/css/buttons.css',
     '~/assets/css/utilities.css',
     '~/assets/css/animations.css',
     '~/assets/css/reveal.css',
@@ -104,6 +105,7 @@ runtimeConfig: {
   app: {
     head: {
       link: [
+        { rel: 'stylesheet', href: '/assets/css/brand-tokens.css' },
         { rel: 'stylesheet', href: '/assets/css/bootstrap.min.css' },
         { rel: 'stylesheet', href: '/assets/css/font-awesome.min.css' },
         { rel: 'stylesheet', href: '/assets/css/line-awesome.min.css' },
@@ -127,7 +129,8 @@ runtimeConfig: {
         { rel: 'stylesheet', href: '/assets/css/study-program-detail.css' },
         { rel: 'stylesheet', href: '/assets/css/campus-gallery.css' },
         { rel: 'stylesheet', href: '/assets/css/dynamic-page.css' },
-        { rel: 'stylesheet', href: '/assets/css/contact-page.css' }
+        { rel: 'stylesheet', href: '/assets/css/contact-page.css' },
+        { rel: 'stylesheet', href: '/assets/css/brand-theme.css' }
       ],
       script: [
         { src: '/assets/js/jquery-1.12.4.min.js', tagPosition: 'bodyClose' },

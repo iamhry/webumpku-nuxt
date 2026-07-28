@@ -114,10 +114,51 @@ const SCROLLED_TOGGLE_COOLDOWN_MS = 280
 const UTILITY_TOGGLE_COOLDOWN_MS = 340
 
 const headerRef = ref<HTMLElement | null>(null)
+const topbarRef = ref<HTMLElement | null>(null)
+const topbarHeight = ref(40)
 
 // Reflects `scrolled` but also folds in the mobile-drawer guard, so template
 // bindings + CSS class toggling only ever depend on one boolean.
 const isHeaderWide = computed(() => scrolled.value && !isMobileOpen.value)
+
+/** Pages whose first viewport is a full-bleed hero — header sits on top of it. */
+const isHeroOverlayPage = computed(() => {
+  const raw = (route.path || '/').replace(/\/+$/, '') || '/'
+  const path = raw.replace(/^\/(id|en)(?=\/|$)/, '') || '/'
+  if (path === '/') return true
+  return (
+    path.startsWith('/page/') ||
+    path.startsWith('/fasilitas/') ||
+    path.startsWith('/facilities/') ||
+    path.startsWith('/program-studi/') ||
+    path.startsWith('/fakultas/') ||
+    path.startsWith('/berita/') ||
+    path.startsWith('/news/') ||
+    path.startsWith('/agenda/')
+  )
+})
+
+/** Transparent white-on-hero look — only before scroll, never with blur/white fill. */
+const isHeaderTransparent = computed(
+  () => isHeroOverlayPage.value && !isHeaderWide.value && !isMobileOpen.value
+)
+
+/** Spacer so hero starts below the orangered topbar (not under it). */
+const showHeroOffset = computed(
+  () => isHeaderTransparent.value && topbarHeight.value > 0
+)
+
+const syncTopbarHeight = () => {
+  if (!import.meta.client) return
+  const el = topbarRef.value
+  if (!el) return
+  const style = window.getComputedStyle(el)
+  if (style.display === 'none' || el.classList.contains('rs-header-top--hidden')) {
+    topbarHeight.value = 0
+    return
+  }
+  topbarHeight.value = el.offsetHeight || 0
+}
 
 let scrollTicking = false
 let rafId: number | null = null
@@ -182,11 +223,20 @@ onMounted(() => {
   lastScrollY.value = window.scrollY
   updateScrollState()
   window.addEventListener('scroll', onScroll, { passive: true })
+  syncTopbarHeight()
+  window.addEventListener('resize', syncTopbarHeight, { passive: true })
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('resize', syncTopbarHeight)
   if (rafId !== null) cancelAnimationFrame(rafId)
+})
+
+watch([isHeaderTransparent, hideUtilityBar], () => {
+  if (import.meta.client) {
+    requestAnimationFrame(syncTopbarHeight)
+  }
 })
 
 // Re-evaluate when mobile drawer closes
@@ -244,9 +294,21 @@ const closeMobileDrawer = () => {
 </script>
 
 <template>
-  <div class="rs-header-root">
+  <div
+    class="rs-header-root"
+    :class="{
+      'rs-header-root--overlay': isHeroOverlayPage,
+      'rs-header-root--transparent': isHeaderTransparent,
+      'rs-header-root--scrolled': isHeaderWide,
+    }"
+    :style="{ '--rs-header-top-height': `${topbarHeight}px` }"
+  >
     <!-- ── TOPBAR (utility-bar) ────────────────────── -->
-    <div class="rs-header-top" :class="{ 'rs-header-top--hidden': hideUtilityBar && !isMobileOpen }">
+    <div
+      ref="topbarRef"
+      class="rs-header-top"
+      :class="{ 'rs-header-top--hidden': hideUtilityBar && !isMobileOpen }"
+    >
       <div class="rs-header-top-inner">
         <!-- Left: Email + Phone -->
         <div class="rs-header-info-wrapper">
@@ -352,26 +414,7 @@ const closeMobileDrawer = () => {
         <!-- RIGHT: CTA + Search + Hamburger -->
         <div class="rs-header-right">
           <!-- Admission CTA (beside menu, right side) -->
-          <div class="rs-header-btn">
-            <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-btn">
-              {{ $t('admission') }}
-              <span class="rs-btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
-                  <path
-                    d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z" />
-                </svg>
-              </span>
-            </NuxtLink>
-            <a v-else :href="pmbUrl" target="_blank" rel="noopener" class="rs-btn">
-              {{ $t('admission') }}
-              <span class="rs-btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor">
-                  <path
-                    d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z" />
-                </svg>
-              </span>
-            </a>
-          </div>
+          
 
           <!-- Search -->
           <div class="rs-header-search-wrapper" ref="searchWrapperRef">
@@ -462,12 +505,11 @@ const closeMobileDrawer = () => {
 
       <!-- Drawer footer: CTA -->
       <div class="rs-drawer-footer">
-        <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-drawer-cta" @click="closeMobileDrawer"
-          style="color: white !important;">
+        <NuxtLink v-if="isInternalLink(pmbUrl)" :to="pmbUrl" class="rs-drawer-cta" @click="closeMobileDrawer">
           {{ $t('admission') }}
           <i class="las la-arrow-right"></i>
         </NuxtLink>
-        <a v-else :href="pmbUrl" class="rs-drawer-cta" target="_blank" rel="noopener" style="color: white !important;">
+        <a v-else :href="pmbUrl" class="rs-drawer-cta" target="_blank" rel="noopener" @click="closeMobileDrawer">
           {{ $t('admission') }}
           <i class="las la-arrow-right"></i>
         </a>
@@ -476,4 +518,12 @@ const closeMobileDrawer = () => {
     </div><!-- /.rs-mobile-drawer -->
 
   </div><!-- /.rs-header-root -->
+
+  <!-- Pushes hero below orangered topbar; main nav still overlays hero top -->
+  <div
+    class="rs-header-hero-offset"
+    :class="{ 'is-active': showHeroOffset }"
+    :style="showHeroOffset ? { height: `${topbarHeight}px` } : undefined"
+    aria-hidden="true"
+  />
 </template>

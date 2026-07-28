@@ -186,14 +186,14 @@ background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, F
   justify-content: center;
   margin-bottom: 22px;
   background: linear-gradient(160deg, #ffffff 0%, #d9ecff 100%);
-  color: #0f4f9e;
+  color: var(--brand-navy-light);
   font-size: 42px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 .hsp-card-icon--role {
-  background: linear-gradient(160deg, #ffe08a 0%, #f5b301 100%);
-  color: #0b2e59;
+  background: linear-gradient(160deg, #ffe08a 0%, var(--brand-accent) 100%);
+  color: var(--brand-navy);
 }
 
 .hsp-card-title {
@@ -230,7 +230,7 @@ background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, F
   padding: 10px 18px;
   border-radius: 999px;
   background: #ffffff;
-  color: #0f4f9e;
+  color: var(--brand-navy-light);
   font-size: 13px;
   font-weight: 600;
   line-height: 1.3;
@@ -243,7 +243,7 @@ background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, F
   transform: translateY(-2px);
   background: #f4f9ff;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-  color: #0b2e59;
+  color: var(--brand-navy);
 }
 
 .hsp-chip--skeleton {
@@ -313,7 +313,7 @@ background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, F
 }
 
 .hsp-role-btn:hover i {
-  color: #0f4f9e;
+  color: var(--brand-navy-light);
   transform: translateX(3px);
 }
 

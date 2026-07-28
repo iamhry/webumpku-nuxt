@@ -70,7 +70,7 @@
   right: 25px;
   width: 60px;
   height: 60px;
-  background: var(--primary-color, #f35c27);
+  background: var(--primary-color, #EA5501);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -84,7 +84,7 @@
 
 .campus-service-card:hover .campus-service-icon {
   background: #ffffff;
-  color: var(--primary-color, #f35c27);
+  color: var(--primary-color, #EA5501);
 }
 
 .campus-service-content h3 {
@@ -97,7 +97,7 @@
 }
 
 .campus-service-card:hover .campus-service-content h3 {
-  color: var(--primary-color, #f35c27);
+  color: var(--primary-color, #EA5501);
 }
 
 .campus-service-content p {
@@ -128,7 +128,7 @@
 }
 
 .campus-service-card:hover .campus-service-readmore {
-  color: var(--primary-color, #f35c27) !important;
+  color: var(--primary-color, #EA5501) !important;
 }
 
 .campus-service-card:hover .campus-service-readmore i {
