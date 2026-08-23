@@ -4,7 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useMenus } from '~/composables/useMenus'
 import { useSettings } from '~/composables/useSettings'
-import type { MenuItem as MenuItemType } from '~/types/menu'
+import type { MenuItem as MenuItemType, MenuPromo, MenuType } from '~/types/menu'
+import { isExternalUrl, resolveMenuType } from '~/utils/menu'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 type HeaderMenu = {
@@ -12,6 +13,12 @@ type HeaderMenu = {
   label: string
   to: string
   target?: string
+  subtitle?: string | null
+  menu_type: MenuType
+  columns?: number | null
+  icon?: string | null
+  is_featured?: boolean
+  promos: MenuPromo[]
   children: HeaderMenu[]
 }
 
@@ -34,9 +41,61 @@ const fallback = {
 }
 
 const siteLogo = computed(() => settings.value?.logo || fallback.logo)
-// Swap to the compact logotype once the header shrinks on scroll
+// Compact dark logotype for solid/white header states
 const scrolledLogo = '/assets/img/umpku_logotype.png'
-const headerLogo = computed(() => (scrolled.value ? scrolledLogo : siteLogo.value))
+const openMegaId = ref<number | string | null>(null)
+const isMegaOpen = computed(() => openMegaId.value !== null)
+// Prefer compact (dark) logotype whenever the bar is solid white
+const useCompactLogo = computed(() => scrolled.value || isMegaOpen.value)
+// Kept for any legacy single-src bindings
+const headerLogo = computed(() =>
+  useCompactLogo.value ? scrolledLogo : siteLogo.value,
+)
+
+// Debounced mega close — prevents flicker when the pointer briefly leaves
+// the trigger while moving into the panel (or crossing a 1px gap).
+let megaCloseTimer: ReturnType<typeof setTimeout> | null = null
+const MEGA_CLOSE_DELAY_MS = 160
+
+const clearMegaCloseTimer = () => {
+  if (megaCloseTimer !== null) {
+    clearTimeout(megaCloseTimer)
+    megaCloseTimer = null
+  }
+}
+
+const openMega = (id: number | string) => {
+  clearMegaCloseTimer()
+  openMegaId.value = id
+}
+const closeMega = () => {
+  clearMegaCloseTimer()
+  openMegaId.value = null
+  if (import.meta.client) {
+    const el = document.activeElement as HTMLElement | null
+    if (el?.closest?.('.has-mega-menu')) el.blur()
+  }
+}
+
+/** Close mega when any link inside the panel is clicked. */
+const onMegaPanelClick = (event: MouseEvent) => {
+  const target = event.target as HTMLElement | null
+  if (!target) return
+  if (target.closest('a')) closeMega()
+}
+const scheduleCloseMega = () => {
+  clearMegaCloseTimer()
+  megaCloseTimer = setTimeout(() => {
+    openMegaId.value = null
+    megaCloseTimer = null
+  }, MEGA_CLOSE_DELAY_MS)
+}
+const onMegaFocusOut = (event: FocusEvent, id: number | string) => {
+  const next = event.relatedTarget as Node | null
+  const current = event.currentTarget as HTMLElement | null
+  if (current && next && current.contains(next)) return
+  if (openMegaId.value === id) scheduleCloseMega()
+}
 const siteEmail = computed(() => settings.value?.email || fallback.email)
 const sitePhone = computed(() => settings.value?.phone || fallback.phone)
 const siteSchedule = computed(() => settings.value?.schedule || fallback.schedule)
@@ -55,19 +114,76 @@ const getTitle = (item: MenuItemType): string => {
 // ─── Helper: normalize to HeaderMenu ────────────────────────────────────────
 const normalizeMenus = (items: MenuItemType[] = []): HeaderMenu[] => {
   return [...items]
-    .sort((a, b) => ((a as any).order ?? (a as any).sort_order ?? 0) - ((b as any).order ?? (b as any).sort_order ?? 0))
+    .sort((a, b) => ((a as any).sort_order ?? (a as any).order ?? 0) - ((b as any).sort_order ?? (b as any).order ?? 0))
     .map((item) => ({
       id: item.id,
       label: getTitle(item) || 'Menu',
       to: item.url || '#',
       target: item.target || '_self',
+      subtitle: item.subtitle || null,
+      menu_type: resolveMenuType(item),
+      columns: item.columns ?? null,
+      icon: item.icon || null,
+      is_featured: !!item.is_featured,
+      promos: Array.isArray(item.promos) ? [...item.promos].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)) : [],
       children: Array.isArray(item.children) && item.children.length
         ? normalizeMenus(item.children)
-        : []
+        : [],
     }))
 }
 
 const menus = computed<HeaderMenu[]>(() => normalizeMenus(headerMenus.value || []))
+
+const isMegaMenuItem = (menu: HeaderMenu) => menu.menu_type === 'mega'
+const isGroupMenuItem = (menu: HeaderMenu) => menu.menu_type === 'group'
+const megaColumns = (menu: HeaderMenu) => {
+  const n = Number(menu.columns)
+  if (!Number.isFinite(n)) return 3
+  return Math.min(5, Math.max(2, Math.round(n)))
+}
+
+/** Prefer group columns; flat links → 2 Telkomsel-style columns. */
+const megaColumnGroups = (menu: HeaderMenu): HeaderMenu[] => {
+  const children = menu.children || []
+  const onlyGroups = children.filter(child => isGroupMenuItem(child))
+  if (onlyGroups.length) return onlyGroups
+
+  const withNested = children.filter(child => child.children.length > 0)
+  if (withNested.length) return withNested
+
+  if (!children.length) return []
+
+  // Flat mega children: split into two balanced columns (Telkomsel-like)
+  const mid = Math.ceil(children.length / 2)
+  const chunks = [children.slice(0, mid), children.slice(mid)].filter(c => c.length)
+  return chunks.map((chunk, index) => ({
+    id: `${menu.id}-col-${index + 1}`,
+    label: '',
+    to: '#',
+    menu_type: 'group' as const,
+    promos: [],
+    children: chunk,
+  }))
+}
+
+const megaPanelMeta = (menu: HeaderMenu) => {
+  const groups = megaColumnGroups(menu)
+  const colCount = groups.length > 1
+    ? Math.min(5, Math.max(2, groups.length))
+    : megaColumns(menu)
+  return {
+    groups,
+    colCount,
+    hasPromos: menu.promos.length > 0,
+  }
+}
+
+const hasNavigableUrl = (to?: string) => !!to && to !== '#'
+
+const toggleMega = (id: number | string) => {
+  clearMegaCloseTimer()
+  openMegaId.value = openMegaId.value === id ? null : id
+}
 
 // ─── Internal link helper ────────────────────────────────────────────────────
 const isInternalLink = (url?: string): boolean => {
@@ -140,12 +256,13 @@ const isHeroOverlayPage = computed(() => {
 
 /** Transparent white-on-hero look — only before scroll, never with blur/white fill. */
 const isHeaderTransparent = computed(
-  () => isHeroOverlayPage.value && !isHeaderWide.value && !isMobileOpen.value
+  () => isHeroOverlayPage.value && !isHeaderWide.value && !isMobileOpen.value && !isMegaOpen.value
 )
 
-/** Spacer so hero starts below the orangered topbar (not under it). */
+/** Spacer so hero starts below the orangered topbar (not under it).
+ *  Layout-only — must stay stable while mega menu is open (no content jump). */
 const showHeroOffset = computed(
-  () => isHeaderTransparent.value && topbarHeight.value > 0
+  () => isHeroOverlayPage.value && !isHeaderWide.value && !isMobileOpen.value && topbarHeight.value > 0
 )
 
 const syncTopbarHeight = () => {
@@ -261,9 +378,10 @@ onBeforeUnmount(() => {
   document.removeEventListener('click', onDocumentClick)
 })
 
-// Close mobile on route change
+// Close mobile / mega on route change
 watch(() => route.fullPath, () => {
   isMobileOpen.value = false
+  closeMega()
   document.body.style.overflow = ''
 })
 
@@ -300,6 +418,7 @@ const closeMobileDrawer = () => {
       'rs-header-root--overlay': isHeroOverlayPage,
       'rs-header-root--transparent': isHeaderTransparent,
       'rs-header-root--scrolled': isHeaderWide,
+      'rs-header-root--mega-open': isMegaOpen,
     }"
     :style="{ '--rs-header-top-height': `${topbarHeight}px` }"
   >
@@ -370,8 +489,20 @@ const closeMobileDrawer = () => {
         <div class="rs-header-left">
           <div class="rs-header-logo-wrapper">
             <div class="rs-header-logo">
-              <NuxtLink to="/">
-                <img :src="headerLogo" :alt="settings?.site_name || 'UMPKU'" />
+              <NuxtLink to="/" class="rs-header-logo-link">
+                <img
+                  class="rs-header-logo-img rs-header-logo-img--full"
+                  :class="{ 'is-hidden': useCompactLogo }"
+                  :src="siteLogo"
+                  :alt="settings?.site_name || 'UMPKU'"
+                />
+                <img
+                  class="rs-header-logo-img rs-header-logo-img--compact"
+                  :class="{ 'is-visible': useCompactLogo }"
+                  :src="scrolledLogo"
+                  alt=""
+                  aria-hidden="true"
+                />
               </NuxtLink>
             </div>
           </div>
@@ -382,27 +513,162 @@ const closeMobileDrawer = () => {
           <!-- Desktop menu -->
           <nav class="rs-main-nav" aria-label="Main Navigation">
             <ul class="multipage-menu">
-              <li v-for="menu in menus" :key="menu.id" :class="{ 'menu-item-has-children': menu.children.length > 0 }">
-                <!-- No children -->
-                <template v-if="menu.children.length === 0">
-                  <a v-if="!isInternalLink(menu.to)" :href="menu.to" :target="menu.target" rel="noopener"
-                    :class="{ 'router-link-active': isActiveMenu(menu) }">{{ menu.label }}</a>
-                  <NuxtLink v-else :to="menu.to" :class="{ 'router-link-active': isActiveMenu(menu) }">{{ menu.label }}
-                  </NuxtLink>
+              <li
+                v-for="menu in menus"
+                :key="menu.id"
+                :class="{
+                  'menu-item-has-children': menu.children.length > 0 || isMegaMenuItem(menu),
+                  'has-mega-menu': isMegaMenuItem(menu),
+                  'is-mega-open': isMegaMenuItem(menu) && openMegaId === menu.id,
+                }"
+                @mouseenter="isMegaMenuItem(menu) && openMega(menu.id)"
+                @mouseleave="isMegaMenuItem(menu) && scheduleCloseMega()"
+                @focusin="isMegaMenuItem(menu) && openMega(menu.id)"
+                @focusout="isMegaMenuItem(menu) && onMegaFocusOut($event, menu.id)"
+              >
+                <!-- Leaf -->
+                <template v-if="menu.children.length === 0 && !isMegaMenuItem(menu)">
+                  <a
+                    v-if="!isInternalLink(menu.to)"
+                    :href="menu.to"
+                    :target="menu.target"
+                    rel="noopener"
+                    :class="{ 'router-link-active': isActiveMenu(menu) }"
+                  >{{ menu.label }}</a>
+                  <NuxtLink
+                    v-else
+                    :to="menu.to"
+                    :class="{ 'router-link-active': isActiveMenu(menu) }"
+                  >{{ menu.label }}</NuxtLink>
                 </template>
 
-                <!-- Has children -->
-                <template v-else>
-                  <a href="#" @click.prevent :class="{ 'router-link-active': isActiveMenu(menu) }">
+                <!-- Mega menu -->
+                <template v-else-if="isMegaMenuItem(menu)">
+                  <a
+                    href="#"
+                    :class="{ 'router-link-active': isActiveMenu(menu) }"
+                    :aria-expanded="openMegaId === menu.id"
+                    @click.prevent="toggleMega(menu.id)"
+                  >
                     {{ menu.label }}
-                    <i class="fa fa-angle-down rs-arrow"></i>
+                    <i class="fa fa-angle-down rs-arrow" />
+                  </a>
+                  <div
+                    class="rs-mega-menu"
+                    @click="onMegaPanelClick"
+                    :class="[
+                      `rs-mega-cols-${megaColumnGroups(menu).length > 1 ? Math.min(5, Math.max(2, megaColumnGroups(menu).length)) : megaColumns(menu)}`,
+                      { 'rs-mega-menu--has-promos': menu.promos.length > 0 },
+                    ]"
+                  >
+                    <div
+                      class="rs-mega-inner"
+                      :class="{ 'rs-mega-inner--with-promos': menu.promos.length > 0 }"
+                    >
+                      <div class="rs-mega-columns">
+                        <div
+                          v-for="group in megaColumnGroups(menu)"
+                          :key="group.id"
+                          class="rs-mega-column"
+                        >
+                          <h5
+                            v-if="group.label"
+                            class="rs-mega-heading"
+                          >
+                            {{ group.label }}
+                          </h5>
+                          <ul class="rs-mega-links">
+                            <li
+                              v-for="link in group.children"
+                              :key="link.id"
+                            >
+                              <a
+                                v-if="!isInternalLink(link.to) || isExternalUrl(link.to)"
+                                :href="link.to"
+                                :target="link.target || '_blank'"
+                                rel="noopener noreferrer"
+                              >
+                                <span>{{ link.label }}</span>
+                                <small v-if="link.subtitle">{{ link.subtitle }}</small>
+                              </a>
+                              <NuxtLink
+                                v-else
+                                :to="link.to"
+                              >
+                                <span>{{ link.label }}</span>
+                                <small v-if="link.subtitle">{{ link.subtitle }}</small>
+                              </NuxtLink>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div
+                        v-if="menu.promos.length"
+                        class="rs-mega-promos"
+                      >
+                        <article
+                          v-for="promo in menu.promos"
+                          :key="promo.id"
+                          class="rs-mega-promo-card"
+                        >
+                          <div
+                            v-if="promo.image"
+                            class="rs-mega-promo-media"
+                          >
+                            <img
+                              :src="promo.image"
+                              :alt="promo.title"
+                              loading="lazy"
+                            >
+                          </div>
+                          <div class="rs-mega-promo-body">
+                            <h6>{{ promo.title }}</h6>
+                            <p v-if="promo.description">{{ promo.description }}</p>
+                            <a
+                              v-if="promo.url"
+                              :href="promo.url"
+                              class="rs-mega-promo-cta"
+                              :target="isExternalUrl(promo.url) ? '_blank' : undefined"
+                              :rel="isExternalUrl(promo.url) ? 'noopener noreferrer' : undefined"
+                            >
+                              {{ promo.button_text || 'Selengkapnya' }}
+                              <i class="fa fa-arrow-right" />
+                            </a>
+                          </div>
+                        </article>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
+                <!-- Standard dropdown -->
+                <template v-else>
+                  <a
+                    href="#"
+                    @click.prevent
+                    :class="{ 'router-link-active': isActiveMenu(menu) }"
+                  >
+                    {{ menu.label }}
+                    <i class="fa fa-angle-down rs-arrow" />
                   </a>
                   <ul class="rs-submenu">
-                    <li v-for="child in menu.children" :key="child.id">
-                      <a v-if="!isInternalLink(child.to)" :href="child.to" :target="child.target" rel="noopener"
-                        :class="{ 'router-link-active': isActiveMenu(child) }">{{ child.label }}</a>
-                      <NuxtLink v-else :to="child.to" :class="{ 'router-link-active': isActiveMenu(child) }">{{
-                        child.label }}</NuxtLink>
+                    <li
+                      v-for="child in menu.children"
+                      :key="child.id"
+                    >
+                      <a
+                        v-if="!isInternalLink(child.to)"
+                        :href="child.to"
+                        :target="child.target"
+                        rel="noopener"
+                        :class="{ 'router-link-active': isActiveMenu(child) }"
+                      >{{ child.label }}</a>
+                      <NuxtLink
+                        v-else
+                        :to="child.to"
+                        :class="{ 'router-link-active': isActiveMenu(child) }"
+                      >{{ child.label }}</NuxtLink>
                     </li>
                   </ul>
                 </template>
@@ -472,30 +738,131 @@ const closeMobileDrawer = () => {
       <!-- Drawer body: mobile menu -->
       <div class="rs-drawer-body">
         <ul class="rs-mobile-menu-list">
-          <li v-for="menu in menus" :key="menu.id" class="rs-mobile-menu-item">
-            <!-- Has children -->
-            <template v-if="menu.children.length > 0">
-              <button class="rs-mobile-menu-link" @click="toggleMobileMenu(menu.id)"
-                :aria-expanded="!!openedMobileMenus[menu.id]">
+          <li
+            v-for="menu in menus"
+            :key="menu.id"
+            class="rs-mobile-menu-item"
+          >
+            <template v-if="menu.children.length > 0 || isMegaMenuItem(menu)">
+              <button
+                class="rs-mobile-menu-link"
+                :aria-expanded="!!openedMobileMenus[menu.id]"
+                @click="toggleMobileMenu(menu.id)"
+              >
                 <span>{{ menu.label }}</span>
-                <i class="fa fa-angle-down rs-mobile-arrow" :class="{ open: openedMobileMenus[menu.id] }"></i>
+                <i
+                  class="fa fa-angle-down rs-mobile-arrow"
+                  :class="{ open: openedMobileMenus[menu.id] }"
+                />
               </button>
-              <ul v-show="openedMobileMenus[menu.id]" class="rs-mobile-submenu">
-                <li v-for="child in menu.children" :key="child.id">
-                  <a v-if="!isInternalLink(child.to)" :href="child.to" :target="child.target" rel="noopener"
-                    @click="closeMobileDrawer">{{ child.label }}</a>
-                  <NuxtLink v-else :to="child.to" @click="closeMobileDrawer">{{ child.label }}</NuxtLink>
-                </li>
+
+              <ul
+                v-show="openedMobileMenus[menu.id]"
+                class="rs-mobile-submenu"
+              >
+                <!-- Mega hierarchy -->
+                <template v-if="isMegaMenuItem(menu)">
+                  <li
+                    v-for="group in menu.children"
+                    :key="group.id"
+                    class="rs-mobile-mega-group"
+                  >
+                    <div class="rs-mobile-mega-heading">{{ group.label }}</div>
+                    <ul class="rs-mobile-mega-links">
+                      <li
+                        v-for="link in group.children"
+                        :key="link.id"
+                      >
+                        <a
+                          v-if="!isInternalLink(link.to) || isExternalUrl(link.to)"
+                          :href="link.to"
+                          :target="link.target || '_blank'"
+                          rel="noopener noreferrer"
+                          @click="closeMobileDrawer"
+                        >
+                          <span>{{ link.label }}</span>
+                          <small v-if="link.subtitle">{{ link.subtitle }}</small>
+                        </a>
+                        <NuxtLink
+                          v-else
+                          :to="link.to"
+                          @click="closeMobileDrawer"
+                        >
+                          <span>{{ link.label }}</span>
+                          <small v-if="link.subtitle">{{ link.subtitle }}</small>
+                        </NuxtLink>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li
+                    v-for="promo in menu.promos"
+                    :key="`promo-${promo.id}`"
+                    class="rs-mobile-promo"
+                  >
+                    <a
+                      v-if="promo.url"
+                      :href="promo.url"
+                      class="rs-mobile-promo-card"
+                      :target="isExternalUrl(promo.url) ? '_blank' : undefined"
+                      :rel="isExternalUrl(promo.url) ? 'noopener noreferrer' : undefined"
+                      @click="closeMobileDrawer"
+                    >
+                      <img
+                        v-if="promo.image"
+                        :src="promo.image"
+                        :alt="promo.title"
+                        loading="lazy"
+                      >
+                      <div class="rs-mobile-promo-body">
+                        <strong>{{ promo.title }}</strong>
+                        <p v-if="promo.description">{{ promo.description }}</p>
+                        <span>{{ promo.button_text || 'Selengkapnya' }}</span>
+                      </div>
+                    </a>
+                  </li>
+                </template>
+
+                <!-- Standard dropdown -->
+                <template v-else>
+                  <li
+                    v-for="child in menu.children"
+                    :key="child.id"
+                  >
+                    <a
+                      v-if="!isInternalLink(child.to)"
+                      :href="child.to"
+                      :target="child.target"
+                      rel="noopener"
+                      @click="closeMobileDrawer"
+                    >{{ child.label }}</a>
+                    <NuxtLink
+                      v-else
+                      :to="child.to"
+                      @click="closeMobileDrawer"
+                    >{{ child.label }}</NuxtLink>
+                  </li>
+                </template>
               </ul>
             </template>
 
-            <!-- No children -->
             <template v-else>
-              <a v-if="!isInternalLink(menu.to)" :href="menu.to" :target="menu.target" rel="noopener"
-                class="rs-mobile-menu-link" @click="closeMobileDrawer">
+              <a
+                v-if="!isInternalLink(menu.to)"
+                :href="menu.to"
+                :target="menu.target"
+                rel="noopener"
+                class="rs-mobile-menu-link"
+                @click="closeMobileDrawer"
+              >
                 <span>{{ menu.label }}</span>
               </a>
-              <NuxtLink v-else :to="menu.to" class="rs-mobile-menu-link" @click="closeMobileDrawer">
+              <NuxtLink
+                v-else
+                :to="menu.to"
+                class="rs-mobile-menu-link"
+                @click="closeMobileDrawer"
+              >
                 <span>{{ menu.label }}</span>
               </NuxtLink>
             </template>

@@ -1,110 +1,191 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import type { MenuItem } from '~/types/menu'
+import {
+  getMenuTitle,
+  hasMenuChildren,
+  isExternalUrl,
+  isMegaMenu,
+  menuLinkTo,
+} from '~/utils/menu'
 
 defineProps<{
   menus: MenuItem[]
 }>()
 
 const { locale } = useLocale()
-
-const getTitle = (m: MenuItem) => {
-  if (typeof m.title === 'string') return m.title;
-  return m.title?.[locale.value] || m.title?.['id'] || '';
-}
-
+const titleOf = (m: MenuItem) => getMenuTitle(m, locale.value)
 const activeMenuId = ref<number | string | null>(null)
 
 const toggleMenu = (id: number | string) => {
-  if (activeMenuId.value === id) {
-    activeMenuId.value = null
-  } else {
-    activeMenuId.value = id
-  }
+  activeMenuId.value = activeMenuId.value === id ? null : id
 }
 </script>
 
 <template>
   <div class="mobile-menu-accordion">
-    <!-- Dynamic Menu Rendering -->
-    <template v-if="menus && menus.length > 0">
+    <template v-if="menus?.length">
       <ul class="mobile-nav-list">
-        <li v-for="menu in menus" :key="menu.id" class="mobile-nav-item">
-          <template v-if="menu.children && menu.children.length > 0">
-            <div class="mobile-nav-header" @click="toggleMenu(menu.id)" :class="{ 'active': activeMenuId === menu.id }">
-              {{ getTitle(menu) }}
-              <span class="mobile-nav-toggler"><i class="fa fa-angle-down"></i></span>
+        <li
+          v-for="menu in menus"
+          :key="menu.id"
+          class="mobile-nav-item"
+        >
+          <template v-if="hasMenuChildren(menu) || isMegaMenu(menu)">
+            <div
+              class="mobile-nav-header"
+              :class="{ active: activeMenuId === menu.id }"
+              @click="toggleMenu(menu.id)"
+            >
+              <span>{{ titleOf(menu) }}</span>
+              <span class="mobile-nav-toggler"><i class="fa fa-angle-down" /></span>
             </div>
-            <ul class="mobile-sub-menu" v-show="activeMenuId === menu.id">
-              <li v-for="child in menu.children" :key="child.id">
-                <!-- If it's a Mega Menu column wrapper -->
-                <template v-if="menu.type === 'mega' || menu.is_mega_menu">
-                  <div class="mobile-mega-title">{{ getTitle(child) }}</div>
-                  <ul class="mobile-mega-sub-menu" v-if="child.children && child.children.length > 0">
-                    <li v-for="subchild in child.children" :key="subchild.id">
-                      <a v-if="subchild.target === '_blank'" :href="subchild.url || '#'" target="_blank" rel="noopener">
-                        {{ getTitle(subchild) }}
+
+            <ul
+              v-show="activeMenuId === menu.id"
+              class="mobile-sub-menu"
+            >
+              <template v-if="isMegaMenu(menu)">
+                <li
+                  v-for="group in (menu.children || [])"
+                  :key="group.id"
+                  class="mobile-mega-block"
+                >
+                  <div class="mobile-mega-title">{{ titleOf(group) }}</div>
+                  <ul class="mobile-mega-sub-menu">
+                    <li
+                      v-for="link in (group.children || [])"
+                      :key="link.id"
+                    >
+                      <a
+                        v-if="isExternalUrl(link.url) || link.target === '_blank'"
+                        :href="menuLinkTo(link)"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <span>{{ titleOf(link) }}</span>
+                        <small v-if="link.subtitle">{{ link.subtitle }}</small>
                       </a>
-                      <NuxtLink v-else :to="subchild.url || '#'">
-                        {{ getTitle(subchild) }}
+                      <NuxtLink
+                        v-else
+                        :to="menuLinkTo(link)"
+                      >
+                        <span>{{ titleOf(link) }}</span>
+                        <small v-if="link.subtitle">{{ link.subtitle }}</small>
                       </NuxtLink>
                     </li>
                   </ul>
-                </template>
-                <!-- Standard Dropdown Child -->
-                <template v-else>
-                   <a v-if="child.target === '_blank'" :href="child.url || '#'" target="_blank" rel="noopener">
-                     {{ getTitle(child) }}
-                   </a>
-                   <NuxtLink v-else :to="child.url || '#'">
-                     {{ getTitle(child) }}
-                   </NuxtLink>
-                </template>
-              </li>
+                </li>
+
+                <li
+                  v-for="promo in (menu.promos || [])"
+                  :key="`promo-${promo.id}`"
+                  class="mobile-promo-item"
+                >
+                  <component
+                    :is="promo.url ? 'a' : 'div'"
+                    class="mobile-promo-card"
+                    v-bind="promo.url
+                      ? {
+                          href: promo.url,
+                          target: isExternalUrl(promo.url) ? '_blank' : undefined,
+                          rel: isExternalUrl(promo.url) ? 'noopener noreferrer' : undefined,
+                        }
+                      : {}"
+                  >
+                    <img
+                      v-if="promo.image"
+                      :src="promo.image"
+                      :alt="promo.title"
+                      loading="lazy"
+                    >
+                    <div class="mobile-promo-body">
+                      <strong>{{ promo.title }}</strong>
+                      <p v-if="promo.description">{{ promo.description }}</p>
+                      <span
+                        v-if="promo.url"
+                        class="mobile-promo-cta"
+                      >
+                        {{ promo.button_text || 'Selengkapnya' }}
+                      </span>
+                    </div>
+                  </component>
+                </li>
+              </template>
+
+              <template v-else>
+                <li
+                  v-for="child in menu.children"
+                  :key="child.id"
+                >
+                  <a
+                    v-if="isExternalUrl(child.url) || child.target === '_blank'"
+                    :href="menuLinkTo(child)"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ titleOf(child) }}
+                  </a>
+                  <NuxtLink
+                    v-else
+                    :to="menuLinkTo(child)"
+                  >
+                    {{ titleOf(child) }}
+                  </NuxtLink>
+                </li>
+              </template>
             </ul>
           </template>
+
           <template v-else>
-            <a v-if="menu.target === '_blank'" :href="menu.url || '#'" class="mobile-nav-link" target="_blank" rel="noopener">
-              {{ getTitle(menu) }}
+            <a
+              v-if="isExternalUrl(menu.url) || menu.target === '_blank'"
+              :href="menuLinkTo(menu)"
+              class="mobile-nav-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ titleOf(menu) }}
             </a>
-            <NuxtLink v-else :to="menu.url || '#'" class="mobile-nav-link">
-              {{ getTitle(menu) }}
+            <NuxtLink
+              v-else
+              :to="menuLinkTo(menu) === '#' ? '/' : menuLinkTo(menu)"
+              class="mobile-nav-link"
+            >
+              {{ titleOf(menu) }}
             </NuxtLink>
           </template>
         </li>
       </ul>
     </template>
 
-    <!-- Error/Fallback State Minimal Menu -->
     <template v-else>
-       <ul class="mobile-nav-list">
-          <li class="mobile-nav-item"><NuxtLink to="/" class="mobile-nav-link">Beranda</NuxtLink></li>
-          <li class="mobile-nav-item"><NuxtLink to="/about" class="mobile-nav-link">Tentang</NuxtLink></li>
-          <li class="mobile-nav-item"><NuxtLink to="/news" class="mobile-nav-link">Berita</NuxtLink></li>
-          <li class="mobile-nav-item"><NuxtLink to="/sdgs" class="mobile-nav-link">SDGs</NuxtLink></li>
-          <li class="mobile-nav-item"><NuxtLink to="/contact" class="mobile-nav-link">Kontak</NuxtLink></li>
-       </ul>
+      <ul class="mobile-nav-list">
+        <li class="mobile-nav-item"><NuxtLink to="/" class="mobile-nav-link">Beranda</NuxtLink></li>
+        <li class="mobile-nav-item"><NuxtLink to="/about" class="mobile-nav-link">Tentang</NuxtLink></li>
+        <li class="mobile-nav-item"><NuxtLink to="/news" class="mobile-nav-link">Berita</NuxtLink></li>
+        <li class="mobile-nav-item"><NuxtLink to="/sdgs" class="mobile-nav-link">SDGs</NuxtLink></li>
+        <li class="mobile-nav-item"><NuxtLink to="/contact" class="mobile-nav-link">Kontak</NuxtLink></li>
+      </ul>
     </template>
   </div>
 </template>
 
 <style scoped>
-.mobile-menu-accordion {
-  width: 100%;
-}
+.mobile-menu-accordion { width: 100%; }
 
-.mobile-nav-list, .mobile-sub-menu, .mobile-mega-sub-menu {
+.mobile-nav-list,
+.mobile-sub-menu,
+.mobile-mega-sub-menu {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.mobile-nav-item {
-  border-bottom: 1px solid #e9ecef;
-}
+.mobile-nav-item { border-bottom: 1px solid #e9ecef; }
 
-.mobile-nav-link, .mobile-nav-header {
+.mobile-nav-link,
+.mobile-nav-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -113,28 +194,21 @@ const toggleMenu = (id: number | string) => {
   text-decoration: none;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-.mobile-nav-header.active {
-  color: var(--primary-color, #0b2e59);
-}
-
-.mobile-nav-header.active .mobile-nav-toggler i {
-  transform: rotate(180deg);
-}
-
-.mobile-nav-toggler i {
-  transition: transform 0.3s;
-}
+.mobile-nav-header.active { color: var(--primary-color, #0b2e59); }
+.mobile-nav-header.active .mobile-nav-toggler i { transform: rotate(180deg); }
+.mobile-nav-toggler i { transition: transform 0.3s; }
 
 .mobile-sub-menu {
-  background-color: #f8f9fa;
-  padding-left: 15px;
+  background: #f8f9fa;
+  padding-bottom: 8px;
 }
 
 .mobile-sub-menu a {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   padding: 10px 15px;
   color: #555;
   text-decoration: none;
@@ -144,34 +218,55 @@ const toggleMenu = (id: number | string) => {
 .mobile-sub-menu a:hover {
   color: var(--primary-color, #0b2e59);
   padding-left: 20px;
-  transition: all 0.2s;
+}
+
+.mobile-sub-menu small {
+  color: #888;
+  font-size: 0.78rem;
 }
 
 .mobile-mega-title {
-  font-weight: 600;
+  font-weight: 700;
   padding: 10px 15px;
-  color: #444;
-  background-color: #f1f3f5;
+  color: #0b2e59;
+  background: #eef2f7;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
 }
 
-.skeleton-text {
-  color: transparent !important;
-  background-color: #e2e8f0;
-  border-radius: 4px;
-  animation: pulse 1.5s infinite;
-  min-height: 40px;
-  margin-bottom: 10px;
+.mobile-promo-item { padding: 10px 15px; }
+
+.mobile-promo-card {
+  display: block;
+  overflow: hidden;
+  border-radius: 10px;
+  background: linear-gradient(160deg, #0b2e59 0%, #134a87 100%);
+  color: #fff;
+  text-decoration: none;
 }
 
-@keyframes pulse {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
+.mobile-promo-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.mobile-promo-body { padding: 12px 14px 14px; }
+.mobile-promo-body strong { display: block; margin-bottom: 4px; }
+.mobile-promo-body p {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+.mobile-promo-cta {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f6c453;
 }
 
 @media (min-width: 992px) {
-  .mobile-menu-accordion {
-    display: none;
-  }
+  .mobile-menu-accordion { display: none; }
 }
 </style>

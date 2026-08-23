@@ -266,6 +266,55 @@
   transform: scale(1.03);
 }
 
+/* Dual-logo crossfade — avoids flicker from swapping <img src> */
+.rs-header-logo-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  text-decoration: none;
+}
+
+.rs-header-logo-img {
+  max-height: 65px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+  transition:
+    opacity 0.18s ease,
+    transform var(--rs-transition, 0.25s ease),
+    max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rs-header-logo-img--full {
+  position: relative;
+  opacity: 1;
+}
+
+.rs-header-logo-img--full.is-hidden {
+  opacity: 0;
+}
+
+.rs-header-logo-img--compact {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  max-height: 40px;
+}
+
+.rs-header-logo-img--compact.is-visible {
+  opacity: 1;
+}
+
+.rs-header-area--scrolled .rs-header-logo-img--full,
+.rs-header-area--scrolled .rs-header-logo-img--compact {
+  max-height: 40px;
+}
+
+
 /* ============================================================
    MIDDLE SECTION (Social + Menu)
    ============================================================ */
@@ -901,6 +950,79 @@
   box-shadow: var(--rs-shadow);
 }
 
+
+/* Mega panel overlays content — must not expand header stack height */
+.rs-header-root--mega-open,
+.rs-header-root--mega-open .rs-header-area,
+.rs-header-root--mega-open .rs-header-inner,
+.rs-header-root--mega-open .rs-main-nav {
+  overflow: visible;
+}
+
+/* Mega-open: settle white bar without fighting transparent transitions */
+.rs-header-root--mega-open .rs-header-area {
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* ============================================================
+   MEGA OPEN — solid white header (seamless with mega panel)
+   Overrides transparent/overlay light text + clear background.
+   ============================================================ */
+.rs-header-root--mega-open .rs-header-area,
+.rs-header-root--transparent.rs-header-root--mega-open .rs-header-area,
+.rs-header-root--overlay.rs-header-root--mega-open .rs-header-area {
+  background: #fff !important;
+  background-color: #fff !important;
+  box-shadow: 0 8px 24px rgba(11, 46, 89, 0.08);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.rs-header-root--mega-open .multipage-menu > li > a,
+.rs-header-root--mega-open .rs-search-icon-btn,
+.rs-header-root--mega-open .rs-header-right,
+.rs-header-root--mega-open .bar-icon,
+.rs-header-root--transparent.rs-header-root--mega-open .multipage-menu > li > a,
+.rs-header-root--transparent.rs-header-root--mega-open .rs-search-icon-btn,
+.rs-header-root--transparent.rs-header-root--mega-open .rs-header-right,
+.rs-header-root--transparent.rs-header-root--mega-open .bar-icon {
+  color: var(--rs-body, #1a1a1a);
+  opacity: 1;
+}
+
+.rs-header-root--mega-open .multipage-menu > li > a:hover,
+.rs-header-root--mega-open .multipage-menu > li > a.router-link-active,
+.rs-header-root--mega-open .multipage-menu > li.is-mega-open > a,
+.rs-header-root--mega-open .multipage-menu > li.has-mega-menu:hover > a,
+.rs-header-root--mega-open .rs-search-icon-btn:hover,
+.rs-header-root--transparent.rs-header-root--mega-open .multipage-menu > li > a:hover,
+.rs-header-root--transparent.rs-header-root--mega-open .multipage-menu > li > a.router-link-active,
+.rs-header-root--transparent.rs-header-root--mega-open .multipage-menu > li.is-mega-open > a,
+.rs-header-root--transparent.rs-header-root--mega-open .multipage-menu > li.has-mega-menu:hover > a {
+  color: var(--rs-theme-primary, #0b2e59);
+  opacity: 1;
+}
+
+.rs-header-root--mega-open .multipage-menu > li > a::after,
+.rs-header-root--transparent.rs-header-root--mega-open .multipage-menu > li > a::after {
+  background: var(--rs-theme-primary, #0b2e59);
+}
+
+.rs-header-root--mega-open .multipage-menu > li.is-mega-open > a::after,
+.rs-header-root--mega-open .multipage-menu > li.has-mega-menu:hover > a::after {
+  transform: scaleX(1);
+}
+
+.rs-header-root--mega-open .rs-hamburger-btn span,
+.rs-header-root--transparent.rs-header-root--mega-open .rs-hamburger-btn span {
+  background: var(--rs-body, #1a1a1a);
+}
+
+/* Soft seam between white header and white mega panel */
+.rs-header-root--mega-open .rs-mega-menu {
+  border-top-color: rgba(11, 46, 89, 0.08);
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -1023,6 +1145,326 @@
 }
 
 /* ============================================================
+   MEGA MENU (Dynamic from API menu_type=mega) — Telkomsel-like
+   ============================================================ */
+.multipage-menu > li.has-mega-menu {
+  position: static;
+}
+
+.rs-mega-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid rgba(11, 46, 89, 0.08);
+  box-shadow: 0 18px 40px rgba(11, 46, 89, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+  z-index: 1000;
+  padding: 0;
+}
+
+/* Open via JS `.is-mega-open` (debounced) or keyboard focus — not bare :hover,
+   which fights mouseleave gaps and causes open/close flicker. */
+.multipage-menu > li.has-mega-menu.is-mega-open > .rs-mega-menu,
+.multipage-menu > li.has-mega-menu:focus-within > .rs-mega-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Invisible hover bridge — closes the seam that fires mouseleave flicker */
+.multipage-menu > li.has-mega-menu.is-mega-open > .rs-mega-menu::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14px;
+  height: 14px;
+  background: transparent;
+}
+
+.rs-mega-inner {
+  width: min(1280px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.75rem 1rem 2rem;
+  display: grid;
+  /* Default: links only (no empty promo column) */
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.rs-mega-inner--with-promos {
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  gap: 2rem;
+}
+
+.rs-mega-columns {
+  display: grid;
+  gap: 0 2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rs-mega-cols-2 .rs-mega-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rs-mega-cols-3 .rs-mega-columns { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rs-mega-cols-4 .rs-mega-columns { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.rs-mega-cols-5 .rs-mega-columns { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+.rs-mega-column {
+  min-width: 0;
+  padding-right: 1.5rem;
+  border-right: 1px solid rgba(11, 46, 89, 0.08);
+}
+
+.rs-mega-column:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.rs-mega-inner--with-promos .rs-mega-columns {
+  padding-right: 0.5rem;
+  border-right: 1px solid rgba(11, 46, 89, 0.08);
+}
+
+.rs-mega-heading {
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(11, 46, 89, 0.1);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rs-theme-primary, #0b2e59);
+}
+
+.rs-mega-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+/* Override theme global `li { display: inline-block }` — root cause of
+   concatenated mega link labels (SambutanRektorSejarah…). */
+.rs-mega-links > li {
+  display: block !important;
+  float: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  clear: both;
+}
+
+.rs-mega-links a {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.35rem 0.7rem 0;
+  color: #111827;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: color 0.2s ease, padding-left 0.2s ease, background 0.2s ease;
+}
+
+.rs-mega-links a span {
+  display: block;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: inherit;
+}
+
+.rs-mega-links a small {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.rs-mega-links a:hover,
+.rs-mega-links a:focus-visible {
+  color: var(--rs-theme-primary, #0b2e59);
+  padding-left: 0.4rem;
+  outline: none;
+}
+
+.rs-mega-promos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.rs-mega-promo-card {
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(160deg, #0b2e59 0%, #134a87 100%);
+  color: #fff;
+}
+
+.rs-mega-promo-media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.rs-mega-promo-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rs-mega-promo-body {
+  padding: 0.95rem 1rem 1.1rem;
+}
+
+.rs-mega-promo-body h6 {
+  margin: 0 0 0.35rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.rs-mega-promo-body p {
+  margin: 0 0 0.65rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.rs-mega-promo-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #f6c453;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.rs-mega-promo-cta:hover {
+  color: #fff;
+}
+
+/* Mobile mega extras */
+.rs-mobile-mega-heading {
+  padding: 10px 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0b2e59;
+  background: #eef2f7;
+}
+
+.rs-mobile-mega-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rs-mobile-mega-links > li {
+  display: block !important;
+  float: none !important;
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+}
+
+.rs-mobile-mega-links a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+  color: #444;
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+}
+
+.rs-mobile-mega-links small {
+  color: #888;
+  font-size: 0.75rem;
+}
+
+.rs-mobile-promo {
+  padding: 12px 16px;
+}
+
+.rs-mobile-promo-card {
+  display: block;
+  overflow: hidden;
+  border-radius: 10px;
+  background: linear-gradient(160deg, #0b2e59 0%, #134a87 100%);
+  color: #fff;
+  text-decoration: none;
+}
+
+.rs-mobile-promo-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.rs-mobile-promo-body {
+  padding: 12px 14px 14px;
+}
+
+.rs-mobile-promo-body strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.rs-mobile-promo-body p {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.rs-mobile-promo-body span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f6c453;
+}
+
+@media (max-width: 991px) {
+  .rs-mega-menu {
+    display: none !important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .rs-mega-inner--with-promos {
+    grid-template-columns: 1fr minmax(200px, 240px);
+  }
+
+  .rs-mega-cols-4 .rs-mega-columns,
+  .rs-mega-cols-5 .rs-mega-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .rs-mega-column {
+    padding-right: 1rem;
+  }
+}
+
+/* ============================================================
    REDUCED MOTION — skip transitions, apply end state instantly
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
@@ -1032,7 +1474,8 @@
   .rs-header-logo-wrapper,
   .rs-header-logo img,
   .rs-header-area,
-  .multipage-menu > li > a {
+  .multipage-menu > li > a,
+  .rs-mega-menu {
     transition: none !important;
     animation: none !important;
   }

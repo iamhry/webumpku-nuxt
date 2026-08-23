@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import type { MenuItem as MenuItemType } from '~/types/menu'
 import MegaMenu from './MegaMenu.vue'
+import {
+  getMenuTitle,
+  hasMenuChildren,
+  isExternalUrl,
+  isMegaMenu as checkIsMegaMenu,
+  menuLinkTo,
+} from '~/utils/menu'
 
 const props = defineProps<{
   item: MenuItemType
@@ -12,14 +18,12 @@ const props = defineProps<{
 const { locale } = useLocale()
 const route = useRoute()
 
-const getTitle = (m: MenuItemType) => {
-  if (typeof m.title === 'string') return m.title;
-  return m.title?.[locale.value] || m.title?.['id'] || '';
-}
-const title = computed(() => getTitle(props.item))
-
-const hasChildren = computed(() => props.item.children && props.item.children.length > 0)
-const isMegaMenu = computed(() => props.item.type === 'mega' || props.item.is_mega_menu)
+const title = computed(() => getMenuTitle(props.item, locale.value))
+const hasChildren = computed(() => hasMenuChildren(props.item))
+const isMegaMenu = computed(() => checkIsMegaMenu(props.item))
+const isParent = computed(() => hasChildren.value || isMegaMenu.value)
+const linkUrl = computed(() => menuLinkTo(props.item))
+const isExternal = computed(() => isExternalUrl(props.item.url) || props.item.target === '_blank')
 
 const isOpen = ref(false)
 const toggleSubMenu = () => {
@@ -27,44 +31,81 @@ const toggleSubMenu = () => {
 }
 
 const isActive = computed(() => {
-  const url = props.item.url;
-  if (!url || url === '#') return false;
-  return route.path === url || route.path.startsWith(url);
+  const url = props.item.url
+  if (!url || url === '#') return false
+  return route.path === url || route.path.startsWith(url)
 })
-
-const linkUrl = computed(() => props.item.url || '#')
 </script>
 
 <template>
-  <li class="nav-item" :class="{ 'dropdown': hasChildren && !isMegaMenu, 'mega-menu-item position-static': isMegaMenu }">
-    <template v-if="!hasChildren">
-      <a v-if="item.target === '_blank'" :href="linkUrl" class="nav-link" :class="{ 'active': isActive }" target="_blank" rel="noopener">
+  <li
+    class="nav-item"
+    :class="{
+      dropdown: hasChildren && !isMegaMenu,
+      'mega-menu-item position-static': isMegaMenu,
+      open: isOpen,
+    }"
+  >
+    <template v-if="!isParent">
+      <a
+        v-if="isExternal"
+        :href="linkUrl"
+        class="nav-link"
+        :class="{ active: isActive }"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {{ title }}
       </a>
-      <NuxtLink v-else :to="linkUrl" class="nav-link" :class="{ 'active': isActive }">
+      <NuxtLink
+        v-else
+        :to="linkUrl === '#' ? '/' : linkUrl"
+        class="nav-link"
+        :class="{ active: isActive }"
+      >
         {{ title }}
       </NuxtLink>
     </template>
-    
-    <a v-else href="#" class="nav-link" :class="{ 'active': isActive }" @click.prevent="toggleSubMenu">
+
+    <a
+      v-else
+      href="#"
+      class="nav-link"
+      :class="{ active: isActive }"
+      :aria-expanded="isOpen"
+      @click.prevent="toggleSubMenu"
+    >
       {{ title }}
-      <span class="sub-nav-toggler" @click.stop.prevent="toggleSubMenu" :class="{ 'active': isOpen }">
-        <i class="fa fa-angle-down"></i>
+      <span
+        class="sub-nav-toggler"
+        :class="{ active: isOpen }"
+        @click.stop.prevent="toggleSubMenu"
+      >
+        <i class="fa fa-angle-down" />
       </span>
     </a>
-    
-    <!-- Recursive Standard Dropdown -->
-    <ul v-if="hasChildren && !isMegaMenu" class="sub-menu" :style="{ display: isOpen ? 'block' : '' }">
-      <MenuItem v-for="child in item.children" :key="child.id" :item="child" />
+
+    <ul
+      v-if="hasChildren && !isMegaMenu"
+      class="sub-menu"
+      :style="{ display: isOpen ? 'block' : '' }"
+    >
+      <MenuItem
+        v-for="child in item.children"
+        :key="child.id"
+        :item="child"
+      />
     </ul>
 
-    <!-- Mega Menu -->
-    <MegaMenu v-if="hasChildren && isMegaMenu" :item="item" :isOpen="isOpen" />
+    <MegaMenu
+      v-if="isMegaMenu"
+      :item="item"
+      :is-open="isOpen"
+    />
   </li>
 </template>
 
 <style scoped>
-/* Handled mainly by theme CSS, but we add minor overrides for the toggler state */
 .sub-nav-toggler.active i {
   transform: rotate(180deg);
   transition: transform 0.3s;
