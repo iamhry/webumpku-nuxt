@@ -20,12 +20,13 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
   ],
 
-  // runtimeConfig: {
-  //   public: {
-  //     apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://cms.umpku.ac.id',
-  //     storageUrl: process.env.NUXT_PUBLIC_STORAGE_URL || 'http://localhost:8000/storage'
-  //   }
-  // },
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://cms.umpku.ac.id',
+      // apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://127.0.0.1:8000',
+      storageUrl: process.env.NUXT_PUBLIC_STORAGE_URL || 'http://localhost:8000/storage'
+    }
+  },
 runtimeConfig: {
   public: {
     apiBase:
