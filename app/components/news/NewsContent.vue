@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import DOMPurify from 'isomorphic-dompurify'
+import createDOMPurify from 'dompurify'
+import type { Config } from 'dompurify'
 
 interface Props {
   content: string
@@ -7,23 +8,27 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// Sanitize HTML content
+const sanitizeConfig: Config = {
+  ALLOWED_TAGS: [
+    'p', 'br', 'strong', 'em', 'u', 'del', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'ul', 'ol', 'li', 'blockquote', 'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
+    'span', 'div', 'pre', 'code'
+  ],
+  ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'src', 'alt', 'width', 'height', 'class'],
+  KEEP_CONTENT: true,
+  RETURN_DOM: false
+}
+
+// The browser build of isomorphic-dompurify calls `.bind` while the server
+// bundle is loading, which crashes direct visits. Build DOMPurify against a
+// real window instead: the browser window on the client, jsdom on the server.
+const purify = import.meta.server
+  ? createDOMPurify(new (await import('jsdom')).JSDOM('<!DOCTYPE html>').window as unknown as Window)
+  : createDOMPurify(window)
+
 const sanitizedContent = computed(() => {
   if (!props.content) return ''
-
-  // Configure DOMPurify
-  const config = {
-    ALLOWED_TAGS: [
-      'p', 'br', 'strong', 'em', 'u', 'del', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-      'ul', 'ol', 'li', 'blockquote', 'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
-      'span', 'div', 'pre', 'code'
-    ],
-    ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'src', 'alt', 'width', 'height', 'class'],
-    KEEP_CONTENT: true,
-    RETURN_DOM: false
-  }
-
-  return DOMPurify.sanitize(props.content, config)
+  return purify.sanitize(props.content, sanitizeConfig)
 })
 
 // Add target="_blank" rel="noopener noreferrer" to links

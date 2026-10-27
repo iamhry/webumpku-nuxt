@@ -146,9 +146,9 @@ watch(finalSliders, async () => {
  				<div class="container content-wide">
  					<div class="row">
  						<div class="col-xxl-7 col-xl-8 col-lg-10 wow fadeInUp animated" data-wow-delay=".2s">
- 							<div class="rs-banner-content">
- 								<span class="rs-banner-subtitle">
- 									<span class="subtitle-text">{{ slide.subtitle }}</span>
+							<div v-show="false" class="rs-banner-content">
+								<span class="rs-banner-subtitle">
+									<span class="subtitle-text">{{ slide.subtitle }}</span>
  									<span class="rs-border-line"></span>
  								</span>
  								<h1 class="rs-banner-title main-title text-3xl font-bold leading-tight md:text-7xl md:max-xl:text-5xl" v-html="slide.title ? slide.title.replace(/\n/g, '<br>') : ''"></h1>
