@@ -145,3 +145,14 @@
   --color-secondary: var(--brand-accent);
   --color-accent: var(--brand-accent);
 }
+
+/* Hero slider: a light wash from the top so the photo stays clear */
+.homepage-slides .overlay {
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(3, 10, 24, 0.35) 0%,
+    rgba(3, 10, 24, 0.12) 16%,
+    transparent 32%
+  );
+}

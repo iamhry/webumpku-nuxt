@@ -61,7 +61,6 @@ onMounted(() => {
 <template>
     <div id="home2" class="homepage-slides owl-carousel">
  		<div class="single-slide-item">
- 			<div class="overlay"></div>
  			<div class="hero-area-content">
  				<div class="container content-wide">
  					<div class="row justify-content-center">
@@ -78,7 +77,6 @@ onMounted(() => {
  		</div>
 
  		<div class="single-slide-item hero-area-bg-2">
- 			<div class="overlay"></div>
  			<div class="hero-area-content">
  				<div class="container content-wide">
  					<div class="row justify-content-center">
