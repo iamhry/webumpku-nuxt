@@ -3,9 +3,9 @@
     v-if="isValid"
     class="about-spotlight"
   >
-    <div class="container content-wide about-spotlight-inner">
-      <div class="row align-items-center g-4 g-xl-5">
-        <!-- Text -->
+    <div class="container about-spotlight-inner">
+      <div class="row align-items-center g-4 g-lg-5">
+        <!-- Kolom Teks -->
         <div class="col-lg-6 col-md-12">
           <div
             class="about-spotlight-copy"
@@ -55,7 +55,7 @@
           </div>
         </div>
 
-        <!-- Image -->
+        <!-- Kolom Gambar -->
         <div class="col-lg-6 col-md-12">
           <div
             class="about-spotlight-media"
@@ -68,6 +68,9 @@
                 :src="primaryImage"
                 :alt="plainTitle"
                 loading="lazy"
+                decoding="async"
+                width="700"
+                height="600"
               >
             </div>
           </div>
@@ -153,7 +156,7 @@ const isValid = computed(() => {
 <style scoped>
 .about-spotlight {
   position: relative;
-  padding: 96px 0;
+  padding: 56px 60px;
   color: #fff;
   overflow: hidden;
   isolation: isolate;
@@ -170,7 +173,7 @@ const isValid = computed(() => {
   }
 }
 
-/* Navy wash — brand, not purple */
+/* Overlay gradient seimbang agar teks kontras dan background kanan tetap hidup */
 .about-spotlight::before {
   content: '';
   position: absolute;
@@ -178,10 +181,11 @@ const isValid = computed(() => {
   z-index: 1;
   pointer-events: none;
   background: linear-gradient(
-    115deg,
-    rgba(7, 27, 58, 0.92) 0%,
-    rgba(7, 27, 58, 0.78) 48%,
-    rgba(7, 27, 58, 0.55) 100%
+    90deg,
+    rgba(6, 23, 49, 0.96) 0%,
+    rgba(6, 23, 49, 0.88) 45%,
+    rgba(6, 23, 49, 0.55) 75%,
+    rgba(6, 23, 49, 0.35) 100%
   );
 }
 
@@ -190,22 +194,24 @@ const isValid = computed(() => {
   z-index: 2;
 }
 
+/* Kicker / Subtitle Atas */
 .about-spotlight-kicker {
-  margin: 0 0 14px;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  margin: 0 0 10px;
+  color: #ea5501;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
+/* Judul Utama */
 .about-spotlight-title {
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.5rem;
   color: #fff;
-  font-size: clamp(1.85rem, 3.6vw, 2.75rem);
-  font-weight: 750;
-  line-height: 1.15;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 800;
+  line-height: 1.2;
   letter-spacing: -0.02em;
-  text-transform: none;
 }
 
 .about-spotlight-title :deep(span),
@@ -215,109 +221,194 @@ const isValid = computed(() => {
   color: #fff;
 }
 
+/* Badge Tahun Prestasi */
 .about-spotlight-stat {
   display: inline-flex;
   flex-direction: column;
-  margin: 0 0 1.25rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 .stat-num {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
   line-height: 1;
   color: var(--brand-accent, #ea5501);
 }
 
 .stat-label {
-  margin-top: 0.35rem;
+  margin-top: 0.4rem;
   font-size: 0.75rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
+/* Paragraf / Konten Utama */
 .about-spotlight-body {
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 1.05rem;
-  line-height: 1.7;
-  max-width: 36rem;
+  color: #f8fafc;
+  font-size: clamp(0.95rem, 1.05vw, 1.0625rem);
+  line-height: 1.75;
+  max-width: 38rem;
+  text-rendering: optimizeLegibility;
 }
 
-.about-spotlight-body :deep(p) {
-  margin: 0 0 0.9rem;
+.about-spotlight-body :deep(p),
+.about-spotlight-body :deep(span),
+.about-spotlight-body :deep(li),
+.about-spotlight-body :deep(div) {
+  color: #f1f5f9;
+  margin: 0 0 1rem;
 }
 
 .about-spotlight-body :deep(ul) {
   list-style: disc;
   padding-left: 1.25rem;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1rem;
 }
 
 .about-spotlight-body :deep(.about-signoff) {
-  margin-top: 1.5rem;
+  margin-top: 1.75rem;
   color: #fff;
+  border-left: 3px solid #ea5501;
+  padding-left: 1rem;
 }
 
 .about-spotlight-body :deep(.about-signoff strong) {
   font-weight: 700;
+  color: #fff;
+  display: block;
 }
 
 .about-spotlight-body :deep(.about-signoff span) {
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.875rem;
 }
 
+/* Button CTA */
 .about-spotlight-actions {
-  margin-top: 1.75rem;
+  margin-top: 2rem;
 }
 
-/* Visual system from buttons.css (.about-spotlight-btn) — keep local hover polish */
+.about-spotlight-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background-color: var(--brand-accent, #ea5501);
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.about-spotlight-btn:hover {
+  background-color: #d04900;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
 .about-spotlight-btn i {
   font-size: 1.1em;
   transition: transform 0.25s ease;
 }
 
 .about-spotlight-btn:hover i {
-  transform: translateX(3px);
+  transform: translateX(4px);
+}
+
+/* Media Kolom Gambar: Alami & Bottom Aligned */
+.about-spotlight-media {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
 }
 
 .about-spotlight-media-frame {
   position: relative;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.06);
-  aspect-ratio: 4 / 5;
-  border-radius: 2px;
+  width: 100%;
+  max-width: 540px;
+  /* Hilangkan aspek rasio kaku & background kotak */
+  background: transparent;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 .about-spotlight-media-frame img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-height: 520px;
+  height: auto;
+  object-fit: contain;
+  object-position: bottom center;
   display: block;
-  transition: transform 0.5s ease;
+  /* Drop shadow halus agar figur mahasiswa kontras dengan background gelap */
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.45));
+  transition: transform 0.4s ease;
 }
 
 .about-spotlight-media:hover .about-spotlight-media-frame img {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
+/* Responsive Breakpoints */
 @media (max-width: 991px) {
   .about-spotlight {
-    padding: 64px 0;
+    padding: 56px 0;
     background-attachment: scroll;
   }
 
+  .about-spotlight::before {
+    background: linear-gradient(
+      180deg,
+      rgba(6, 23, 49, 0.95) 0%,
+      rgba(6, 23, 49, 0.88) 100%
+    );
+  }
+
+  .about-spotlight-body {
+    max-width: 100%;
+  }
+
   .about-spotlight-media {
-    max-width: 420px;
-    margin: 0.5rem auto 0;
+    margin-top: 1.5rem;
+  }
+
+  .about-spotlight-media-frame {
+    max-width: 440px;
+  }
+
+  .about-spotlight-media-frame img {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 575px) {
+  .about-spotlight-title {
+    font-size: 1.85rem;
+  }
+
+  .about-spotlight-body {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .about-spotlight-media-frame img {
+    max-height: 320px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .about-spotlight-btn,
   .about-spotlight-btn i,
   .about-spotlight-media-frame img {
     transition: none;
+    transform: none !important;
   }
 }
 </style>
