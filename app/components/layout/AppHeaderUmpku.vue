@@ -248,8 +248,6 @@ const isHeroOverlayPage = computed(() => {
     path.startsWith('/facilities/') ||
     path.startsWith('/program-studi/') ||
     path.startsWith('/fakultas/') ||
-    path.startsWith('/berita/') ||
-    path.startsWith('/news/') ||
     path.startsWith('/agenda/')
   )
 })
