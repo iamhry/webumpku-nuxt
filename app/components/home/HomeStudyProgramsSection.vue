@@ -19,6 +19,16 @@ interface StudyProgramItem {
   faculty_name?: string
   faculty_code?: string
   accreditation?: string
+  website?: string
+  web?: string
+  url?: string
+  link?: string
+  website_url?: string
+  site?: string
+  meta?: {
+    website?: string
+    url?: string
+  }
 }
 
 const props = defineProps<{
@@ -53,6 +63,7 @@ const FACULTIES_CONFIG = [
   {
     code: 'FIK',
     name: 'Fakultas Ilmu Kesehatan',
+    website: 'https://fik.umpku.ac.id',
     keywords: [
       'kebidanan',
       'keperawatan',
@@ -67,6 +78,7 @@ const FACULTIES_CONFIG = [
   {
     code: 'FST',
     name: 'Fakultas Sains dan Teknologi',
+    website: 'https://fst.umpku.ac.id',
     keywords: [
       'informatika',
       'elektromedis',
@@ -78,6 +90,7 @@ const FACULTIES_CONFIG = [
   {
     code: 'FESH',
     name: 'Fakultas Ekonomi dan Sosial Humaniora',
+    website: 'https://fesh.umpku.ac.id',
     keywords: [
       'psikologi',
       'psikolgi',
@@ -90,23 +103,48 @@ const FACULTIES_CONFIG = [
   }
 ]
 
-// Resolver Fakultas berdasarkan konfigurasi resmi di atas
+// Mapping URL Hardcoded Resmi masing-masing Program Studi UMPKU
+const PRODI_WEBSITES: Record<string, string> = {
+  // Fakultas Ilmu Kesehatan (FIK)
+  'd3 keperawatan': 'https://d3keperawatan.umpku.ac.id',
+  's1 keperawatan': 'https://keperawatan.umpku.ac.id',
+  's1 kebidanan': 'https://kebidanan.umpku.ac.id',
+  's1 gizi': 'https://gizi.umpku.ac.id',
+  'd4 keperawatan anestesiologi': 'https://anestesi.umpku.ac.id',
+  'anestesiologi': 'https://anestesi.umpku.ac.id',
+  'anestesi': 'https://anestesi.umpku.ac.id',
+  'profesi ners': 'https://keperawatan.umpku.ac.id',
+  'profesi bidan': 'https://kebidanan.umpku.ac.id',
+
+  // Fakultas Sains dan Teknologi (FST)
+  's1 informatika': 'https://informatika.umpku.ac.id',
+  'informatika': 'https://informatika.umpku.ac.id',
+  'd4 teknologi rekayasa elektromedis': 'https://elektromedis.umpku.ac.id',
+  'elektromedis': 'https://elektromedis.umpku.ac.id',
+
+  // Fakultas Ekonomi dan Sosial Humaniora (FESH)
+  's1 psikologi': 'https://psikologi.umpku.ac.id',
+  'psikologi': 'https://psikologi.umpku.ac.id',
+  's1 manajemen': 'https://manajemen.umpku.ac.id',
+  'manajemen': 'https://manajemen.umpku.ac.id',
+  's1 hukum': 'https://fesh.umpku.ac.id',
+  'hukum': 'https://fesh.umpku.ac.id'
+}
+
+// Resolver Fakultas berdasarkan konfigurasi resmi institusi
 const resolveFaculty = (p: StudyProgramItem) => {
-  // 1. Cek kode & nama langsung dari backend jika sudah valid
   if (p.faculty_code && p.faculty_name && p.faculty_code.toUpperCase() !== 'FAKU' && p.faculty_code.toUpperCase() !== 'UMPKU') {
     return { code: p.faculty_code.toUpperCase(), name: p.faculty_name }
   }
 
   const searchTarget = `${p.name || ''} ${p.faculty_name || ''} ${p.faculty?.name || ''}`.toLowerCase()
 
-  // 2. Cocokkan dengan 3 Fakultas Resmi UMPKU
   for (const fac of FACULTIES_CONFIG) {
     if (fac.keywords.some((kw) => searchTarget.includes(kw))) {
       return { code: fac.code, name: fac.name }
     }
   }
 
-  // 3. Fallback jika ada kata 'sains' / 'teknik' / 'kesehatan' / 'sosial'
   if (searchTarget.includes('sains') || searchTarget.includes('teknologi')) {
     return { code: 'FST', name: 'Fakultas Sains dan Teknologi' }
   }
@@ -118,6 +156,51 @@ const resolveFaculty = (p: StudyProgramItem) => {
   }
 
   return { code: 'FIK', name: 'Fakultas Ilmu Kesehatan' }
+}
+
+// Resolver Website URL: 1. API -> 2. Hardcoded Prodi -> 3. Fallback Fakultas -> 4. Fallback Internal
+const getProgramUrl = (program: StudyProgramItem): string => {
+  if (!program) return '#'
+
+  // 1. Ambil dari field API/Database
+  const candidate =
+    program.website ||
+    program.web ||
+    program.url ||
+    program.link ||
+    program.website_url ||
+    program.site ||
+    program.meta?.website ||
+    program.meta?.url ||
+    ''
+
+  if (typeof candidate === 'string' && candidate.trim()) {
+    const trimmed = candidate.trim()
+    return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`
+  }
+
+  // 2. Cocokkan dengan data hardcoded mapping prodi UMPKU (case-insensitive)
+  const targetText = `${program.name || ''} ${program.slug || ''}`.toLowerCase().replace(/[-_]/g, ' ')
+  
+  for (const [key, url] of Object.entries(PRODI_WEBSITES)) {
+    if (targetText.includes(key.toLowerCase())) {
+      return url
+    }
+  }
+
+  // 3. Fallback ke portal website fakultas masing-masing
+  const faculty = resolveFaculty(program)
+  const facMatch = FACULTIES_CONFIG.find((f) => f.code === faculty.code)
+  if (facMatch && facMatch.website) {
+    return facMatch.website
+  }
+
+  // 4. Fallback ke rute lokal Nuxt
+  return localePath(`/program-studi/${program.slug}`)
+}
+
+const isExternalUrl = (url: string): boolean => {
+  return /^https?:\/\//i.test(url)
 }
 
 // Opsi Fakultas yang selalu lengkap sesuai konfigurasi institusi
@@ -149,25 +232,9 @@ const visiblePrograms = computed(() => {
   return filteredPrograms.value.slice(0, INITIAL_LIMIT)
 })
 
-const getDegree = (p: StudyProgramItem) => {
-  if (p.degree) return p.degree
-  if (p.degree_level) return p.degree_level
-  const name = p.name || ''
-  if (/^D3|D-III/i.test(name)) return 'D3'
-  if (/^D4|D-IV|Sarjana Terapan/i.test(name)) return 'D4'
-  if (/^S1|Sarjana/i.test(name)) return 'S1'
-  if (/^Profesi/i.test(name)) return 'Profesi'
-  if (/^S2|Magister/i.test(name)) return 'S2'
-  return 'Program Studi'
-}
-
 const getAccreditation = (p: StudyProgramItem) => {
   return p.accreditation || 'Unggul'
 }
-
-const sectionBadge = computed(() =>
-  locale.value === 'en' ? 'Featured Study Programs' : 'Program Studi Unggulan'
-)
 
 const title = computed(() => {
   if (props.section?.title) return props.section.title
@@ -199,10 +266,6 @@ const roles = computed(() => [
       
       <!-- Section Header -->
       <header class="prodi-header">
-        <!-- <div class="prodi-tag">
-          <span class="prodi-tag-bullet"></span>
-          <span>{{ sectionBadge }}</span>
-        </div> -->
         <h2 class="prodi-title">{{ title }}</h2>
         <p class="prodi-subtitle">{{ subtitle }}</p>
       </header>
@@ -269,11 +332,14 @@ const roles = computed(() => [
         <p>{{ locale === 'en' ? 'No study program matched your search.' : 'Tidak ada program studi yang cocok dengan kriteria pencarian.' }}</p>
       </div>
 
-      <!-- Cards Grid -->
+      <!-- Cards Grid: Redirect langsung ke URL Web Prodi masing-masing -->
       <div v-else class="prodi-grid">
-        <article
+        <NuxtLink
           v-for="program in visiblePrograms"
           :key="program.id"
+          :to="getProgramUrl(program)"
+          :target="isExternalUrl(getProgramUrl(program)) ? '_blank' : undefined"
+          :rel="isExternalUrl(getProgramUrl(program)) ? 'noopener noreferrer' : undefined"
           class="prodi-card"
         >
           <!-- Top Card Meta -->
@@ -294,25 +360,21 @@ const roles = computed(() => [
           <div class="prodi-card-body">
             <h3 class="prodi-card-title">{{ program.name }}</h3>
             <p class="prodi-card-meta">
-              <!-- <span>{{ getDegree(program) }}</span> -->
-              <!-- <span class="meta-dot">·</span> -->
               <span>{{ resolveFaculty(program).name }}</span>
             </p>
           </div>
 
           <!-- Bottom Action Link -->
           <div class="prodi-card-action">
-            <NuxtLink
-              :to="localePath(`/program-studi/${program.slug}`)"
-              class="prodi-card-link"
-            >
-              <span>{{ locale === 'en' ? 'Learn More' : 'Pelajari Selengkapnya' }}</span>
+            <span class="prodi-card-link">
+              <span>{{ locale === 'en' ? 'Visit Website' : 'Kunjungi Website' }}</span>
               <svg class="link-arrow" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h4a.75.75 0 0 1 0 1.5h-4Z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M6.19 15.22a.75.75 0 0 0 1.06 1.06l7.5-7.5V13a.75.75 0 0 0 1.5 0V6.75A.75.75 0 0 0 15.5 6H9.25a.75.75 0 0 0 0 1.5h4.19l-7.25 7.72Z" clip-rule="evenodd" />
               </svg>
-            </NuxtLink>
+            </span>
           </div>
-        </article>
+        </NuxtLink>
       </div>
 
       <!-- Bottom Bar -->
@@ -338,7 +400,7 @@ const roles = computed(() => [
               {{ locale === 'en' ? 'Need academic guidance?' : 'Belum menemukan pilihan yang cocok?' }}
             </span>
             <a
-              href="https://wa.me/6281234567890?text=Halo%20Admin%20PMB%20UMPKU"
+              href="https://wa.me/628112636175?text=Halo%20Admin%20PMB%20UMPKU"
               target="_blank"
               rel="noopener noreferrer"
               class="consult-link"
@@ -398,27 +460,6 @@ const roles = computed(() => [
   margin: 0 auto 40px;
 }
 
-.prodi-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  background-color: #0f4c81;
-  color: #ffffff;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 16px;
-}
-
-.prodi-tag-bullet {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #eab308;
-  flex-shrink: 0;
-}
-
 .prodi-title {
   font-size: 2rem;
   font-weight: 800;
@@ -458,7 +499,6 @@ const roles = computed(() => [
   }
 }
 
-/* PRODI FILTERS: flex dengan align-items: stretch memastikan semua child memiliki tinggi dan baseline yang rata */
 .prodi-filters {
   display: flex !important;
   flex-direction: row !important;
@@ -469,7 +509,6 @@ const roles = computed(() => [
   flex-wrap: nowrap !important;
 }
 
-/* 1. Tombol 'Semua' */
 .filter-pill {
   display: inline-flex !important;
   align-items: center !important;
@@ -496,7 +535,6 @@ const roles = computed(() => [
   color: #ffffff !important;
 }
 
-/* 2. Dropdown Fakultas */
 .select-box {
   position: relative !important;
   display: inline-flex !important;
@@ -545,7 +583,6 @@ const roles = computed(() => [
   pointer-events: none !important;
 }
 
-/* 3. Search Box */
 .search-container {
   display: flex !important;
   align-items: center !important;
@@ -643,7 +680,7 @@ const roles = computed(() => [
   }
 }
 
-/* Card Detail */
+/* Card Detail (Sebagai clickable link) */
 .prodi-card {
   background-color: #ffffff;
   border: 1.5px solid #facc15;
@@ -655,6 +692,9 @@ const roles = computed(() => [
   min-height: 180px;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   box-sizing: border-box;
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {
@@ -732,11 +772,6 @@ const roles = computed(() => [
   line-height: 1.45;
 }
 
-.meta-dot {
-  margin: 0 5px;
-  color: #cbd5e1;
-}
-
 .prodi-card-action {
   border-top: 1px solid #f1f5f9;
   padding-top: 14px;
@@ -753,7 +788,7 @@ const roles = computed(() => [
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.prodi-card-link:hover {
+.prodi-card:hover .prodi-card-link {
   color: #082d4d;
   transform: translateX(3px);
 }
