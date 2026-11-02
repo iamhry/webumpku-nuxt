@@ -11,8 +11,12 @@
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import { useHead } from '#imports'
+import { useSettings } from '~/composables/useSettings'
 
 const route = useRoute()
+const { settings, fetchSettings } = useSettings()
+
+await fetchSettings()
 
 
 const bodyClass = computed(() => {
@@ -66,9 +70,16 @@ const bodyClass = computed(() => {
   return 'layout-content'
 })
 
+const faviconHref = computed(() => settings.value.favicon || '/favicon.ico')
+
 useHead({
   bodyAttrs: {
     class: bodyClass
-  }
+  },
+  link: computed(() => [{
+    rel: 'icon',
+    href: faviconHref.value,
+    key: 'favicon'
+  }])
 })
 </script>

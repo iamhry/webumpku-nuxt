@@ -13,6 +13,10 @@ export const settingsService = {
       if (response && response.logo && !response.logo.startsWith('http')) {
         response.logo = `${apiBase}${response.logo}`
       }
+
+      if (response && response.favicon && !response.favicon.startsWith('http')) {
+        response.favicon = `${apiBase}${response.favicon}`
+      }
       
       return response || null
     } catch (error) {
