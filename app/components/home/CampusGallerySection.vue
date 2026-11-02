@@ -26,7 +26,7 @@
     </div>
     
     <div v-if="!loading && galleryData?.data && galleryData.data.length > 0" class="text-center" style="margin-top: 40px;">
-      <NuxtLink :to="localePath('/galeri')" class="theme-btn">
+      <NuxtLink :to="localePath('/gallery')" class="theme-btn">
         {{ $t('campus_gallery.view_all', 'Lihat Semua Galeri') }}
       </NuxtLink>
     </div>
