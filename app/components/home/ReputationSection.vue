@@ -53,7 +53,6 @@ await useAsyncData('homepage-reputations-data', async () => {
 <style scoped>
 .reputation-section {
   position: relative;
-  padding: 80px 60px;
   z-index: 10;
 }
 
@@ -73,7 +72,7 @@ await useAsyncData('homepage-reputations-data', async () => {
   display: flex;
   flex-wrap: nowrap; /* <-- Mematikan wrap */
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 2rem;
   width: 100%;
 }

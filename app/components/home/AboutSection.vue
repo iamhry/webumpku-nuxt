@@ -156,11 +156,11 @@ const isValid = computed(() => {
 <style scoped>
 .about-spotlight {
   position: relative;
-  padding: 56px 60px;
+  padding: 50px 56px 0 60px;
   color: #fff;
   overflow: hidden;
   isolation: isolate;
-  background-image: url('/assets/img/new_umpku.jpg');
+  background-image: url('/assets/img/gedung.webp');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;

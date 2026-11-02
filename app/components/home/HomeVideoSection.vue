@@ -98,6 +98,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
         <span class="home-video-subtitle">
           <span class="home-video-subtitle-bar" aria-hidden="true"></span>
           {{ displaySubtitle }}
+          <span class="home-video-subtitle-bar" aria-hidden="true"></span>
         </span>
 
         <h2 class="home-video-title">{{ displayTitle }}</h2>
@@ -172,9 +173,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   overflow: hidden;
 }
 
-/* True fixed background on desktop only — background-attachment: fixed is
-   unreliable on iOS/Android, so it's kept as scroll below 992px (same
-   approach as AboutSection.vue). */
 @media (min-width: 992px) {
   .home-video-section {
     background-attachment: fixed;
@@ -184,20 +182,23 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 .home-video-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, rgba(10, 10, 12, 0.86) 0%, rgba(10, 10, 12, 0.6) 48%, rgba(10, 10, 12, 0.3) 100%);
+  background: rgba(10, 10, 12, 0.65);
   z-index: 0;
 }
 
 .home-video-content {
   position: relative;
   z-index: 1;
-  max-width: 700px;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
   color: #ffffff;
 }
 
 .home-video-subtitle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 14px;
   font-size: 15px;
   font-weight: 700;
@@ -216,10 +217,10 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 
 .home-video-title {
   font-size: 42px;
-  line-height: 1.2;
+  line-height: 1.25;
   font-weight: 700;
   color: #ffffff;
-  margin: 0 0 20px;
+  margin: 0 auto 20px;
 }
 
 .home-video-description {
@@ -232,6 +233,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 .home-video-actions {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 24px;
   flex-wrap: wrap;
 }
@@ -289,8 +291,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   transform: translateX(0);
 }
 
-/* Circular play button — matches the reference's .rs-play-btn.has-theme-yellow:
-   solid yellow circle, black icon, by default (not just on hover). */
 .home-video-play-btn {
   position: relative;
   display: inline-flex;
@@ -307,10 +307,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   cursor: pointer;
   z-index: 1;
   box-shadow: 0 8px 24px rgba(245, 179, 1, 0.35), 0 0 0 0 rgba(245, 179, 1, 0.5);
-  /* Simple heartbeat-style pulse — scale + glow throb on a loop, the classic
-     "click me" CTA cue. Kept deliberately simple rather than simulating a
-     full hover/press sequence, so it reads as an inviting pulse rather than
-     a busy demo animation. */
   animation: home-video-btn-pulse 1.8s ease-in-out infinite;
   transition: box-shadow 0.3s ease;
 }
@@ -322,8 +318,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   transition: transform 0.3s ease;
 }
 
-/* Two rings pulsing outward with a staggered delay ("sonar" effect) instead
-   of a single ring — reads as more alive/inviting on a static hero image. */
 .home-video-play-btn::before,
 .home-video-play-btn::after {
   content: '';
@@ -360,15 +354,11 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   transform: scale(0.9);
 }
 
-/* Outer sonar rings — two concentric pulses fading outward with a staggered
-   delay, on top of the button's own heartbeat pulse below. */
 @keyframes home-video-pulse {
   0% { transform: scale(1); opacity: 0.55; }
   100% { transform: scale(1.9); opacity: 0; }
 }
 
-/* Heartbeat-style scale + glow throb — deliberately simple and rhythmic so
-   it reads as "click me" rather than a busy demo. */
 @keyframes home-video-btn-pulse {
   0%, 100% {
     transform: scale(1);
