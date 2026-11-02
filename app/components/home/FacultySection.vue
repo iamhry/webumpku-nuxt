@@ -34,6 +34,33 @@ const description = computed(() => {
     : 'Kurikulum unggul berstandar nasional untuk membina kompetensi dan masa depan profesional.'
 })
 
+// Mengambil semua kemungkinan field URL dari database / API
+const getFacultyUrl = (faculty: any): string => {
+  if (!faculty) return ''
+
+  const candidate = 
+    faculty.website ||
+    faculty.web ||
+    faculty.url ||
+    faculty.link ||
+    faculty.website_url ||
+    faculty.link_website ||
+    faculty.site ||
+    faculty.external_url ||
+    faculty.domain ||
+    faculty.meta?.website ||
+    faculty.meta?.url ||
+    ''
+
+  if (!candidate || typeof candidate !== 'string') return ''
+
+  const trimmed = candidate.trim()
+  if (!trimmed) return ''
+
+  // Jika berupa tautan eksternal tanpa protokol, tambahkan https://
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`
+}
+
 // Pemetaan tema clean berbasis top-accent stripe: FIK = Forest Emerald, FEKOSHUM = Warm Rust/Orange, FST = Deep Navy
 const getCardThemeClass = (faculty: any, index: number) => {
   const text = `${faculty?.name || ''} ${faculty?.title || ''} ${faculty?.code || ''} ${faculty?.slug || ''}`.toLowerCase()
@@ -94,7 +121,25 @@ const getCardThemeClass = (faculty: any, index: number) => {
           
           <!-- Faculty Card Component -->
           <div class="card-inner-body">
-            <FacultyCard :faculty="faculty" />
+            <!-- Jika memiliki link website / eksternal -->
+            <a 
+              v-if="getFacultyUrl(faculty)" 
+              :href="getFacultyUrl(faculty)" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="faculty-card-link"
+            >
+              <FacultyCard :faculty="faculty" />
+            </a>
+            
+            <!-- Fallback ke halaman detail internal fakultas jika URL tidak ditemukan -->
+            <NuxtLink 
+              v-else 
+              :to="`/fakultas/${faculty.slug || faculty.id}`"
+              class="faculty-card-link"
+            >
+              <FacultyCard :faculty="faculty" />
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -211,28 +256,43 @@ const getCardThemeClass = (faculty: any, index: number) => {
 
 /* Color Accents */
 .card-theme-fik .card-accent-line {
-  background-color: #0d9488; /* Emerald Teal */
+  background-color: #0d9488;
 }
 
 .card-theme-fekoshum .card-accent-line {
-  background-color: #ea580c; /* Warm Orange/Rust */
+  background-color: #ea580c;
 }
 
 .card-theme-fst .card-accent-line {
-  background-color: #1e3a8a; /* Deep Navy */
+  background-color: #1e3a8a;
 }
 
-/* Card Body Inner Containment */
+/* Card Body Inner Containment & Link Wrap */
 .card-inner-body {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
+.faculty-card-link {
+  text-decoration: none !important;
+  color: inherit !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+
 .card-inner-body :deep(> *) {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+/* Hindari nested link di dalam child card */
+.faculty-card-link :deep(a) {
+  pointer-events: none;
 }
 
 /* Image Cleaning & Fitting */
@@ -260,7 +320,7 @@ const getCardThemeClass = (faculty: any, index: number) => {
   transform: scale(1.03);
 }
 
-/* Eliminate messy dividers, duplicated subheaders, or broken tags */
+/* Hilangkan garis pemisah bawaan yang tidak rapi */
 .card-inner-body :deep(hr),
 .card-inner-body :deep(.border-b),
 .card-inner-body :deep([class*="border-b"]) {
