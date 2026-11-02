@@ -195,16 +195,8 @@ const formatHeroDate = (dateString: string) => {
     
     <!-- SECTION 1: FULL WIDTH ARTICLE HERO -->
     <div class="editorial-hero-section" :style="{ backgroundImage: `url(${article.featured_image})` }">
-      <div class="editorial-hero-overlay"></div>
       <div class="editorial-hero-content">
-        <!-- Badges -->
-        <div class="editorial-hero-badges">
-        </div>
-        
-        <!-- Title -->
         <h1 class="editorial-hero-title">{{ article.title }}</h1>
-        
-    
       </div>
     </div>
 
