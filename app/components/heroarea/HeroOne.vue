@@ -140,7 +140,7 @@ watch(finalSliders, async () => {
 	</div>
 
     <div v-else class="homepage-slides owl-carousel" :key="locale">
- 		<div class="single-slide-item" v-for="slide in finalSliders" :key="slide.id" :style="{ backgroundImage: `url(${slide.image})` }">
+ 		<div class="single-slide-item" v-for="slide in finalSliders" :key="slide.id" :style="{ backgroundImage: `url(${slide.image})`, '--bg-img': `url(${slide.image})` }">
  			<div class="overlay"></div>
  			<div class="hero-area-content">
  				<div class="container content-wide">
@@ -178,6 +178,81 @@ watch(finalSliders, async () => {
 </template>
 
 <style scoped>
+/* Memaksa wrapper Owl Carousel agar tinggi fleksibel mengikuti anak-anaknya */
+:deep(.owl-stage-outer),
+:deep(.owl-stage),
+:deep(.owl-item) {
+  height: 100%;
+}
+
+.homepage-slides {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- PERBAIKAN RESPONSIVE BACKGROUND GAMBAR & EFEK BLUR --- */
+.single-slide-item {
+  background-size: cover;          
+  background-position: center;     
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;               
+  display: flex;
+  align-items: center;             
+  position: relative;
+  /* Tambahan wajib untuk efek blur */
+  z-index: 1; 
+  overflow: hidden; 
+}
+
+/* Responsif untuk Mobile / Layar Kecil (Smartphone) */
+@media (max-width: 767px) {
+  .single-slide-item {
+    height: 65vh !important; /* Atur tinggi slider di HP */
+    background-image: none !important; /* Matikan background utama */
+    background-color: #000;
+  }
+
+  /* LAYER 1: Background Blur (Mengisi ruang atas/bawah) */
+  .single-slide-item::before {
+    content: "";
+    position: absolute;
+    top: -20px; left: -20px; right: -20px; bottom: -20px;
+    background-image: var(--bg-img);
+    background-size: cover;
+    background-position: center;
+    filter: blur(15px) brightness(0.5); /* Efek blur & sedikit gelap */
+    z-index: -2;
+  }
+
+  /* LAYER 2: Gambar Utama Tajam (Contain agar tidak terpotong) */
+  .single-slide-item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg-img);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+  }
+
+  /* Sembunyikan konten teks HTML (judul, subtitle) dan overlay gelap */
+  .hero-area-content, .overlay {
+      display: none !important;
+  }
+}
+
+/* Responsif untuk Tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .single-slide-item {
+    height: 75vh !important; /* Paksa Owl Carousel patuh dengan !important */
+    background-position: center;
+  }
+}
+/* --------------------------------------------------- */
+
 .rs-banner-content {
   color: #fff;
 }
@@ -204,6 +279,17 @@ watch(finalSliders, async () => {
   -webkit-text-fill-color: #fff !important;
   color: #fff !important;
 }
+
+/* Menyembunyikan deskripsi di Mobile (Sesuai kesepakatan sebelumnya) */
+.rs-banner-descrip {
+  display: none;
+}
+@media (min-width: 768px) {
+  .rs-banner-descrip {
+    display: block;
+  }
+}
+
 .rs-banner-descrip p {
   margin-bottom: 30px;
   font-size: 18px;
