@@ -15,8 +15,8 @@
         <AboutSection v-else-if="section.type === 'about'" :section="section" />
         <QuickAccessSection v-else-if="section.type === 'quick_access'" />
         <StatisticsSection v-else-if="section.type === 'statistics'" />
-        <HomeStudyProgramsSection v-else-if="section.type === 'study_programs'" :section="section" />
         <FacultySection v-else-if="section.type === 'faculties'" :section="section" />
+        <HomeStudyProgramsSection v-else-if="section.type === 'study_programs'" :section="section" />
         <HomeEventSection v-else-if="section.type === 'events'" />
         <CampusGallerySection v-else-if="section.type === 'campus_gallery'" />
         <NewsSection 
@@ -105,19 +105,17 @@ const orderedSections = computed(() => {
     items.splice(newNewsIndex, 0, statsItem)
   }
   
-  // Keep study_programs (Binus-style dual cards) directly above Faculties.
-  // CMS currently ships it with sort_order 0 (before hero) — relocate so it
-  // sits in the academic block rather than above the hero.
-  const studyProgramsIndex = items.findIndex(s => s.type === 'study_programs')
-  if (studyProgramsIndex !== -1) {
-    const [studyProgramsItem] = items.splice(studyProgramsIndex, 1)
-    const facultiesForPrograms = items.findIndex(s => s.type === 'faculties')
-    if (facultiesForPrograms !== -1) {
-      items.splice(facultiesForPrograms, 0, studyProgramsItem)
-    } else {
-      items.push(studyProgramsItem)
-    }
+const studyProgramsIndex = items.findIndex(s => s.type === 'study_programs')
+if (studyProgramsIndex !== -1) {
+  const [studyProgramsItem] = items.splice(studyProgramsIndex, 1)
+  const facultiesForPrograms = items.findIndex(s => s.type === 'faculties')
+  if (facultiesForPrograms !== -1) {
+    // + 1 agar posisinya berada tepat di bawah faculties
+    items.splice(facultiesForPrograms + 1, 0, studyProgramsItem)
+  } else {
+    items.push(studyProgramsItem)
   }
+}
 
   // Campus services stay in the academic block (above faculties), not under hero
   const studyOrFacultiesIndex = items.findIndex(
