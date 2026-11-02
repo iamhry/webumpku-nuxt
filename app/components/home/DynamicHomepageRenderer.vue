@@ -13,7 +13,7 @@
         <ReputationSection v-else-if="section.type === 'reputation'" />
         <HomeQuickAccessSection v-else-if="false && section.type === 'campus_services'" />
         <AboutSection v-else-if="section.type === 'about'" :section="section" />
-        <QuickAccessSection v-else-if="section.type === 'quick_access'" />
+        <!-- <QuickAccessSection v-else-if="section.type === 'quick_access'" /> -->
         <StatisticsSection v-else-if="section.type === 'statistics'" />
         <FacultySection v-else-if="section.type === 'faculties'" :section="section" />
         <HomeStudyProgramsSection v-else-if="section.type === 'study_programs'" :section="section" />
