@@ -1,15 +1,43 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useAsyncData } from '#imports'
 import { useQuickAccessStore } from '~/stores/quickAccess'
+import { quickAccessService } from '~/services/quickAccess'
+import type { QuickAccessItem } from '~/types/quickAccess'
 
 const store = useQuickAccessStore()
+const { locale } = useLocale()
 
-const portals = [
-  { name: 'PMB Online', icon: 'las la-file-signature', desc: 'Penerimaan Mahasiswa Baru', url: '/pmb' },
-  { name: 'myLMS', icon: 'las la-laptop-code', desc: 'Media Pembelajaran Kuliah Online', url: '#' },
-  { name: 'Repository', icon: 'las la-archive', desc: 'Penyimpanan Karya Ilmiah Digital', url: '#' },
-  { name: 'Perpustakaan', icon: 'las la-book-open', desc: 'Katalog Buku & Jurnal Perpustakaan', url: '#' },
-  { name: 'Jurnal', icon: 'las la-journal-whills', desc: 'Publikasi Jurnal Ilmiah UMPKU', url: '#' }
-]
+const { data, pending } = await useAsyncData(
+  'header-quick-access',
+  () => quickAccessService.getQuickAccess(),
+  { watch: [locale] }
+)
+
+const portals = computed(() => (data.value?.data ?? []).filter((item) => item.url))
+
+const lineAwesomeIcons: Record<string, string> = {
+  'ri-graduation-cap-fill': 'las la-graduation-cap',
+  'ri-computer-fill': 'las la-desktop',
+  'ri-book-open-fill': 'las la-book-open',
+  'ri-database-2-fill': 'las la-database',
+  'ri-building-fill': 'las la-university',
+  'ri-newspaper-fill': 'las la-newspaper',
+  'ri-briefcase-fill': 'las la-briefcase',
+  'ri-global-fill': 'las la-globe',
+  'ri-user-star-fill': 'las la-user-graduate',
+  'ri-team-fill': 'las la-users',
+}
+
+const portalIcon = (icon?: string | null) => {
+  const value = (icon || '').trim()
+  if (/^(las|lar|lab|la)\s/.test(value)) return value
+  return lineAwesomeIcons[value] || 'las la-external-link-alt'
+}
+
+const isExternal = (item: QuickAccessItem) => {
+  return item.target === '_blank' || /^https?:\/\//.test(item.url)
+}
 </script>
 
 <template>
@@ -24,21 +52,31 @@ const portals = [
 
       <!-- Sidebar Content -->
       <div class="sidebar-body">
-        <h5 class="menu-title">Layanan & Portal</h5>
-        
-        <div class="portals-grid">
-          <a 
-            v-for="portal in portals" 
-            :key="portal.name" 
+        <h5 class="menu-title">{{ locale === 'en' ? 'Services & Portals' : 'Layanan & Portal' }}</h5>
+
+        <p v-if="pending && portals.length === 0" class="portal-status">
+          {{ locale === 'en' ? 'Loading services…' : 'Memuat layanan…' }}
+        </p>
+        <p v-else-if="portals.length === 0" class="portal-status">
+          {{ locale === 'en' ? 'No services available yet.' : 'Belum ada layanan.' }}
+        </p>
+
+        <div v-else class="portals-grid">
+          <a
+            v-for="portal in portals"
+            :key="portal.id"
             :href="portal.url"
             class="portal-card"
+            :target="isExternal(portal) ? (portal.target || '_blank') : undefined"
+            :rel="isExternal(portal) ? 'noopener noreferrer' : undefined"
+            @click="store.close()"
           >
             <div class="portal-icon-wrapper">
-              <i :class="portal.icon"></i>
+              <i :class="portalIcon(portal.icon)"></i>
             </div>
             <div class="portal-info">
-              <span class="portal-name">{{ portal.name }}</span>
-              <span class="portal-desc">{{ portal.desc }}</span>
+              <span class="portal-name">{{ portal.title }}</span>
+              <span class="portal-desc">{{ portal.description }}</span>
             </div>
             <i class="las la-angle-right arrow-icon"></i>
           </a>
@@ -133,6 +171,12 @@ const portals = [
   margin-bottom: 20px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.portal-status {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9rem;
 }
 
 .portals-grid {
