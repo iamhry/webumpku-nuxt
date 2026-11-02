@@ -46,7 +46,7 @@
       <HomeStudyProgramsSection/>
       <FacultySection/>
       <HomeEventSection/>
-      <QuickAccessSection/>
+      <!-- <QuickAccessSection/> -->
       <CampusGallerySection/>
       <NewsSection/>
       <CTAOne/>
