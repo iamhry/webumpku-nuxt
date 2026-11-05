@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import AppHeaderUmpku from '~/components/layout/AppHeaderUmpku.vue'
+import AppHeader from '~/components/header/AppHeader.vue';
+
 </script>
 
 <template>
   <div>
-    <AppHeaderUmpku />
+    <AppHeader />
     <main>
       <slot />
     </main>

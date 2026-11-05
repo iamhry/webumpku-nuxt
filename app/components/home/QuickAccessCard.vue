@@ -106,5 +106,47 @@ const mappedIcon = computed(() => {
 </template>
 
 <style scoped>
-/* Scoped overrides if needed, but styling is loaded via home-quick-access.css */
+/* Memperhalus gradasi gambar pada kartu yang warnanya gelap (Navy/Primary) */
+.qa-card--primary .qa-card-media img,
+.quick-access-card.primary-variant img /* Sesuaikan dengan class yang Anda gunakan di parent/global css */ {
+  object-fit: cover;
+  object-position: center top;
+  
+  /* Gradient yang lebih halus: mulai transparan, berlahan muncul, lalu pekat di bawah */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 15%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0.9) 70%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 15%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0.9) 70%,
+    #000 100%
+  );
+}
+
+/* Memperhalus gradasi gambar pada kartu yang warnanya terang (Light) */
+.qa-card--light .qa-card-media img,
+.quick-access-card.light-variant img {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 10%,
+    rgba(0, 0, 0, 0.6) 35%,
+    #000 80%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 10%,
+    rgba(0, 0, 0, 0.6) 35%,
+    #000 80%
+  );
+}
 </style>

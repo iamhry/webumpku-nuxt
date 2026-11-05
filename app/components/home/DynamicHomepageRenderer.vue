@@ -9,7 +9,7 @@
     
     <div v-else-if="orderedSections.length > 0">
       <template v-for="section in orderedSections" :key="section.id">
-        <HeroOne v-if="section.type === 'hero'" />
+        <HeroSlider v-if="section.type === 'hero'" />
         <ReputationSection v-else-if="section.type === 'reputation'" />
         <HomeQuickAccessSection v-else-if="false && section.type === 'campus_services'" />
         <AboutSection v-else-if="section.type === 'about'" :section="section" />
