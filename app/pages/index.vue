@@ -18,9 +18,9 @@ useHead({
     lang: i18nHead.value.htmlAttrs!.lang,
     dir: i18nHead.value.htmlAttrs!.dir
   },
-  title: locale.value === 'en' ? 'Welcome to Our University' : 'Selamat Datang di Universitas Kami',
+  title: locale.value === 'en' ? 'Universitas Muhammadiyah PKU Surakarta' : 'Universitas Muhammadiyah PKU Surakarta',
   meta: [
-    { name: 'description', content: locale.value === 'en' ? 'Official University Website and Homepage' : 'Website Resmi Universitas' },
+    { name: 'description', content: locale.value === 'en' ? 'Official of Universitas Muhammadiyah PKU Surakarta (UMPKU)' : 'Website Resmi Universitas Muhammadiyah PKU Surakarta' },
     ...(i18nHead.value.meta || [])
   ],
   link: [
